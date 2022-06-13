@@ -1,15 +1,16 @@
 <template>
   <div class="container">
     <div id="cesiumContainer"></div>
+    <operation-panel />
   </div>
 </template>
  
 <script>
 import Entity from "@/common/cesium/Entity.js";
-import formView from "./module/form.vue";
+import operationPanel from "./module/operationPanel.vue";
 export default {
   name: "textMapRectangle",
-  components: { formView },
+  components: { operationPanel },
   data() {
     return {
       viewer: null,
