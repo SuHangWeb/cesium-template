@@ -58,14 +58,24 @@ export const constantRoutes = [
   {
     path: '/',
     component: Layout,
-    redirect: '/dashboard',
     children: [{
-      path: 'dashboard',
-      name: 'Dashboard',
-      component: () => import('@/views/dashboard/index'),
+      path: '/',
+      name: 'index',
+      component: () => import('@/views/index'),
       meta: { title: '首页', icon: 'dashboard' }
     }]
   },
+  // {
+  //   path: '/',
+  //   component: Layout,
+  //   redirect: '/dashboard',
+  //   children: [{
+  //     path: 'dashboard',
+  //     name: 'Dashboard',
+  //     component: () => import('@/views/dashboard/index'),
+  //     meta: { title: '首页', icon: 'dashboard' }
+  //   }]
+  // },
   {
     path: '/getCoordinates',
     component: Layout,
@@ -191,7 +201,7 @@ export const constantRoutes = [
         path: 'waterPolo',
         name: 'WaterPolo',
         component: () => import('@/views/Echarts/WaterPolo'),
-        meta: { title: '动态水球', icon: 'el-icon-coordinate' }
+        meta: { title: '动态水球', icon: 'waterPolo' }
       },
     ]
   },
