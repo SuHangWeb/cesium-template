@@ -2,13 +2,15 @@
   <div class="highlight" v-highlight>
     <pre>
         <code>
-            {{content}}
+            {{code}}
         </code>
     </pre>
   </div>
 </template>
  
 <script>
+// this.$store.dispatch("highlight/set_code", "");
+import { mapState } from "vuex";
 export default {
   props: {
     option: {
@@ -17,6 +19,11 @@ export default {
         return {};
       },
     },
+  },
+  computed: {
+    ...mapState({
+      code: (state) => state.highlight.code,
+    }),
   },
   data() {
     return {
