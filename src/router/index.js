@@ -139,6 +139,12 @@ export const constantRoutes = [
           },
         ]
       },
+      {
+        path: 'canvasImageSpot',
+        name: 'CanvasImageSpot',
+        component: () => import('@/views/Entity/canvasImageSpot'),
+        meta: { title: 'Canvas 图片点', icon: 'el-icon-pie-chart' }
+      },
     ]
   },
 
@@ -163,6 +169,39 @@ export const constantRoutes = [
             meta: { title: '飞机尾焰', icon: 'el-icon-s-promotion' }
           },
         ]
+      },
+    ]
+  },
+
+
+  {
+    path: '/echarts',
+    component: Layout,
+    redirect: '/Echarts/Bar',
+    name: 'Echarts',
+    meta: { title: 'Echarts', icon: 'el-icon-menu' },
+    children: [
+      {
+        path: 'bar',
+        name: 'Bar',
+        component: () => import('@/views/Echarts/Bar'),
+        meta: { title: '统计柱状体', icon: 'el-icon-s-data' }
+      },
+    ]
+  },
+
+  {
+    path: '/maps',
+    component: Layout,
+    redirect: '/Maps/Base',
+    name: 'Maps',
+    meta: { title: 'Maps', icon: 'el-icon-menu' },
+    children: [
+      {
+        path: 'base',
+        name: 'Base',
+        component: () => import('@/views/Maps/Base'),
+        meta: { title: 'baseMap 地图集合', icon: 'el-icon-map-location' }
       },
     ]
   },

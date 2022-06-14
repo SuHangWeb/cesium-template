@@ -156,7 +156,7 @@ class Echarts3D {
             const domPosition = (id, position) => {
                 const dom = document.getElementById(id);
                 dom.style.top =
-                    position.y - (dom.offsetHeight + 20) + "px";
+                    position.y - dom.offsetHeight + "px";
                 dom.style.left =
                     position.x + dom.offsetWidth + "px";
             }

@@ -1,0 +1,79 @@
+.echarts3D-Bar-Info-Window {
+  width: 200px;
+  background-color: #fff;
+  z-index: 2;
+  position: fixed;
+  // top: 100px;
+  // right: 10px;
+  padding: 10px;
+  box-sizing: border-box;
+  border-radius: 6px;
+
+  .echarts3D-Bar-Info-Window-Title {
+    font-size: 16px;
+    color: #333;
+    padding-bottom: 5px;
+  }
+
+  .echarts3D-Bar-Info-Window-Box {
+    .echarts3D-Bar-Info-Window-Item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 5px 0;
+
+      .echarts3D-Bar-Info-Window-Item-Label {
+        display: flex;
+        align-items: center;
+
+        .echarts3D-Bar-Info-Window-Item-Spot {
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          margin-right: 5px;
+        }
+
+        .echarts3D-Bar-Info-Window-Item-Text {
+          font-size: 14px;
+          color: #666;
+        }
+      }
+
+      .echarts3D-Bar-Info-Window-Item-Value {
+        font-size: 14px;
+        font-weight: bold;
+        color: #333;
+      }
+    }
+  }
+
+  .echarts3D-Bar-Info-Window-triangle {
+    // // 下三角
+    // position: absolute;
+    // bottom: 0;
+    // left: 50%;
+    // border: 8px solid transparent;
+    // border-top-color: #fff;
+    // border-bottom: 0;
+    // margin: 0 0 -8px -8px;
+
+    // 左下三角
+    position: absolute;
+    bottom: 0;
+    left: 30px;
+    border: 16px solid transparent;
+    border-top-color: #fff;
+    border-bottom: 0;
+    margin: 0 0 -16px -16px;
+    border-left: 0;
+    // //右下三角
+    // position: absolute;
+    // bottom: 0;
+    // left: 50%;
+    // border: 34px solid transparent;
+    // border-top-color: #0094ff;
+    // border-bottom: 0;
+    // margin: 0 0 -34px -34px;
+    // border-right: 0;
+  }
+}
