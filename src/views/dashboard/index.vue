@@ -7,7 +7,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import docMd from "../../assets/doc/home.md"
+// import docMd from "../../assets/doc/home.md"
 export default {
   name: "Dashboard",
   computed: {

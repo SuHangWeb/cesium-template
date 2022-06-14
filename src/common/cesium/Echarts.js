@@ -342,7 +342,7 @@ class Echarts3D {
 
                 const style = {
                     zIndex: item?.zIndex ? item.zIndex : zIndex,
-                    color: item?.color ? item.color : color[i],
+                    color: item?.color ? item.color : color.length > i ? color[i] : _Utils.getRandomColor,
                     data: item.data,
                     size: option.size,
                     padding: option.padding,
