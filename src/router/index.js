@@ -179,13 +179,19 @@ export const constantRoutes = [
     component: Layout,
     redirect: '/Echarts/Bar',
     name: 'Echarts',
-    meta: { title: 'Echarts', icon: 'el-icon-menu' },
+    meta: { title: 'Echarts', icon: 'el-icon-pie-chart' },
     children: [
       {
         path: 'bar',
         name: 'Bar',
         component: () => import('@/views/Echarts/Bar'),
         meta: { title: '统计柱状体', icon: 'el-icon-s-data' }
+      },
+      {
+        path: 'waterPolo',
+        name: 'WaterPolo',
+        component: () => import('@/views/Echarts/WaterPolo'),
+        meta: { title: '动态水球', icon: 'el-icon-coordinate' }
       },
     ]
   },

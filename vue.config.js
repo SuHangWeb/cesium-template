@@ -90,7 +90,17 @@ module.exports = {
     ],
     module: {
       unknownContextCritical: /^.\/.*$/,
-      unknownContextCritical: false
+      unknownContextCritical: false,
+      rules: [
+        // 配置读取 *.md 文件的规则
+        {
+          test: /\.md$/,
+          use: [
+            { loader: "html-loader" },
+            { loader: "markdown-loader", options: {} }
+          ]
+        }
+      ]
     }
   },
   chainWebpack(config) {
@@ -104,6 +114,8 @@ module.exports = {
         include: 'initial'
       }
     ])
+
+
 
     // when there are many pages, it will cause too many meaningless requests
     config.plugins.delete('prefetch')
