@@ -73,7 +73,7 @@ export const constantRoutes = [
       path: 'getCoordinates',
       name: 'GetCoordinates',
       component: () => import('@/views/GetCoordinates'),
-      meta: { title: '获取经纬度', icon: 'dashboard' }
+      meta: { title: '获取经纬度', icon: 'el-icon-map-location' }
     }]
   },
 
@@ -84,7 +84,7 @@ export const constantRoutes = [
       path: 'haloLine',
       name: 'HaloLine',
       component: () => import('@/views/HaloLine'),
-      meta: { title: '光晕线', icon: 'dashboard' }
+      meta: { title: '光晕线', icon: 'el-icon-paperclip' }
     }]
   },
 
@@ -95,13 +95,13 @@ export const constantRoutes = [
     component: Layout,
     redirect: '/entity/htmlPopup',
     name: 'Html',
-    meta: { title: 'Html', icon: 'el-icon-s-help' },
+    meta: { title: 'Html', icon: 'el-icon-collection-tag' },
     children: [
       {
         path: 'htmlPopup',
         name: 'HtmlPopup',
         component: () => import('@/views/Html/htmlPopup'),
-        meta: { title: 'html图层定位', icon: 'table' }
+        meta: { title: 'html图层定位', icon: 'el-icon-collection-tag' }
       }
     ]
   },
@@ -111,31 +111,56 @@ export const constantRoutes = [
     component: Layout,
     redirect: '/entity/drawPoint',
     name: 'Entity',
-    meta: { title: 'Entity', icon: 'el-icon-s-help' },
+    meta: { title: 'Entity', icon: 'el-icon-menu' },
     children: [
       {
         path: 'drawPoint',
         name: 'DrawPoint',
         component: () => import('@/views/Entity/drawPoint'),
-        meta: { title: '绘制点', icon: 'table' }
+        meta: { title: '绘制点', icon: 'el-icon-edit' }
       },
       {
         path: 'drawLine',
         name: 'DrawLine',
         component: () => import('@/views/Entity/drawLine'),
-        meta: { title: '绘制线', icon: 'table' }
+        meta: { title: '绘制线', icon: 'el-icon-edit' }
       },
       {
         path: 'textMap',
         name: 'TextMap',
         component: () => import('@/views/Entity/textMap/rectangle'),
-        meta: { title: '文字贴图', icon: 'table' },
+        meta: { title: '文字贴图', icon: 'el-icon-edit' },
         children: [
           {
             path: 'rectangle',
             component: () => import('@/views/Entity/textMap/rectangle'),
             name: 'Rectangle',
-            meta: { title: '文字贴图-矩形' }
+            meta: { title: '文字贴图-矩形', icon: 'el-icon-edit' }
+          },
+        ]
+      },
+    ]
+  },
+
+
+  {
+    path: '/primitives',
+    component: Layout,
+    redirect: '/Primitives/ParticleSystem',
+    name: 'Primitives',
+    meta: { title: 'Primitives', icon: 'el-icon-menu' },
+    children: [
+      {
+        path: 'particleSystem',
+        name: 'ParticleSystem',
+        component: () => import('@/views/Primitives/ParticleSystem/AircraftTailFlame'),
+        meta: { title: '粒子', icon: 'table' },
+        children: [
+          {
+            path: 'aircraftTailFlame',
+            component: () => import('@/views/Primitives/ParticleSystem/AircraftTailFlame'),
+            name: 'AircraftTailFlame',
+            meta: { title: '飞机尾焰', icon: 'el-icon-s-promotion' }
           },
         ]
       },
