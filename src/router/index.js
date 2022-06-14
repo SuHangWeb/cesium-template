@@ -201,7 +201,7 @@ export const constantRoutes = [
         path: 'waterPolo',
         name: 'WaterPolo',
         component: () => import('@/views/Echarts/WaterPolo'),
-        meta: { title: '动态水球', icon: 'waterPolo' }
+        meta: { title: '动态水球', icon: 'WaterPolo' }
       },
     ]
   },
@@ -211,13 +211,13 @@ export const constantRoutes = [
     component: Layout,
     redirect: '/Maps/Base',
     name: 'Maps',
-    meta: { title: 'Maps', icon: 'el-icon-menu' },
+    meta: { title: 'Maps', icon: 'earth' },
     children: [
       {
         path: 'base',
         name: 'Base',
         component: () => import('@/views/Maps/Base'),
-        meta: { title: 'baseMap 地图集合', icon: 'el-icon-map-location' }
+        meta: { title: 'baseMap 地图集合', icon: 'earth' }
       },
     ]
   },
