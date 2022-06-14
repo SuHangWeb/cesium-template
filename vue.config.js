@@ -90,17 +90,7 @@ module.exports = {
     ],
     module: {
       unknownContextCritical: /^.\/.*$/,
-      unknownContextCritical: false,
-      rules: [
-        // 配置读取 *.md 文件的规则
-        {
-          test: /\.md$/,
-          use: [
-            { loader: "html-loader" },
-            { loader: "markdown-loader", options: {} }
-          ]
-        }
-      ]
+      unknownContextCritical: false
     }
   },
   chainWebpack(config) {
@@ -136,6 +126,17 @@ module.exports = {
         symbolId: 'icon-[name]'
       })
       .end()
+
+    config.module.rule('md')
+      .test(/\.md/)
+      .use('vue-loader')
+      .loader('vue-loader')
+      .end()
+      .use('vue-markdown-loader')
+      .loader('vue-markdown-loader/lib/markdown-compiler')
+      .options({
+        raw: true
+      })
 
     config
       .when(process.env.NODE_ENV !== 'development',
