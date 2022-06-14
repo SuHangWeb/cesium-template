@@ -1,0 +1,16 @@
+{
+  "id": "3465728",
+  "name": "cesium-template",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "11975178",
+      "name": "代码",
+      "font_class": "daima",
+      "unicode": "e60e",
+      "unicode_decimal": 58894
+    }
+  ]
+}

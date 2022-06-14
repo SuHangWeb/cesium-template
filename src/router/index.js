@@ -83,7 +83,7 @@ export const constantRoutes = [
       path: 'getCoordinates',
       name: 'GetCoordinates',
       component: () => import('@/views/GetCoordinates'),
-      meta: { title: '获取经纬度', icon: 'el-icon-map-location' }
+      meta: { title: '获取经纬度', icon: 'el-icon-map-location', highlight: true }
     }]
   },
 
@@ -94,7 +94,7 @@ export const constantRoutes = [
       path: 'haloLine',
       name: 'HaloLine',
       component: () => import('@/views/HaloLine'),
-      meta: { title: '光晕线', icon: 'el-icon-paperclip' }
+      meta: { title: '光晕线', icon: 'el-icon-paperclip', highlight: true }
     }]
   },
 
@@ -111,7 +111,7 @@ export const constantRoutes = [
         path: 'htmlPopup',
         name: 'HtmlPopup',
         component: () => import('@/views/Html/htmlPopup'),
-        meta: { title: 'html图层定位', icon: 'el-icon-collection-tag' }
+        meta: { title: 'html图层定位', icon: 'el-icon-collection-tag', highlight: true }
       }
     ]
   },
@@ -127,25 +127,25 @@ export const constantRoutes = [
         path: 'drawPoint',
         name: 'DrawPoint',
         component: () => import('@/views/Entity/drawPoint'),
-        meta: { title: '绘制点', icon: 'el-icon-edit' }
+        meta: { title: '绘制点', icon: 'el-icon-edit', highlight: true }
       },
       {
         path: 'drawLine',
         name: 'DrawLine',
         component: () => import('@/views/Entity/drawLine'),
-        meta: { title: '绘制线', icon: 'el-icon-edit' }
+        meta: { title: '绘制线', icon: 'el-icon-edit', highlight: true }
       },
       {
         path: 'textMap',
         name: 'TextMap',
         component: () => import('@/views/Entity/textMap/rectangle'),
-        meta: { title: '文字贴图', icon: 'el-icon-edit' },
+        meta: { title: '文字贴图', icon: 'el-icon-edit', highlight: true },
         children: [
           {
             path: 'rectangle',
             component: () => import('@/views/Entity/textMap/rectangle'),
             name: 'Rectangle',
-            meta: { title: '文字贴图-矩形', icon: 'el-icon-edit' }
+            meta: { title: '文字贴图-矩形', icon: 'el-icon-edit', highlight: true }
           },
         ]
       },
@@ -153,7 +153,7 @@ export const constantRoutes = [
         path: 'canvasImageSpot',
         name: 'CanvasImageSpot',
         component: () => import('@/views/Entity/canvasImageSpot'),
-        meta: { title: 'Canvas 图片点', icon: 'el-icon-pie-chart' }
+        meta: { title: 'Canvas 图片点', icon: 'el-icon-pie-chart', highlight: true }
       },
     ]
   },
@@ -164,19 +164,19 @@ export const constantRoutes = [
     component: Layout,
     redirect: '/Primitives/ParticleSystem',
     name: 'Primitives',
-    meta: { title: 'Primitives', icon: 'el-icon-menu' },
+    meta: { title: 'Primitives', icon: 'el-icon-menu', highlight: true },
     children: [
       {
         path: 'particleSystem',
         name: 'ParticleSystem',
         component: () => import('@/views/Primitives/ParticleSystem/AircraftTailFlame'),
-        meta: { title: '粒子', icon: 'table' },
+        meta: { title: '粒子', icon: 'table', highlight: true },
         children: [
           {
             path: 'aircraftTailFlame',
             component: () => import('@/views/Primitives/ParticleSystem/AircraftTailFlame'),
             name: 'AircraftTailFlame',
-            meta: { title: '飞机尾焰', icon: 'el-icon-s-promotion' }
+            meta: { title: '飞机尾焰', icon: 'el-icon-s-promotion', highlight: true }
           },
         ]
       },
@@ -189,19 +189,19 @@ export const constantRoutes = [
     component: Layout,
     redirect: '/Echarts/Bar',
     name: 'Echarts',
-    meta: { title: 'Echarts', icon: 'el-icon-pie-chart' },
+    meta: { title: 'Echarts', icon: 'el-icon-pie-chart', highlight: true },
     children: [
       {
         path: 'bar',
         name: 'Bar',
         component: () => import('@/views/Echarts/Bar'),
-        meta: { title: '统计柱状体', icon: 'el-icon-s-data' }
+        meta: { title: '统计柱状体', icon: 'el-icon-s-data', highlight: true }
       },
       {
         path: 'waterPolo',
         name: 'WaterPolo',
         component: () => import('@/views/Echarts/WaterPolo'),
-        meta: { title: '动态水球', icon: 'WaterPolo' }
+        meta: { title: '动态水球', icon: 'WaterPolo', highlight: true }
       },
     ]
   },
@@ -211,13 +211,13 @@ export const constantRoutes = [
     component: Layout,
     redirect: '/Maps/Base',
     name: 'Maps',
-    meta: { title: 'Maps', icon: 'earth' },
+    meta: { title: 'Maps', icon: 'earth', highlight: true },
     children: [
       {
         path: 'base',
         name: 'Base',
         component: () => import('@/views/Maps/Base'),
-        meta: { title: 'baseMap 地图集合', icon: 'earth' }
+        meta: { title: 'baseMap 地图集合', icon: 'earth', highlight: true }
       },
     ]
   },
@@ -228,13 +228,13 @@ export const constantRoutes = [
     component: Layout,
     redirect: '/Test/TestPage',
     name: 'Test',
-    meta: { title: '测试', icon: 'el-icon-menu' },
+    meta: { title: '测试', icon: 'el-icon-menu', highlight: true },
     children: [
       {
         path: 'test',
         name: 'Test',
         component: () => import('@/views/Test/TestPage'),
-        meta: { title: '测试页面', icon: 'el-icon-monitor' }
+        meta: { title: '测试页面', icon: 'el-icon-monitor', highlight: true }
       },
     ]
   },

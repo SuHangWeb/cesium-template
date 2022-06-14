@@ -1,12 +1,16 @@
 <template>
-  <div class="container"><docMd /></div>
+  <div class="container">
+    <highlight/>
+    <!-- <docMd /> -->
+  </div>
 </template>
 
 <script>
 import docMd from "@/assets/doc/home.md";
+import highlight from "@/components/highlight";
 export default {
   name: "index",
-  components: { docMd },
+  components: { docMd, highlight },
 };
 </script>
 

@@ -16,13 +16,27 @@ import router from './router'
 
 import '@/icons' // icon
 import '@/permission' // permission control
-
+import '@/assets/iconfont/iconfont.css';
 
 //引入cesium相关文件
 var cesium = require('cesium/Cesium');
 var widgets = require('cesium/Widgets/widgets.css');
 Vue.prototype.cesium = cesium
 Vue.prototype.widgets = widgets
+
+// 引入 highlight.js 代码高亮工具
+import hljs from "highlight.js";
+// 使用样式，有多种样式可选
+import "highlight.js/styles/github.css";
+// 增加自定义命令v-highlight
+Vue.directive("highlight", function(el) {
+  let blocks = el.querySelectorAll("pre code");
+  blocks.forEach(block => {
+    hljs.highlightBlock(block);
+  });
+});
+// 增加组定义属性，用于在代码中预处理代码格式
+Vue.prototype.$hljs = hljs;
 
 /**
  * If you don't want to use mock-server
