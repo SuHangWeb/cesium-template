@@ -1,0 +1,62 @@
+{
+  "_from": "@verzth/uuid-js",
+  "_id": "@verzth/uuid-js@0.0.1",
+  "_inBundle": false,
+  "_integrity": "sha512-SR1r04yKy1vdJdX38XHiEK/DKbJKOjXrFO4XQZhLDWtgxA7SlGNvMFv8mNdnoJeaq7SxZ5CDWb6S/djdqhe84Q==",
+  "_location": "/@verzth/uuid-js",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "@verzth/uuid-js",
+    "name": "@verzth/uuid-js",
+    "escapedName": "@verzth%2fuuid-js",
+    "scope": "@verzth",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/@verzth/uuid-js/-/uuid-js-0.0.1.tgz",
+  "_shasum": "ebf0c4f887d5332d4a8bf05a160d045e4e74ab6e",
+  "_spec": "@verzth/uuid-js",
+  "_where": "C:\\Users\\suhan\\Desktop",
+  "author": {
+    "name": "Verzth"
+  },
+  "bugs": {
+    "url": "https://github.com/verzth/uuid-js/issues"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "UUID v4 for Javascript based on RFC4122 version 4",
+  "devDependencies": {
+    "uglifyjs": "^2.4.11"
+  },
+  "homepage": "https://github.com/verzth/uuid-js#readme",
+  "keywords": [
+    "uuid",
+    "uuidjs",
+    "uuidv4",
+    "uuid",
+    "javascript",
+    "javascript",
+    "uuid",
+    "js",
+    "uuid-js"
+  ],
+  "license": "MIT",
+  "main": "uuid.js",
+  "name": "@verzth/uuid-js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/verzth/uuid-js.git"
+  },
+  "scripts": {
+    "build": "uglifyjs uuid.js -c -m -e -o uuid.min.js"
+  },
+  "version": "0.0.1"
+}

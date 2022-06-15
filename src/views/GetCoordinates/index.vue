@@ -7,6 +7,7 @@
 <script>
 import Entity from "@/common/cesium/Entity.js";
 import Transform from "@/common/cesium/Transform.js";
+import code from "./module/highlight";
 export default {
   name: "GetCoordinates",
 
@@ -17,6 +18,9 @@ export default {
       _Transform: null,
       handler: null,
     };
+  },
+  created() {
+    this.$store.dispatch("highlight/set_code", code);
   },
   mounted() {
     this.init();

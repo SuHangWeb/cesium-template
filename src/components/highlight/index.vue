@@ -31,15 +31,16 @@
             >{{ item.codeLanguage }}</el-radio-button
           >
         </el-radio-group>
-        <el-dropdown>
+        <el-dropdown @command="handleCommand">
           <el-button size="mini" type="primary">
             依赖文件<i class="el-icon-connection el-icon--right"></i>
           </el-button>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item disabled
-              >当期示例依赖文件（注意顺序）</el-dropdown-item
+              >当前示例依赖文件（注意顺序）</el-dropdown-item
             >
             <el-dropdown-item
+              :command="item.url"
               v-for="(item, index) in subCodeComputed.relyOn"
               :key="index"
               >{{ item.label }}</el-dropdown-item
@@ -72,6 +73,7 @@
  
 <script>
 import { mapState } from "vuex";
+import { downloadLocalFile } from "@/utils";
 export default {
   props: {
     option: {
@@ -121,8 +123,9 @@ export default {
       subCodeLanguage: "html",
     };
   },
-  created() {
-    if (this.code[0].length != 0) {
+  created() {},
+  mounted() {
+    if (this.code && this.code.length != 0) {
       this.codeLanguage = this.code[0].codeLanguage;
       this.subCodeLanguage = this.code[0].code[0].codeLanguage;
     }
@@ -130,6 +133,12 @@ export default {
   methods: {
     handleClose() {
       this.$store.dispatch("highlight/set_view_code", false);
+    },
+    /**
+     * 点击菜单
+     */
+    handleCommand(e) {
+      downloadLocalFile(e);
     },
   },
 };

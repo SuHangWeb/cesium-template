@@ -45,7 +45,7 @@ export function parseTime(time, cFormat) {
   const time_str = format.replace(/{([ymdhisa])+}/g, (result, key) => {
     const value = formatObj[key]
     // Note: getDay() returns 0 on Sunday
-    if (key === 'a') { return ['日', '一', '二', '三', '四', '五', '六'][value ] }
+    if (key === 'a') { return ['日', '一', '二', '三', '四', '五', '六'][value] }
     return value.toString().padStart(2, '0')
   })
   return time_str
@@ -114,4 +114,32 @@ export function param2Obj(url) {
     }
   })
   return obj
+}
+
+/**
+ * 载本地资源文件
+ * @param {*} file 文件全称包含文件扩展名
+ * @param {*} fileName 下载下来的文件名称（自定义）
+ */
+export const downloadLocalFile = (file, fileName) => {
+  function getFileName2(path) {
+    var pos1 = path.lastIndexOf('/');
+    var pos2 = path.lastIndexOf('\\');
+    var pos = Math.max(pos1, pos2);
+    if (pos < 0)
+      return path;
+    else
+      return path.substring(pos + 1);
+  }
+  if (!fileName) {
+    fileName = getFileName2(file)
+  }
+  const prefixUrl = process.env.NODE_ENV === 'production' ? '/项目目录名称/' : '/';
+  let a = document.createElement('a');
+  // 路径中'/'为根目录，即index.html所在的目录
+  a.href = prefixUrl + 'cesium/' + file;
+  // 下载下来的文件名
+  a.download = fileName;
+  // 添加点击
+  a.click();
 }
