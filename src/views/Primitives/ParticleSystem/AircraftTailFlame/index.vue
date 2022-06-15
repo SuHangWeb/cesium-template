@@ -7,6 +7,7 @@
 <script>
 import Primitives from "@/common/cesium/Primitives.js";
 import Entity from "@/common/cesium/Entity.js";
+import code from "./module/highlight";
 export default {
   name: "AircraftTailFlame",
   data() {
@@ -15,6 +16,9 @@ export default {
       _Primitives: null,
       _Entity: null,
     };
+  },
+  created() {
+    this.$store.dispatch("highlight/set_code", code);
   },
   mounted() {
     this.init();

@@ -8,6 +8,7 @@
 import Entity from "@/common/cesium/Entity.js";
 import Echarts3D from "@/common/cesium/Echarts.js";
 import echartsData from "./module/data";
+import code from "./module/highlight";
 export default {
   name: "echartsWaterPolo",
   data() {
@@ -16,22 +17,10 @@ export default {
       _Entity: null,
       _Echarts3D: null,
       echartsData: echartsData,
-
-      percentage: 50,
-      ballOption: {
-        size: 200,
-        border: {
-          use: true,
-          width: 3,
-          color: "red",
-        },
-        background: {
-          use: true,
-          color: "#fff",
-        },
-        padding: 0,
-      },
     };
+  },
+  created() {
+    this.$store.dispatch("highlight/set_code", code);
   },
   mounted() {
     this.init();

@@ -77,6 +77,17 @@ export const constantRoutes = [
   //   }]
   // },
   {
+    path: '/start',
+    component: Layout,
+    children: [{
+      path: 'start',
+      name: 'Start',
+      component: () => import('@/views/Start'),
+      meta: { title: '快速开始', icon: 'el-icon-star-off', highlight: true }
+    }]
+  },
+
+  {
     path: '/getCoordinates',
     component: Layout,
     children: [{

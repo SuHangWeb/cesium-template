@@ -21,6 +21,7 @@
  
 <script>
 import Map from "@/common/cesium/Map/index.js";
+import code from "./module/highlight";
 export default {
   name: "MapsBase",
   data() {
@@ -30,6 +31,9 @@ export default {
       mapList: [],
       mapType: "",
     };
+  },
+  created() {
+    this.$store.dispatch("highlight/set_code", code);
   },
   mounted() {
     this.init();

@@ -35,7 +35,10 @@
             >{{ item.codeLanguage }}</el-radio-button
           >
         </el-radio-group>
-        <el-dropdown @command="handleCommand">
+        <el-dropdown
+          @command="handleCommand"
+          v-if="(subCodeComputed.relyOn && subCodeComputed.relyOn.length != 0)"
+        >
           <el-button size="mini" type="primary">
             依赖文件<i class="el-icon-connection el-icon--right"></i>
           </el-button>
@@ -44,7 +47,7 @@
               >当前示例依赖文件（注意顺序）</el-dropdown-item
             >
             <el-dropdown-item
-              :command="item.url"
+              :command="item"
               v-for="(item, index) in subCodeComputed.relyOn"
               :key="index"
               >{{ item.label }}</el-dropdown-item
@@ -142,7 +145,11 @@ export default {
      * 点击菜单
      */
     handleCommand(e) {
-      downloadLocalFile(e);
+      if (e?.externalLinks && e.externalLinks) {
+        window.open(e.url);
+      } else {
+        downloadLocalFile(e.url);
+      }
     },
     /**
      * 一级语言切换
