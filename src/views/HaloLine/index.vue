@@ -6,12 +6,16 @@
  
 <script>
 import HaloLine from "./HaloLine";
+import code from "./module/highlight";
 export default {
   name: "HaloLine",
   data() {
     return {
       viewer: null,
     };
+  },
+  created() {
+    this.$store.dispatch("highlight/set_code", code);
   },
   mounted() {
     this.init();

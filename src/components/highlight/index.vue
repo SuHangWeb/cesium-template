@@ -11,7 +11,11 @@
     <template #title>
       <div class="title-view">
         <div class="title">源代码</div>
-        <el-radio-group size="mini" v-model="codeLanguage">
+        <el-radio-group
+          size="mini"
+          v-model="codeLanguage"
+          @change="codeLanguageChange"
+        >
           <el-radio-button
             v-for="(item, index) in codeComputed"
             :key="index"
@@ -139,6 +143,12 @@ export default {
      */
     handleCommand(e) {
       downloadLocalFile(e);
+    },
+    /**
+     * 一级语言切换
+     */
+    codeLanguageChange(e) {
+      this.subCodeLanguage = this.subCodeComputed.code[0].codeLanguage;
     },
   },
 };

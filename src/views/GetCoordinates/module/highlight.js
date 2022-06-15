@@ -4,11 +4,11 @@ export default [
     relyOn: [
       {
         label: "Entity.js",
-        url: "/Entity.js"
+        url: "cesium/Entity.js"
       },
       {
         label: "Transform.js",
-        url: "/Transform.js"
+        url: "cesium/Transform.js"
       }
     ],
     code: [

@@ -137,7 +137,8 @@ export const downloadLocalFile = (file, fileName) => {
   const prefixUrl = process.env.NODE_ENV === 'production' ? '/项目目录名称/' : '/';
   let a = document.createElement('a');
   // 路径中'/'为根目录，即index.html所在的目录
-  a.href = prefixUrl + 'cesium/' + file;
+  console.log(prefixUrl + file)
+  a.href = prefixUrl + file;
   // 下载下来的文件名
   a.download = fileName;
   // 添加点击
