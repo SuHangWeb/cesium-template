@@ -10,7 +10,7 @@
 
     <div class="right-menu">
       <div class="ciewSourceCode" v-if="ciewSourceCode">
-        <el-button type="text" class="button"
+        <el-button type="text" class="button" @click="openViewCode"
           ><i class="iconfont icon-daima"></i>查看源代码</el-button
         >
       </div>
@@ -57,6 +57,7 @@ export default {
   watch: {
     $route: {
       handler(to, from) {
+        this.$store.dispatch("highlight/set_view_code", false);
         if (to.meta?.highlight && to.meta.highlight) {
           this.ciewSourceCode = true;
         } else {
@@ -77,6 +78,12 @@ export default {
     async logout() {
       await this.$store.dispatch("user/logout");
       this.$router.push(`/login?redirect=${this.$route.fullPath}`);
+    },
+    /**
+     * 打开查看源代码
+     */
+    openViewCode() {
+      this.$store.dispatch("highlight/set_view_code", true);
     },
   },
 };

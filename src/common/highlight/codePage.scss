@@ -1,0 +1,68 @@
+pre {
+  margin: 0 !important;
+  background: #282c34 !important;
+  color: #abb2bf !important;
+}
+
+.css.hljs.language-css,
+.javascript.hljs.language-javascript,
+.html.hljs.language-xml {
+  background: #282c34 !important;
+  color: #abb2bf !important;
+  padding: 0px;
+
+  .hljs-number {
+    color: #abb2bf !important;
+  }
+
+  .hljs-attribute {
+    color: #75d0fa !important;
+  }
+
+  // css选择器颜色
+  .hljs-selector-tag {
+    color: #e6db74 !important;
+  }
+
+  // 括号
+  .hljs-tag {
+    color: #fff !important;
+  }
+
+  // 对象的key
+  .hljs-attr {
+    color: #70ccf7 !important;
+  }
+
+  // 对象value
+  .hljs-string {
+    color: #abb2bf !important;
+  }
+
+  // 内置对象
+  .hljs-variable.language_ {
+    color: #75d0fa !important;
+  }
+
+  // 方法
+  .hljs-title.function_ {
+    color: #e6db74 !important;
+  }
+
+  // 构造方法
+  .hljs-title.class_ {
+    color: #07fad1 !important;
+  }
+
+  // js注释
+  .hljs-comment {}
+}
+
+// 标签名称,js关键字
+.hljs-built_in,
+.hljs-keyword,
+.hljs-name,
+.hljs-selector-tag,
+.hljs-tag {
+  color: rgb(91, 161, 241) !important;
+}

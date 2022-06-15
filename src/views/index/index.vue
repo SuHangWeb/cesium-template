@@ -17,6 +17,52 @@ export default {
         <div class="highlight">
             <div class="post-content" v-html="content" v-highlight></div>
         </div>
+         <div class="highlight">
+            <div class="post-content" v-html="content" v-highlight></div>
+        </div>
+         <div class="highlight">
+            <div class="post-content" v-html="content" v-highlight></div>
+        </div>
+         <div class="highlight">
+            <div class="post-content" v-html="content" v-highlight></div>
+        </div>
+         <div class="highlight">
+            <div class="post-content" v-html="content" v-highlight></div>
+        </div>
+         <div class="highlight">
+            <div class="post-content" v-html="content" v-highlight></div>
+        </div>
+         <div class="highlight">
+            <div class="post-content" v-html="content" v-highlight></div>
+        </div>
+         <div class="highlight">
+            <div class="post-content" v-html="content" v-highlight></div>
+        </div>
+         <div class="highlight">
+            <div class="post-content" v-html="content" v-highlight></div>
+        </div>
+         <div class="highlight">
+            <div class="post-content" v-html="content" v-highlight></div>
+        </div>
+         <div class="highlight">
+            <div class="post-content" v-html="content" v-highlight></div>
+        </div>
+         <div class="highlight">
+            <div class="post-content" v-html="content" v-highlight></div>
+        </div>
+         <div class="highlight">
+            <div class="post-content" v-html="content" v-highlight></div>
+        </div>
+         <div class="highlight">
+            <div class="post-content" v-html="content" v-highlight></div>
+        </div>
+         <div class="highlight">
+            <div class="post-content" v-html="content" v-highlight></div>
+        </div>
+         <div class="highlight">
+         13246546
+            <div class="post-content" v-html="content" v-highlight></div>
+        </div>
       `;
     this.$store.dispatch("highlight/set_code", code);
   },
