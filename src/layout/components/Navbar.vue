@@ -9,7 +9,7 @@
     <breadcrumb class="breadcrumb-container" />
 
     <div class="right-menu">
-      <div class="ciewSourceCode" v-if="ciewSourceCode">
+      <div class="ciewSourceCode" v-if="ciewSourceCode && code.length != 0">
         <el-button type="text" class="button" @click="openViewCode"
           ><i class="iconfont icon-daima"></i>查看源代码</el-button
         >
@@ -69,7 +69,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["sidebar", "avatar"]),
+    ...mapGetters(["sidebar", "avatar", "code"]),
   },
   methods: {
     toggleSideBar() {
