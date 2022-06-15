@@ -15,6 +15,7 @@
 import { initPosition, dataPosition } from "./module/data";
 import popupDom from "./module/popupDom.vue";
 import Entity from "@/common/cesium/Entity.js";
+import code from "./module/highlight";
 export default {
   name: "htmlPopup",
   components: { popupDom },
@@ -26,6 +27,9 @@ export default {
       dataPosition: dataPosition,
       show_list: [],
     };
+  },
+  created() {
+    this.$store.dispatch("highlight/set_code", code);
   },
   mounted() {
     this.init();

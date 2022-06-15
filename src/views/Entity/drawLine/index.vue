@@ -15,6 +15,7 @@
  
 <script>
 import Entity from "@/common/cesium/Entity.js";
+import code from "./module/highlight";
 export default {
   name: "drawLine",
   data() {
@@ -25,6 +26,9 @@ export default {
       cesiumContainer: null,
       EntityData: [],
     };
+  },
+  created() {
+    this.$store.dispatch("highlight/set_code", code);
   },
   mounted() {
     this.init();

@@ -8,6 +8,7 @@
 import Entity from "@/common/cesium/Entity.js";
 import Canvas from "@/common/cesium/Canvas.js";
 import positionData from "./module/data";
+import code from "./module/highlight";
 export default {
   name: "canvasImageSpot",
   data() {
@@ -19,6 +20,9 @@ export default {
       //广告牌数据
       billboardArr: [],
     };
+  },
+  created() {
+    this.$store.dispatch("highlight/set_code", code);
   },
   mounted() {
     this.init();

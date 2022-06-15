@@ -201,7 +201,7 @@ export const constantRoutes = [
         path: 'waterPolo',
         name: 'WaterPolo',
         component: () => import('@/views/Echarts/WaterPolo'),
-        meta: { title: '动态水球', icon: 'WaterPolo', highlight: true }
+        meta: { title: '动态水球', icon: 'el-icon-pie-chart', highlight: true }
       },
     ]
   },

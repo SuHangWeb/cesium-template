@@ -1,7 +1,11 @@
 <template>
   <div class="container">
     <div id="cesiumContainer"></div>
-    <operation-panel @draw="drawStart" @edit="editRect" :edit="rectArr.length != 0" />
+    <operation-panel
+      @draw="drawStart"
+      @edit="editRect"
+      :edit="rectArr.length != 0"
+    />
   </div>
 </template>
  
@@ -9,6 +13,7 @@
 import Canvas from "@/common/cesium/Canvas";
 import Entity from "@/common/cesium/Entity.js";
 import operationPanel from "./module/operationPanel.vue";
+import code from "./module/highlight";
 export default {
   name: "textMapRectangle",
   components: { operationPanel },
@@ -33,6 +38,9 @@ export default {
       //当前编辑点
       currentPoint: null,
     };
+  },
+  created() {
+    this.$store.dispatch("highlight/set_code", code);
   },
   mounted() {
     this.init();
