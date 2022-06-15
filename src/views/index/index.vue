@@ -8,62 +8,11 @@
 <script>
 import docMd from "@/assets/doc/home.md";
 import highlight from "@/components/highlight";
-
+import code from "./module/highlight";
 export default {
   name: "index",
   components: { docMd, highlight },
   created() {
-    const code = `
-        <div class="highlight">
-            <div class="post-content" v-html="content" v-highlight></div>
-        </div>
-         <div class="highlight">
-            <div class="post-content" v-html="content" v-highlight></div>
-        </div>
-         <div class="highlight">
-            <div class="post-content" v-html="content" v-highlight></div>
-        </div>
-         <div class="highlight">
-            <div class="post-content" v-html="content" v-highlight></div>
-        </div>
-         <div class="highlight">
-            <div class="post-content" v-html="content" v-highlight></div>
-        </div>
-         <div class="highlight">
-            <div class="post-content" v-html="content" v-highlight></div>
-        </div>
-         <div class="highlight">
-            <div class="post-content" v-html="content" v-highlight></div>
-        </div>
-         <div class="highlight">
-            <div class="post-content" v-html="content" v-highlight></div>
-        </div>
-         <div class="highlight">
-            <div class="post-content" v-html="content" v-highlight></div>
-        </div>
-         <div class="highlight">
-            <div class="post-content" v-html="content" v-highlight></div>
-        </div>
-         <div class="highlight">
-            <div class="post-content" v-html="content" v-highlight></div>
-        </div>
-         <div class="highlight">
-            <div class="post-content" v-html="content" v-highlight></div>
-        </div>
-         <div class="highlight">
-            <div class="post-content" v-html="content" v-highlight></div>
-        </div>
-         <div class="highlight">
-            <div class="post-content" v-html="content" v-highlight></div>
-        </div>
-         <div class="highlight">
-            <div class="post-content" v-html="content" v-highlight></div>
-        </div>
-         <div class="highlight">
-         13246546
-            <div class="post-content" v-html="content" v-highlight></div>
-        </div>
-      `;
     this.$store.dispatch("highlight/set_code", code);
   },
 };

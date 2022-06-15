@@ -60,6 +60,20 @@ export default {
         });
         // 获取点击位置
         const getPosition = this._Transform.getPosition(event);
+        // const getPositionAll = JSON.stringify(getPosition);
+        // const longitude = getPosition.longitude;
+        // const latitude = getPosition.latitude;
+        // const cameraHeight = getPosition.cameraHeight;
+        // const Alert =
+        //   getPositionAll +
+        //   "\n经度：" +
+        //   longitude +
+        //   "、纬度：" +
+        //   latitude +
+        //   "、相机高度：" +
+        //   cameraHeight;
+        // const Alert = getPositionAll + '\n' +'经度：' +longitude+'、纬度：'+latitude、相机高度：cameraHeight
+
         const Alert = `${JSON.stringify(getPosition)}\n经度：${
           getPosition.longitude
         }、纬度：${getPosition.latitude}、相机高度：${

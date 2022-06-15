@@ -12,17 +12,24 @@
       <div class="title-view">
         <div class="title">源代码</div>
         <el-radio-group size="mini" v-model="codeLanguage">
-          <el-radio-button label="VUE">Vue</el-radio-button>
-          <el-radio-button label="JS">原生JS</el-radio-button>
+          <el-radio-button
+            v-for="(item, index) in codeComputed"
+            :key="index"
+            :label="item.codeLanguage"
+            >{{ item.codeLanguageLable }}</el-radio-button
+          >
         </el-radio-group>
       </div>
     </template>
     <div class="code-view">
       <div class="subCodeLanguage">
         <el-radio-group size="mini" v-model="subCodeLanguage">
-          <el-radio-button label="html">html</el-radio-button>
-          <el-radio-button label="js">js</el-radio-button>
-          <el-radio-button label="css">css</el-radio-button>
+          <el-radio-button
+            v-for="(item, index) in subCodeComputed.code"
+            :key="index"
+            :label="item.codeLanguage"
+            >{{ item.codeLanguage }}</el-radio-button
+          >
         </el-radio-group>
         <el-dropdown>
           <el-button size="mini" type="primary">
@@ -32,20 +39,31 @@
             <el-dropdown-item disabled
               >当期示例依赖文件（注意顺序）</el-dropdown-item
             >
-            <el-dropdown-item>Echarts.js</el-dropdown-item>
-            <el-dropdown-item>Canvas.js</el-dropdown-item>
-            <el-dropdown-item>Entity.js</el-dropdown-item>
-            <el-dropdown-item>index.js</el-dropdown-item>
+            <el-dropdown-item
+              v-for="(item, index) in subCodeComputed.relyOn"
+              :key="index"
+              >{{ item.label }}</el-dropdown-item
+            >
           </el-dropdown-menu>
         </el-dropdown>
       </div>
       <div class="code-main">
-        <div class="code-main-view" v-code>
-          <pre>
-            <code>
-                {{code}}
-            </code>
-          </pre>
+        <div v-for="(_item, _index) in codeComputed" :key="_index">
+          <div v-if="_item.codeLanguage == codeLanguage">
+            <div v-for="(item, index) in subCodeComputed.code" :key="index">
+              <div
+                class="code-main-view"
+                v-if="item.codeLanguage == subCodeLanguage"
+                v-code
+              >
+                <pre>
+                  <code>
+                      {{item.content}}
+                  </code>
+                </pre>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -68,12 +86,46 @@ export default {
       code: (state) => state.highlight.code,
       viewCode: (state) => state.highlight.viewCode,
     }),
+    //一级计算
+    codeComputed() {
+      function get_subCodeLanguage(type) {
+        if (type == "VUE") {
+          return "Vue";
+        }
+        if (type == "JS") {
+          return "原生JS";
+        }
+      }
+      if (this.code.length == 0) {
+        return [];
+      } else {
+        return this.code.map((item) => {
+          return {
+            ...item,
+            codeLanguageLable: get_subCodeLanguage(item.codeLanguage),
+          };
+        });
+      }
+    },
+    //二级计算
+    subCodeComputed() {
+      const _filter = this.code.filter(
+        (item) => this.codeLanguage == item.codeLanguage
+      );
+      return _filter.length != 0 ? _filter[0] : [];
+    },
   },
   data() {
     return {
       codeLanguage: "VUE",
       subCodeLanguage: "html",
     };
+  },
+  created() {
+    if (this.code[0].length != 0) {
+      this.codeLanguage = this.code[0].codeLanguage;
+      this.subCodeLanguage = this.code[0].code[0].codeLanguage;
+    }
   },
   methods: {
     handleClose() {
@@ -111,10 +163,16 @@ export default {
       width: 100%;
       background: #f8f8f8;
       box-sizing: border-box;
-      padding: 10px;
+
       height: calc(100% - 68px);
+      position: relative;
       .code-main-view {
         height: 100%;
+        width: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        padding: 10px;
         pre {
           width: 100%;
           height: 100%;
