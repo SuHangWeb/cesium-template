@@ -14,6 +14,19 @@ class Entity {
         this.Cesium = Cesium
         this.viewer = viewer
     }
+
+    /**
+    * 创建任意实体
+    * @param {Object} params 配置参数
+    * @returns {Entity} 实体
+    */
+    create(params) {
+        const entity = this.viewer.entities.add({
+            ...params
+        })
+        return entity
+    }
+
     /**
      * 创建点
      * @param {Object} params 配置参数

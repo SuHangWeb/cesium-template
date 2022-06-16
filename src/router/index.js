@@ -166,6 +166,12 @@ export const constantRoutes = [
         component: () => import('@/views/Entity/canvasImageSpot'),
         meta: { title: 'Canvas 图片点', icon: 'el-icon-pie-chart', highlight: true }
       },
+      {
+        path: 'dynamicPosition',
+        name: 'DynamicPosition',
+        component: () => import('@/views/Entity/dynamicPosition'),
+        meta: { title: '动态位置', icon: 'el-icon-place', highlight: true }
+      },
     ]
   },
 

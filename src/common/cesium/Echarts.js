@@ -277,6 +277,7 @@ class Echarts3D {
         if (params.data.length == 0) return
 
         const _Utils = new Utils();
+
         const Cesium = this.Cesium
         //节点id 用来插入当前节点内元素使用
         const nodeId = params?.nodeId ? params.nodeId : ""
@@ -463,18 +464,44 @@ class Echarts3D {
         //插入到页面中
         _Utils.operationDom("append", nodeId, _createDom)
 
+        // const watchUpdatedPositions = (dom, height, latitude, longitude) => {
+        //     /**
+        //      * scene = 场景
+        //      * preRender = Event 事件订阅
+        //      * addEventListener = 注册一个在事件引发时执行的回调函数
+        //      *
+        //      */
+        //     this.viewer.scene.preRender.addEventListener(() => {
+        //         const position = Cesium.Cartesian3.fromDegrees(latitude, longitude, height);
+        //         /**
+        //          * 转换为画布坐标
+        //          * cartesianToCanvasCoordinates = 将笛卡尔坐标中的位置转换为画布坐标。这通常用于放置与场景中的对象位于同一屏幕位置的HTML元素。
+        //          */
+        //         const canvasPosition = this.viewer.scene.cartesianToCanvasCoordinates(
+        //             position,
+        //             new Cesium.Cartesian2()
+        //         );
+
+        //         if (Cesium.defined(canvasPosition)) {
+        //             dom.style.top = canvasPosition.y + "px";
+        //             dom.style.left = canvasPosition.x + "px";
+        //         }
+        //     });
+        // }
+
         //定位到页面中
         for (let i = 0; i < data.length; i++) {
             const item = data[i]
             const dom = document.getElementById(item.id);
             // let cartographics = [Cesium.Cartographic.fromDegrees(item.position[0], item.position[1])];
-            // // sampleTerrain=采样地形 三个参数分别备注如下
+            // sampleTerrain=采样地形 三个参数分别备注如下
             // Cesium.sampleTerrain(
             //     this.viewer.scene.terrainProvider, //地形相关的
             //     14, //地形高度级别
             //     cartographics
             // ).then((updatedPositions) => {
             //     const { height, latitude, longitude } = updatedPositions[0]
+            //     watchUpdatedPositions(dom, height, item.position[0], item.position[1])
             // });
 
             /**

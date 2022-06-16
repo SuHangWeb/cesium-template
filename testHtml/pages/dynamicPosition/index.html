@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title> sesium Demo </title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <script src="../../src/Build/Cesium/Cesium.js"></script>
+  <link href="../../src/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+</head>
+
+<body>
+  <input type="text" id="clock">
+  <div id="cesiumContainer"></div>
+  <div id="showInfo"></div>
+
+</body>
+
+</html>
+
+<!-- 1、获取viewer对象 -->
+<script>
+  var viewer = new Cesium.Viewer('cesiumContainer', {
+    imageryProvider: new Cesium.UrlTemplateImageryProvider({
+      url: "http://map.geoq.cn/ArcGIS/rest/services/ChinaOnlineStreetPurplishBlue/MapServer/tile/{z}/{y}/{x}",
+    }),
+    terrainProvider: new Cesium.CesiumTerrainProvider({
+      url: "http://data.marsgis.cn/terrain",
+    }),
+    shouldAnimate: true,
+    geocoder: false,
+    homeButton: false,
+    sceneModePicker: false,
+    baseLayerPicker: false,
+    //baseLayerPicker:false,
+    //animation:false,
+    //creditContainer:"credit"
+    timeline: true,
+    vrButton: false
+  });
+
+</script>
+
+<!-- 2、加载渲染代码 -->
+<script src="./cesiumFlight.js"></script>
+
+<!-- 3、调用更新 -->
+<script>
+  //测试数据 [时间，经度，纬度，高程]
+  var myArray = [
+    [0, -119, 35.1219512195122, 0],
+    [10, -118, 35.2439024390244, 48750],
+    [20, -117, 35.3658536585366, 95000],
+    [30, -116, 35.4878048780488, 138750],
+    [40, -115, 35.609756097561, 180000],
+    [50, -114, 35.7317073170732, 218750],
+    [60, -113, 35.8536585365854, 255000],
+    [70, -112, 35.9756097560976, 288750],
+    [80, -111, 36.0975609756098, 320000],
+    [90, -110, 36.219512195122, 348750],
+    [100, -109, 36.3414634146341, 375000],
+    [110, -108, 36.4634146341463, 398750],
+    [120, -107, 36.5853658536585, 420000],
+    [130, -106, 36.7073170731707, 438750],
+    [140, -105, 36.8292682926829, 455000],
+    [150, -104, 36.9512195121951, 468750],
+    [160, -103, 37.0731707317073, 480000],
+    [170, -102, 37.1951219512195, 488750],
+    [180, -101, 37.3170731707317, 495000],
+    [190, -100, 37.4390243902439, 498750],
+    [200, -99, 37.5609756097561, 500000],
+    [210, -98, 37.6829268292683, 498750],
+    [220, -97, 37.8048780487805, 495000],
+    [230, -96, 37.9268292682927, 488750],
+    [240, -95, 38.0487804878049, 480000],
+    [250, -94, 38.1707317073171, 468750],
+    [260, -93, 38.2926829268293, 455000],
+    [270, -92, 38.4146341463415, 438750],
+    [280, -91, 38.5365853658537, 420000],
+    [290, -90, 38.6585365853659, 398750],
+    [300, -89, 38.780487804878, 375000],
+    [310, -88, 38.9024390243902, 348750],
+    [320, -87, 39.0243902439024, 320000],
+    [330, -86, 39.1463414634146, 288750],
+    [340, -85, 39.2682926829268, 255000],
+    [350, -84, 39.390243902439, 218750],
+    [360, -83, 39.5121951219512, 180000],
+    [370, -82, 39.6341463414634, 138750],
+    [380, -81, 39.7560975609756, 95000],
+    [390, -80, 39.8780487804878, 48750],
+    [400, -79, 40, 0]
+  ];
+
+  //初始化模型
+  doScene('./Cesium_Air.glb', false, 0, 0, 500000, 0, 0, 0);
+
+  //用定时器模拟实时更新数据
+
+  var i = 0;
+  var int = self.setInterval("clock()", 20);
+
+  function clock() {
+    var d = new Date();
+    var t = d.toLocaleTimeString();
+    document.getElementById("clock").value = t;
+
+    var position = new Cesium.Cartesian3();
+
+    position = Cesium.Cartesian3.fromDegrees(myArray[i][1], myArray[i][2], myArray[i][3]); //(经度，纬度，高程)
+
+    var gheading = Cesium.Math.toRadians(i * 10); //俯仰角
+    var gpitch = Cesium.Math.toRadians(0); //偏行角
+    var groll = Cesium.Math.toRadians(0); //滚转角
+
+    var hpr = new Cesium.HeadingPitchRoll(gheading, gpitch, groll);
+    var orientation = Cesium.Transforms.headingPitchRollQuaternion(position, hpr);
+
+    //更新位置
+    viewer.entities.getById("myEntity").position = position;
+    //更新姿态
+    viewer.entities.getById("myEntity").orientation = orientation;
+    i++;
+
+    if (i == myArray.length) {
+      i = 0;
+    }
+  }
+
+</script>
