@@ -243,6 +243,35 @@ class Echarts3D {
     /**
      * 创建动态水球
      * @param {*} params 
+     * @use 使用方法如下:
+     * const _Echarts3D = new Echarts3D(Cesium, viewer)
+     * _Echarts3D.createWaterPolo({
+     *  data:[{
+     *      name:"当前组名称:String",
+     *      position:[经度:Number,纬度:Number,高程:Number],
+     *      data:{Number} 0-100之间的值,
+     *      color:{十六进制、rgb、rgba...} 可选值 ,
+     *        
+     *  }],
+     * nodeId:{String}, 必选参数：需要插入信息框的父元素id名称
+     * id:{String}, 可选参数：如果不存在id 默认会自动随机赋予id
+     * color:{Array}, 可选参数： 颜色数组 默认会存在一组色值 也可以自定义传递 取值从索引0 开始
+     * padding:{Number}, 可选参数： 球体内容的 内间距
+     * size:{Number}, 可选参数：球体的直径 默认是100/单位：px
+     * zIndex:{Number},可选参数：定位层级
+     * border：{Objedt}, 可选参数： 边框=》{
+     *      width:{Number} ,边框宽度
+     *      color:{色值},边框的颜色
+     * }
+     * background:{Object},可选参数：背景=》{
+     *      color:{色值},背景色 默认：白色
+     * }
+     * font:{Object},可选参数：文字=》{
+     *      size:{Number},文字字号 默认是 直径的四分之一大小
+     *      color:{色值},文字颜色 默认：黑色  
+     * }
+     *  
+     * })
      */
     createWaterPolo(params) {
         if (params.data.length == 0) return
