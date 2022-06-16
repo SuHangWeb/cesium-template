@@ -46,6 +46,7 @@
             >一键复制</el-button
           >
           <el-dropdown
+            class="dropdown"
             @command="handleCommand"
             v-if="subCodeComputed.relyOn && subCodeComputed.relyOn.length != 0"
           >
@@ -228,8 +229,8 @@ export default {
       font-size: 16px;
     }
   }
-  .copy {
-    margin-right: 15px;
+  .dropdown {
+    margin-left: 15px;
   }
   .code-view {
     border-top: 1px solid #dcdfe6;
