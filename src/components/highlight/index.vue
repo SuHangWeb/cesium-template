@@ -35,25 +35,36 @@
             >{{ item.codeLanguage }}</el-radio-button
           >
         </el-radio-group>
-        <el-dropdown
-          @command="handleCommand"
-          v-if="(subCodeComputed.relyOn && subCodeComputed.relyOn.length != 0)"
-        >
-          <el-button size="mini" type="primary">
-            依赖文件<i class="el-icon-connection el-icon--right"></i>
-          </el-button>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item disabled
-              >当前示例依赖文件（注意顺序）</el-dropdown-item
-            >
-            <el-dropdown-item
-              :command="item"
-              v-for="(item, index) in subCodeComputed.relyOn"
-              :key="index"
-              >{{ item.label }}</el-dropdown-item
-            >
-          </el-dropdown-menu>
-        </el-dropdown>
+        <div>
+          <el-button
+            icon="el-icon-copy-document"
+            class="copy"
+            size="mini"
+            type="primary"
+            @click="doCopy"
+            plain
+            >一键复制</el-button
+          >
+          <el-dropdown
+            @command="handleCommand"
+            v-if="subCodeComputed.relyOn && subCodeComputed.relyOn.length != 0"
+          >
+            <el-button size="mini" type="primary">
+              依赖文件<i class="el-icon-connection el-icon--right"></i>
+            </el-button>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item disabled
+                >当前示例依赖文件（注意顺序）</el-dropdown-item
+              >
+              <el-dropdown-item
+                :command="item"
+                v-for="(item, index) in subCodeComputed.relyOn"
+                :key="index"
+                >{{ item.label }}</el-dropdown-item
+              >
+            </el-dropdown-menu>
+          </el-dropdown>
+        </div>
       </div>
       <div class="code-main">
         <div v-for="(_item, _index) in codeComputed" :key="_index">
@@ -65,7 +76,7 @@
                 v-code
               >
                 <pre>
-                  <code>
+                  <code :class="item.codeLanguage | languageFilter">
                       {{item.content}}
                   </code>
                 </pre>
@@ -88,6 +99,20 @@ export default {
       default: () => {
         return {};
       },
+    },
+  },
+  filters: {
+    languageFilter(value) {
+      if (value == "js") {
+        return "javascript";
+      }
+      if (value == "css") {
+        return "scss";
+      }
+      if (value == "html") {
+        return "html";
+      }
+      return value;
     },
   },
   computed: {
@@ -123,6 +148,12 @@ export default {
       );
       return _filter.length != 0 ? _filter[0] : [];
     },
+    /**
+     * 拷贝的数据
+     */
+    copyData() {
+      return 123;
+    },
   },
   data() {
     return {
@@ -138,6 +169,31 @@ export default {
     }
   },
   methods: {
+    // 复制
+    doCopy() {
+      const copyDataFilter = this.subCodeComputed.code.filter(
+        (item) => item.codeLanguage == this.subCodeLanguage
+      );
+      if (copyDataFilter.length == 0) return;
+      const copyData = copyDataFilter[0].content;
+      this.$copyText(copyData)
+        .then((message) => {
+          this.$notify({
+            title: "成功",
+            message: "复制成功",
+            type: "success",
+          });
+        })
+        .catch((err) => {
+          this.$notify.error({
+            title: "错误",
+            message: "复制失败",
+          });
+        });
+    },
+    /**
+     * 窗口关闭
+     */
     handleClose() {
       this.$store.dispatch("highlight/set_view_code", false);
     },
@@ -172,9 +228,12 @@ export default {
       font-size: 16px;
     }
   }
+  .copy {
+    margin-right: 15px;
+  }
   .code-view {
     border-top: 1px solid #dcdfe6;
-    height: calc(100vh - 90px);
+    height: calc(100vh - 80px);
     display: flex;
     flex-direction: column;
     .subCodeLanguage {
@@ -187,7 +246,7 @@ export default {
     }
     .code-main {
       width: 100%;
-      background: #f8f8f8;
+      background: #282c34;
       box-sizing: border-box;
 
       height: calc(100% - 68px);
@@ -204,6 +263,7 @@ export default {
           height: 100%;
           margin: 0;
           padding: 0;
+          display: flex;
           // white-space: pre-wrap;
           // tab-size: 2;
           code {

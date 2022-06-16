@@ -6,8 +6,9 @@
 
 import hljs from 'highlight.js'
 // import 'highlight.js/styles/vs.css'
-import "highlight.js/styles/github.css";
+// import "highlight.js/styles/github.css";
 // import 'highlight.js/styles/default.css';
+import 'highlight.js/styles/atom-one-dark.css';
 // 由于这个插件库自带的代码高样式不是很好看,这里引入一个自己改的样式文件
 // import '../styles/codePage.scss'
 const install = function (Vue) {
