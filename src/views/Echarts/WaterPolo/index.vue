@@ -14,7 +14,6 @@ export default {
   data() {
     return {
       viewer: null,
-      _Entity: null,
       _Echarts3D: null,
       echartsData: echartsData,
     };
@@ -43,7 +42,6 @@ export default {
       });
       //设置贴地效果
       this.viewer.scene.globe.depthTestAgainstTerrain = false;
-      this._Entity = new Entity(Cesium, this.viewer);
       this._Echarts3D = new Echarts3D(Cesium, this.viewer);
       this.start();
     },

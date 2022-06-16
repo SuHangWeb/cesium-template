@@ -204,16 +204,49 @@ export default [
     ],
     code: [
       {
-        codeLanguage: "html",
-        content: ``
-      },
-      {
         codeLanguage: "js",
-        content: ``
-      },
-      {
-        codeLanguage: "css",
-        content: ``
+        content: `function openWaterPolo() {
+                    const _Echarts3D = new Echarts3D(Cesium, viewer);
+                    const echartsData = [
+                        {
+                            name: "惠工广场",
+                            position: [123.43382736814452, 41.811201240193164, 0],
+                            data: 50,
+                            // color: "red"
+                        },
+                        {
+                            name: "沈阳北站",
+                            position: [123.4297225289727, 41.816902281612464, 0],
+                            data: 10,
+                        },
+                        {
+                            name: "市府广场",
+                            position: [123.42781540061213, 41.802398394932275, 0],
+                            data: 80,
+                        },
+                    ]
+                
+                    _Echarts3D.createWaterPolo({
+                        nodeId: "MainCenter",
+                        data: echartsData,
+                    });
+                
+                    //相机(定位到了 沈河区惠工广场)
+                    viewer.camera.flyTo({
+                        //setView是直接跳到 flyTo// 是镜头飞行到  网速不好或者电脑配置不高 还是不要fly了吧
+                        destination: Cesium.Cartesian3.fromDegrees(
+                            123.43382736814452,
+                            41.811201240193164,
+                            5000
+                        ), //经纬度坐标转换为 笛卡尔坐标(世界坐标)
+                        orientation: {
+                            heading: Cesium.Math.toRadians(0.0), // east, default value is 0.0 (north) //东西南北朝向
+                            pitch: Cesium.Math.toRadians(-90), // default value (looking down)  //俯视仰视视觉
+                            roll: 0.0, // default value
+                        },
+                        duration: 3, //3秒到达战场
+                    });
+                }`
       }
     ]
   },

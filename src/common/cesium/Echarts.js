@@ -249,7 +249,6 @@ class Echarts3D {
 
         const _Utils = new Utils();
         const Cesium = this.Cesium
-        const _Transform = new Transform(Cesium, this.viewer)
         //节点id 用来插入当前节点内元素使用
         const nodeId = params?.nodeId ? params.nodeId : ""
         //初始化背景色
