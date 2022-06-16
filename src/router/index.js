@@ -234,7 +234,21 @@ export const constantRoutes = [
         path: 'base',
         name: 'Base',
         component: () => import('@/views/Maps/Base'),
-        meta: { title: 'baseMap 地图集合', icon: 'earth', highlight: true }
+        meta: { title: '地图集合', icon: 'earth', highlight: true }
+      },
+      {
+        path: 'gaode',
+        name: 'Gaode',
+        component: () => import('@/views/Maps/Gaode/PoiQuery'),
+        meta: { title: '高德', icon: 'earth', highlight: true },
+        children: [
+          {
+            path: 'poiQuery',
+            component: () => import('@/views/Maps/Gaode/PoiQuery'),
+            name: 'PoiQuery',
+            meta: { title: '高德POI查询', icon: 'earth', highlight: true }
+          },
+        ]
       },
     ]
   },
