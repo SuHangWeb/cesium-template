@@ -10,8 +10,6 @@ import '@/styles/index.scss' // global css
 
 import 'github-markdown-css';
 
-console.log(process.env.VUE_APP_PUBLIC_URL)
-
 import App from './App'
 import store from './store'
 import router from './router'
