@@ -49,7 +49,8 @@ export default {
       const _HaloLine = new HaloLine(
         Cesium,
         this.viewer,
-        "/file/HaloLine/geojson/wuhan-line1.json",
+        process.env.VUE_APP_PUBLIC_URL +
+          "/file/HaloLine/geojson/wuhan-line1.json",
         "#ffa500"
       );
       _HaloLine.init();

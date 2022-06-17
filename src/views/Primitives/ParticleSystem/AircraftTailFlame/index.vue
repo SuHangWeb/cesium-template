@@ -64,7 +64,7 @@ export default {
         ),
         //控制位偏移
         // viewFrom: new Cesium.Cartesian3(-100.0, 0.0, 100.0),
-        uri: "/glb/Cesium_Air.glb",
+        uri: process.env.VUE_APP_PUBLIC_URL + "/glb/Cesium_Air.glb",
         minimumPixelSize: 100,
       });
       // 创建模型 end
@@ -210,7 +210,7 @@ export default {
       //创建粒子 start
       //通用的配置
       const CommonConfig = {
-        image: "/image/fire.png",
+        image: process.env.VUE_APP_PUBLIC_URL + "/image/fire.png",
         /**
          * 每帧都要调用一次回调函数以更新粒子。
          * @param {*} particle 正在更新粒子。

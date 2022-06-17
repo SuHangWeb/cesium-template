@@ -60,7 +60,7 @@ export default {
           ...item,
           height: 140,
           width: 300,
-          src: "/image/textPnl.png",
+          src: process.env.VUE_APP_PUBLIC_URL + "/image/textPnl.png",
         });
         imageReq.then((image) => {
           const _createBillboard = this._Entity.createBillboard({
@@ -112,7 +112,7 @@ export default {
             ...item,
             height: 140,
             width: 300,
-            src: "/image/textPnl.png",
+            src: process.env.VUE_APP_PUBLIC_URL + "/image/textPnl.png",
             data: {
               num: Math.round(Math.random() * (0 - 1000) + 1000),
             },
@@ -136,7 +136,4 @@ export default {
     height: 100%;
   }
 }
-
-
-
 </style>
