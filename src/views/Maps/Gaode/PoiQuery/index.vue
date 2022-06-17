@@ -72,6 +72,21 @@ export default {
     ).then(() => {
       // 加载成功，进行后续操作
       // this.searchKeywordChange();
+      AMap.plugin("AMap.DistrictSearch", function () {
+        const districtSearch = new AMap.DistrictSearch({
+          level: "country",
+          subdistrict: 1,
+        });
+        console.log(districtSearch);
+        // https://blog.csdn.net/fwx426328/article/details/81611143
+        districtSearch.search("中国", function (status, result) {
+          console.log(result)
+          var list = result.districtList[0]["districtList"];
+          // for (var i = 0; i < list.length; i++) {
+          //   _this.provinceList.push(list[i].name);
+          // }
+        });
+      });
     });
     this.init();
   },
