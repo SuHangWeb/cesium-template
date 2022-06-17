@@ -2,14 +2,46 @@
   <div class="container">
     <div id="cesiumContainer"></div>
     <div class="poi-view-panel">
-      <el-input
-        placeholder="地点搜索......"
-        id="searchInput"
-        class="input-with-select"
-        @change="initGaode"
-        v-model="searchKeyword"
-      >
-      </el-input>
+      <template v-if="searchList.length != 0">
+        <div class="tabel-wrap">
+          <el-table
+            height="300px"
+            :data="searchList"
+            border
+            style="width: 100%"
+            @row-click="rowClick"
+          >
+            <el-table-column label="序列号" width="80px">
+              <template slot-scope="scope">
+                {{ (pageIndex - 1) * pageSize + (scope.$index + 1) }}
+              </template>
+            </el-table-column>
+            <el-table-column prop="name" label="名称"> </el-table-column>
+            <el-table-column prop="type" label="类型"> </el-table-column>
+            <el-table-column prop="address" label="地址"></el-table-column>
+          </el-table>
+          <div class="pagination">
+            <el-pagination
+              layout="prev, pager, next"
+              @current-change="currentPaginationChange"
+              :total="count"
+              :page-size="pageSize"
+              :current-page="pageIndex"
+            />
+          </div>
+        </div>
+        <el-divider></el-divider>
+      </template>
+      <div class="search-view">
+        <el-input
+          placeholder="地点搜索......"
+          id="searchInput"
+          class="input-with-select"
+          @change="searchKeywordChange"
+          v-model="searchKeyword"
+        >
+        </el-input>
+      </div>
     </div>
   </div>
 </template>
@@ -25,6 +57,10 @@ export default {
       _Map: null,
 
       searchKeyword: "",
+      searchList: [],
+      pageIndex: 1,
+      pageSize: 10,
+      count: 0,
     };
   },
   mounted() {
@@ -35,7 +71,7 @@ export default {
       "https://webapi.amap.com/maps?v=1.4.15&key=439ce156ded2dbce828cde9504fdd59e&plugin=AMap.Autocomplete,AMap.PlaceSearch,AMap.DistrictSearch"
     ).then(() => {
       // 加载成功，进行后续操作
-      this.initGaode();
+      // this.searchKeywordChange();
     });
     this.init();
   },
@@ -59,41 +95,58 @@ export default {
       this.viewer.scene.globe.depthTestAgainstTerrain = false;
     },
     /**
-     * 高德api方法初始化
+     * 分页
+     * @param {*} e
      */
-    initGaode() {
+    currentPaginationChange(e) {
+      this.pageIndex = e;
+      this.searchKeywordChange();
+    },
+    /**
+     * 高德POI 搜索
+     */
+    searchKeywordChange() {
+      if (this.searchKeyword == "") {
+        this.searchList = [];
+        return;
+      }
       const _this = this;
-      // const Keyword = new AMap.Autocomplete({
-      //   input: "searchInput",
-      // });
-      // // this.$nextTick(() => {
-      // //   AMap.event.addListener(Keyword, "select", (res) => {
-      // //     console.log(res);
-      // //     const { address, district, location, name, id } = res.poi;
-      // //     _this.startCamera({
-      // //       address,
-      // //       district,
-      // //       location,
-      // //       name,
-      // //       id,
-      // //     });
-      // //   }); //注册监听，当选中某条记录时会触发
-      // // });
 
-      AMap.plugin("AMap.PlaceSearch", function () {
+      AMap.plugin("AMap.PlaceSearch", () => {
+        /**
+         * 参数地址：https://lbs.amap.com/api/javascript-api/reference/search
+         * AMap.PlaceSearch 类目下
+         */
         var autoOptions = {
-          city: "全国",
+          city: "全国", //可选值：城市名（中文或中文全拼）、citycode、adcode 默认值：“全国”
+          pageSize: _this.pageSize, // 单页显示结果条数
+          children: 0, //不展示子节点数据
+          pageIndex: _this.pageIndex, //页码
+          extensions: "base", //返回基本地址信息
         };
         var placeSearch = new AMap.PlaceSearch(autoOptions);
         placeSearch.search(_this.searchKeyword, (status, result) => {
+          // console.log(status)
           // 搜索成功时，result即是对应的匹配数据
-          console.log(result);
-          // var node = new PrettyJSON.view.Node({
-          //     el: document.querySelector("#input-info"),
-          //     data: result
-          // });
+          // console.log(result);
+          if (result.info == "OK") {
+            _this.count = result.poiList.count;
+            _this.searchList = result.poiList.pois;
+          } else {
+            this.$notify.error({
+              title: "错误",
+              message: "请重新搜索",
+            });
+          }
         });
       });
+    },
+    /**
+     * 表格行点击
+     * @param {*} e
+     */
+    rowClick(e) {
+      this.startCamera(e);
     },
     /**
      * 相机视角调整到选中地址
@@ -171,7 +224,7 @@ export default {
   }
 }
 .poi-view-panel {
-  width: 400px;
+  width: 500px;
   position: fixed;
   bottom: 0;
   right: 0;
@@ -179,5 +232,12 @@ export default {
   border-radius: 6px 0 0 0;
   box-sizing: border-box;
   padding: 20px;
+  .tabel-wrap {
+    .pagination {
+      padding: 10px 0;
+      display: flex;
+      justify-content: flex-end;
+    }
+  }
 }
 </style>
