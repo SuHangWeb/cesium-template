@@ -3,8 +3,8 @@ export default [
     codeLanguage: "VUE",
     relyOn: [
       {
-        label: "loadJs.js",
-        url: "VUE/loadJs.js"
+        label: "Utils.js",
+        url: "cesium/Utils.js"
       },
       {
         label: "Entity.js",
@@ -125,7 +125,7 @@ export default [
       },
       {
         codeLanguage: "js",
-        content: `import loadJs from "@/common/loadJs.js";
+        content: `import Utils from "@/common/cesium/Utils.js";
                   import Entity from "@/common/cesium/Entity.js";
                   import GaodeMap from "@/common/cesium/Map/Gaode";
                   export default {
@@ -135,6 +135,7 @@ export default [
                         viewer: null,
                         _Entity: null,
                         _GaodeMap: null,
+                        _Utils: null,
                   
                         searchKeyword: "", //搜索关键词
                         searchList: [], //搜索结果表格数据
@@ -167,10 +168,11 @@ export default [
                       window._AMapSecurityConfig = {
                         securityJsCode: "2a0ce2005352672661417093c485a056",
                       };
+                      this._Utils = new Utils();
                       /**
                        * 加载高德api
                        */
-                      loadJs(
+                       this._Utils.loadJs(
                         "https://webapi.amap.com/maps?v=2.0&key="+process.env.VUE_APP_GAODE_KEY_WEB_TERMINAL+"&plugin=AMap.Autocomplete,AMap.PlaceSearch,AMap.DistrictSearch",
                         true
                       ).then(() => {
@@ -237,6 +239,7 @@ export default [
                         this.searchList = [];
                         this.city = [];
                         this.viewer.entities.removeAll();
+                        this.is_detailed = false
                       },
                       /**
                        * 分页
@@ -362,9 +365,9 @@ export default [
                           if (Cesium.defined(canvasPosition)) {
                             dom.style.top = canvasPosition.y - dom.offsetHeight - 20 + "px";
                             dom.style.left = canvasPosition.x + dom.offsetWidth / 2 + "px";
-                            this.is_detailed = true;
                           }
                         });
+                        this.is_detailed = true;
                       },
                       /**
                        * 相机视角调整到选中地址
