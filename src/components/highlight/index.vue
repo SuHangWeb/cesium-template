@@ -268,6 +268,7 @@ export default {
           // white-space: pre-wrap;
           // tab-size: 2;
           code {
+            width: 100%;
             margin: 0;
             height: 100%;
             box-sizing: border-box;

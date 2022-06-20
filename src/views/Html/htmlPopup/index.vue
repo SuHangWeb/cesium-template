@@ -122,7 +122,7 @@ export default {
          *
          */
         this.viewer.scene.preRender.addEventListener(() => {
-          const position = Cesium.Cartesian3.fromDegrees(item.lng, item.lat, 0);
+          const position = Cesium.Cartesian3.fromDegrees(item.lng, item.lat);
           /**
            * 转换为画布坐标
            * cartesianToCanvasCoordinates = 将笛卡尔坐标中的位置转换为画布坐标。这通常用于放置与场景中的对象位于同一屏幕位置的HTML元素。
