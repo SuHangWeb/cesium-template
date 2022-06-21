@@ -21,6 +21,6 @@ export default [
     },
     {
         title: "coding 工作台",
-        path: "https://landstar.coding.net/user"
+        path: "https://landstar.coding.net"
     }
 ]

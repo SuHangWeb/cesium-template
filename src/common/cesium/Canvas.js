@@ -1,5 +1,16 @@
+
 /**
  * 操作canvas
+ * 使用方法如下 
+   const _Canvas = new Canvas(cenium上下文,场景viewer)
+    _Canvas.方法函数(根据当前方法所需参数进行传递)
+    
+    方法目录如下：
+
+    方法名称 | 概要
+    --- | ---
+    drawText | 绘制文字
+    drawImageText | 绘制图片+文字
  */
 class Canvas {
     constructor(Cesium, viewer) {

@@ -1,36 +1,171 @@
 <template>
   <div class="container">
     <div id="cesiumContainer"></div>
-    <el-button
-      type="primary"
-      class="tools"
-      icon="el-icon-s-tools"
-      circle
-      @click="poiPanelShow = !poiPanelShow"
-    ></el-button>
-    <poi-Panel :show="poiPanelShow" @close="poiPanelShow = false" />
+    <div
+      id="marker-detailed-view"
+      class="marker-detailed-view"
+      v-show="is_detailed"
+    >
+      <div class="marker-detailed-title">{{ detailed.name }}</div>
+      <div class="marker-detailed-box">
+        <div class="marker-detailed-image" v-if="detailed.photos.length != 0">
+          <img :src="detailed.photos[0].url" alt="" />
+        </div>
+        <div class="marker-detailed-text">
+          <div class="marker-detailed-item">
+            <span>评分：</span>{{ detailed.rating }}
+          </div>
+          <div class="marker-detailed-item">
+            <span>电话：</span>{{ detailed.tel }}
+          </div>
+          <div class="marker-detailed-item">
+            <span>类目：</span>{{ detailed.type }}
+          </div>
+          <div class="marker-detailed-item">
+            <span>地址：</span>{{ detailed.pname }}/{{ detailed.cityname }}/{{
+              detailed.adname
+            }}/{{ detailed.address }}
+          </div>
+        </div>
+      </div>
+      <!-- <div class="marker-detailed-triangle"></div> -->
+    </div>
+    <div class="poi-view-panel">
+      <el-form ref="form" label-width="80px">
+        <el-form-item label="范围">
+          <el-radio-group v-model="cityRadio">
+            <el-radio :label="1">全国</el-radio>
+            <el-radio :label="2">城市</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <transition name="slide-fade">
+          <el-form-item label="城市" v-if="cityRadio === 2">
+            <el-cascader
+              v-model="city"
+              :props="{
+                children: 'districtList',
+                label: 'name',
+                value: 'adcode',
+              }"
+              style="width: 100%"
+              placeholder="城市选择..."
+              :options="cityOptions"
+            ></el-cascader>
+          </el-form-item>
+        </transition>
+      </el-form>
+      <template v-if="searchList.length != 0">
+        <div class="tabel-wrap">
+          <el-table
+            height="300px"
+            :data="searchList"
+            border
+            style="width: 100%"
+            @row-click="rowClick"
+          >
+            <el-table-column label="序列号" width="80px">
+              <template slot-scope="scope">
+                {{ (pageIndex - 1) * pageSize + (scope.$index + 1) }}
+              </template>
+            </el-table-column>
+            <el-table-column prop="name" label="名称"> </el-table-column>
+            <el-table-column prop="type" label="类型"> </el-table-column>
+            <el-table-column prop="address" label="地址"></el-table-column>
+          </el-table>
+          <div class="pagination">
+            <el-pagination
+              layout="prev, pager, next"
+              @current-change="currentPaginationChange"
+              :total="count"
+              :page-size="pageSize"
+              :current-page="pageIndex"
+            />
+          </div>
+        </div>
+        <el-divider></el-divider>
+      </template>
+      <div class="search-view">
+        <el-input
+          placeholder="地点搜索......"
+          id="searchInput"
+          class="input-with-select"
+          v-model="searchKeyword"
+        >
+        </el-input>
+      </div>
+      <div class="button-view">
+        <el-button type="primary" @click="searchKeywordChange" plain
+          >搜索</el-button
+        >
+        <el-button type="warning" @click="clearData" plain>清空</el-button>
+      </div>
+    </div>
   </div>
 </template>
  
 <script>
-import poiPanel from "./module/POI-panel.vue";
 import Utils from "@/common/cesium/Utils.js";
 import Entity from "@/common/cesium/Entity.js";
 import GaodeMap from "@/common/cesium/Map/Gaode";
+import code from "./module/highlight";
 export default {
   name: "PoiQuery",
-  components: { poiPanel },
   data() {
     return {
-      poiPanelShow: false,
-
       viewer: null,
       _Entity: null,
       _GaodeMap: null,
       _Utils: null,
+
+      searchKeyword: "", //搜索关键词
+      searchList: [], //搜索结果表格数据
+      pageIndex: 1, //页码
+      pageSize: 10, //页数量
+      count: 0, //总数
+      cityRadio: 1, //搜索类型 1=全国 2=选择城市
+      city: [], //城市选择的code数据
+      cityOptions: [], //城市联动数据
+      EntityArr: [], //实体位置数据
+      detailed: {
+        name: "",
+        photos: [],
+        rating: "",
+        tel: "",
+        type: "",
+        pname: "",
+        cityname: "",
+        adname: "",
+        address: "",
+      },
+      is_detailed: false,
+      markerDetailedDom: null,
     };
   },
+  created() {
+    this.$store.dispatch("highlight/set_code", code);
+  },
   mounted() {
+    /**
+     * 设置秘钥 必须在脚本加载之前设置
+     */
+    window._AMapSecurityConfig = {
+      securityJsCode: "2a0ce2005352672661417093c485a056",
+    };
+    this._Utils = new Utils();
+    /**
+     * 加载高德api
+     */
+    this._Utils
+      .loadJs(
+        `https://webapi.amap.com/maps?v=2.0&key=${process.env.VUE_APP_GAODE_KEY_WEB_TERMINAL}&plugin=AMap.Autocomplete,AMap.PlaceSearch,AMap.DistrictSearch`,
+        true
+      )
+      .then(() => {
+        this._GaodeMap = new GaodeMap(AMap);
+        this._GaodeMap.districtList({ subdistrict: 2 }).then((res) => {
+          this.cityOptions = res;
+        });
+      });
     this.init();
   },
   methods: {
@@ -270,10 +405,95 @@ export default {
     width: 100%;
     height: 100%;
   }
-  .tools {
-    position: fixed;
-    bottom: 40px;
-    right: 20px;
+}
+.poi-view-panel {
+  width: 500px;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  z-index: 3;
+  background-color: #fff;
+  border-radius: 6px 0 0 0;
+  box-sizing: border-box;
+  padding: 20px;
+  .tabel-wrap {
+    .pagination {
+      padding: 10px 0;
+      display: flex;
+      justify-content: flex-end;
+    }
+  }
+  .button-view {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 20px;
+    > * {
+      margin: 0 10px;
+    }
+  }
+}
+//城市选择表单过度动画
+.slide-fade-enter-active,
+.slide-fade-leave-active {
+  transition: all 0.3s ease;
+}
+.slide-fade-enter,
+.slide-fade-leave-to {
+  transform: translateY(10px);
+  opacity: 0;
+}
+//详细窗口样式
+.marker-detailed-view {
+  width: 300px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 2;
+  background-color: #fff;
+  padding: 10px;
+  box-sizing: border-box;
+  border-radius: 6px;
+  .marker-detailed-title {
+    font-size: 16px;
+    color: #333;
+    font-weight: bold;
+    text-align: center;
+    line-height: 1.3;
+    padding: 10px 0 15px;
+  }
+  .marker-detailed-box {
+    display: flex;
+    .marker-detailed-image {
+      width: 90px;
+      margin-right: 10px;
+      img {
+        width: 100%;
+        display: block;
+      }
+    }
+    .marker-detailed-text {
+      width: calc(100% - 100px);
+      .marker-detailed-item {
+        font-size: 12px;
+        color: #666;
+        margin-bottom: 5px;
+        line-height: 1.3;
+        span {
+          color: #333;
+        }
+      }
+    }
+  }
+  .marker-detailed-triangle {
+    position: absolute;
+    bottom: 0;
+    left: 30px;
+    border: 16px solid transparent;
+    border-top-color: #fff;
+    border-bottom: 0;
+    margin: 0 0 -16px -16px;
+    border-left: 0;
   }
 }
 </style>

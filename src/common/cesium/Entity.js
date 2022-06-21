@@ -8,6 +8,26 @@ const timeStamp = () => {
 
 /**
  * 实体实例将多种形式的可视化聚集到单个高级对象中
+ * 使用方法如下 
+   const _Entity = new Entity(cenium上下文,场景viewer)
+    _Entity.方法函数(根据当前方法所需参数进行传递)
+    
+    方法目录如下：
+
+    方法名称 | 概要
+    --- | ---
+    create | 创建任意实体（需要根据官方的格式来创建）
+    createPoint | 点
+    createPolyline | 线
+    createPolygon | 多边形线
+    createWall | 墙
+    createModel | 模型
+    createBox | 盒子
+    createRectangle | 矩形
+    createBillboard | 广告牌
+    createEllipse | 椭圆
+    createCylinder | 圆柱体
+    createPolylineVolume | 多线段柱体
  */
 class Entity {
     constructor(Cesium, viewer) {
@@ -94,7 +114,7 @@ class Entity {
         return entity;
     }
     /**
-     * 绘制线
+     * 创建线
      * @param {Object} params 配置参数
      * 注：通用参数使用 params.common
      * @returns {Entity} 实体线
@@ -168,7 +188,7 @@ class Entity {
         return entity;
     }
     /**
-     * 绘制多边形线
+     * 创建多边形线
      * @param {Object} params 配置参数
      * 注：通用参数使用 params.common
      * @returns {Entity} 实体多边形线
@@ -277,7 +297,7 @@ class Entity {
         return entity;
     }
     /**
-    * 绘制墙体
+    * 创建墙体
     * @param {Object} params 配置参数
     * 注：通用参数使用 params.common
     * @returns {Entity} 实体墙体

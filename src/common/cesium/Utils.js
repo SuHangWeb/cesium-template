@@ -1,5 +1,19 @@
 /**
  * 工具
+ * 使用方法如下 
+   const _Utils = new Utils(cenium上下文,场景viewer)
+    _Utils.方法函数(根据当前方法所需参数进行传递)
+    
+    方法目录如下：
+
+    方法名称 | 概要
+    --- | ---
+    getRandomColor | 获取随机十六进制颜色
+    operationDom | 操作dom
+    debounce | 防抖函数
+    throttle | 节流函数
+    createScript | 原生创建脚本
+    loadJs | 加载外部js（es6）
  */
 class Utils {
     constructor(Cesium, viewer) {
