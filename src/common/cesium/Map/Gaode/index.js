@@ -167,6 +167,65 @@ class GaodeMap {
             });
         })
     }
+    /**
+     * 使用搜索组件  输入提示，根据输入关键字提示匹配信息
+     * @param {Object} params 配置参数  https://lbs.amap.com/api/javascript-api/reference/search#m_AMap.Autocomplete
+     * @returns {Object} 搜索数据
+     */
+    AutoComplete(params) {
+        const AMap = this.AMap
+        const autoCompleteParams = {
+            /**
+             * 输入提示时限定POI类型，多个类型用“|”分隔，POI相关类型请在网站“相关下载”处下载
+             * 目前只支持Poi类型编码如“050000”
+             * 默认值：所有类别
+             */
+            type: params?.type ? params.type : "",
+            /**
+             * 输入提示时限定城市。
+             * 可选值：城市名（中文或中文全拼）、citycode、adcode；
+             * 默认值：“全国”
+             */
+            city: params?.city && params.city != "" ? params.city : "全国",
+            /**
+             * 返回的数据类型
+             * 可选值：all-返回所有数据类型、poi-返回POI数据类型、bus-返回公交站点数据类型、busline-返回公交线路数据类型
+             * 目前暂时不支持多种类型
+             */
+            datatype: params?.datatype ? params.datatype : "all",
+            /**
+             * 是否强制限制在设置的城市内搜索,
+             * 默认值为：false
+             * true：强制限制设定城市，false：不强制限制设定城市
+             */
+            citylimit: params?.citylimit ? params.citylimit : false,
+            /**
+             * 可选参数，用来指定一个input输入框，设定之后，在input输入文字将自动生成下拉选择列表。
+             * 支持传入输入框DOM对象的id值，或直接传入输入框的DOM对象。
+             */
+            input: params?.input ? params.input : undefined,
+            /**
+             * 可选参数，指定一个现有的div的id或者元素，作为展示提示结果的容器，
+             * 当指定了input的时候有效，缺省的时候将自动创建一个显示结果面板
+             */
+            output: params?.output ? params.output : undefined,
+            /**
+             * 默认为true，
+             * 表示是否在input位于页面较下方的时候自动将输入面板显示在input上方以避免被遮挡
+             */
+            outPutDirAuto: params?.outPutDirAuto ? params.outPutDirAuto : true
+        }
+
+        return new Promise((resolve, reject) => {
+            AMap.plugin("AMap.AutoComplete", () => {
+                const auto = new AMap.AutoComplete(autoCompleteParams);
+                //注册监听，当选中某条记录时会触发
+                auto.on("select", (result) => {
+                    resolve(result)
+                });
+            });
+        })
+    }
 }
 
 

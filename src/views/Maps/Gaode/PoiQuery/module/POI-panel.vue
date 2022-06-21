@@ -15,7 +15,8 @@
           :name="item.value"
         ></el-tab-pane>
       </el-tabs>
-      <section class="pois">
+      <!-- 兴趣点 Start -->
+      <section class="pois" v-if="panelType == '1'">
         <div class="form-view">
           <div class="form-item">
             <div class="form-label">范围：</div>
@@ -91,6 +92,7 @@
               class="pois-item"
               v-for="(item, index) in poisList"
               :key="item.id + index"
+              @click="poisClick(item)"
             >
               <div class="pois-item-image">
                 <el-image
@@ -139,11 +141,51 @@
           </div>
         </div>
       </section>
+      <!-- 兴趣点 End -->
+      <!-- 路线规划与导航 Start -->
+      <section class="navigation" v-if="panelType == '2'">
+        <div class="form-view">
+          <el-form ref="form" label-width="100px">
+            <el-form-item label="起始位置：">
+              <el-input
+                size="mini"
+                placeholder="请输入起始位置"
+                id="startPosition"
+                v-model.trim="startPosition"
+                clearable
+              >
+              </el-input>
+            </el-form-item>
+            <el-form-item label="终点位置：">
+              <el-input
+                size="mini"
+                placeholder="请输入终点位置"
+                id="endPosition"
+                v-model.trim="endPosition"
+                clearable
+              >
+              </el-input>
+            </el-form-item>
+            <el-form-item label="类型：">
+              <el-radio-group v-model="navigationType" size="mini">
+                <el-radio-button
+                  v-for="(item, index) in navigationTypeArr"
+                  :key="index"
+                  :label="item.value"
+                  >{{ item.label }}</el-radio-button
+                >
+              </el-radio-group>
+            </el-form-item>
+          </el-form>
+        </div>
+      </section>
+      <!-- 路线规划与导航 End -->
     </div>
   </el-drawer>
 </template>
  
 <script>
+// https://blog.csdn.net/u014556081/article/details/113185855 路线规划与导航
 import Utils from "@/common/cesium/Utils.js";
 import GaodeMap from "@/common/cesium/Map/Gaode";
 export default {
@@ -173,8 +215,12 @@ export default {
           label: "兴趣点",
           value: "1",
         },
+        {
+          label: "路线规划与导航",
+          value: "2",
+        },
       ],
-      panelType: "1", //面板类型tab
+      panelType: "2", //面板类型tab
       range: "city", //范围
       cityOptions: [], //城市数据
       city: ["210000", "210100"], //城市
@@ -187,6 +233,24 @@ export default {
       total: 0, //总数
 
       poisList: [], //兴趣点搜索结果
+
+      startPosition: "",
+      endPosition: "",
+      navigationTypeArr: [
+        {
+          label: "驾车",
+          value: "1",
+        },
+        {
+          label: "公交",
+          value: "2",
+        },
+        {
+          label: "步行",
+          value: "3",
+        },
+      ],
+      navigationType: "",
     };
   },
   watch: {
@@ -205,6 +269,7 @@ export default {
     window._AMapSecurityConfig = {
       securityJsCode: process.env.VUE_APP_SECURITY_JS_CODE,
     };
+
     this._Utils = new Utils();
     /**
      * 加载高德api
@@ -220,9 +285,20 @@ export default {
           this.cityOptions = res;
         });
         this.placeSearchType = this._GaodeMap.placeSearchType;
+
+        this._GaodeMap.AutoComplete({
+          input: "startPosition",
+        });
       });
   },
   methods: {
+    /**
+     * 点击兴趣点
+     * @param {*} item
+     */
+    poisClick(item) {
+      this.$emit("poisClick", item);
+    },
     /**
      * 搜索
      */
@@ -252,7 +328,6 @@ export default {
       this._GaodeMap
         .placeSearch(placeSearchData)
         .then((res) => {
-          console.log(res);
           this.total = res.count;
           this.poisList = res.pois;
           this.$nextTick(() => {

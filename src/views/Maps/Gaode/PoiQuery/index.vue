@@ -8,7 +8,12 @@
       circle
       @click="poiPanelShow = !poiPanelShow"
     ></el-button>
-    <poi-Panel :show="poiPanelShow" @close="poiPanelShow = false" />
+    <poi-Panel
+      :show="poiPanelShow"
+      @close="poiPanelShow = false"
+      @load="load"
+      @poisClick="poisClick"
+    />
   </div>
 </template>
  
@@ -17,6 +22,7 @@ import poiPanel from "./module/POI-panel.vue";
 import Utils from "@/common/cesium/Utils.js";
 import Entity from "@/common/cesium/Entity.js";
 import GaodeMap from "@/common/cesium/Map/Gaode";
+import gcoord from "gcoord";
 export default {
   name: "PoiQuery",
   components: { poiPanel },
@@ -28,12 +34,16 @@ export default {
       _Entity: null,
       _GaodeMap: null,
       _Utils: null,
+
+      EntityArr: [],
     };
   },
   mounted() {
     this.init();
   },
   methods: {
+    // https://blog.csdn.net/weixin_38676065/article/details/123776236 坐标系转换
+    // https://blog.csdn.net/weixin_52469620/article/details/124397586 坐标系转换
     init() {
       const Cesium = this.cesium;
       Cesium.Ion.defaultAccessToken = process.env.VUE_APP_TOKEN;
@@ -53,210 +63,92 @@ export default {
       this.viewer.scene.globe.depthTestAgainstTerrain = false;
 
       this._Entity = new Entity(Cesium, this.viewer);
-
-      this.markerDetailedDom = document.getElementById("marker-detailed-view");
-
-      //事件操作
-      this.eventOperation();
     },
     /**
-     * 事件操作
+     * 兴趣点触发
+     * @param {*} e
      */
-    eventOperation() {
-      const Cesium = this.cesium;
-      //创建事件
-      const handler = new Cesium.ScreenSpaceEventHandler(
-        this.viewer.scene.canvas
+    poisClick(e) {
+      //坐标系转换
+      const result = gcoord.transform(
+        [e.location.lng, e.location.lat], // 经纬度坐标
+        gcoord.AMap, // 当前坐标系
+        gcoord.WGS84 // 目标坐标系
       );
-      handler.setInputAction((event) => {
-        const pickInfo = this.viewer.scene.pick(event.position);
-        // console.log(pickInfo.id.id);
-        if (pickInfo) {
-          const filter_f = this.searchList.filter(
-            (item) => item.id == pickInfo.id.id
-          );
-          if (filter_f.length != 0) {
-            this.startCamera(filter_f[0]);
-          }
-        }
-      }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+      this.setCamera({
+        location: result,
+      });
     },
     /**
-     * 清空数据
-     */
-    clearData() {
-      this.searchKeyword = "";
-      this.searchList = [];
-      this.city = [];
-      this.viewer.entities.removeAll();
-      this.is_detailed = false;
-    },
-    /**
-     * 分页
+     * 设置相机位置
      * @param {*} e
      */
-    currentPaginationChange(e) {
-      this.pageIndex = e;
-      this.searchKeywordChange();
-    },
-    /**
-     * 高德POI 搜索
-     */
-    searchKeywordChange() {
+    setCamera(e) {
       const Cesium = this.cesium;
-      if (this.searchKeyword == "") {
-        this.searchList = [];
-        return;
-      }
-      if (this.cityRadio == 2) {
-        if (this.city.length == 0) {
-          this.$message({
-            message: "请选择城市",
-            type: "warning",
-          });
-          return;
-        }
-      }
-
-      if (this.searchKeyword == "") {
-        this.$message({
-          message: "请输入搜索关键词",
-          type: "warning",
-        });
-        return;
-      }
-      const placeSearchData = {
-        pageSize: this.pageSize,
-        pageIndex: this.pageIndex,
-        searchKeyword: this.searchKeyword,
-      };
-      if (this.cityRadio == 2) {
-        placeSearchData.city = this.city[1] || "";
-      }
-
-      const setPointPosition = async (arr) => {
-        this.viewer.entities.removeAll();
-        const EntityArr = [];
-        for (let i = 0; i < arr.length; i++) {
-          const item = this.searchList[i];
-          const _Entity_ = this._Entity.createBillboard({
-            id: item.id,
-            name: item.name,
-            position: Cesium.Cartesian3.fromDegrees(
-              item.location.lng,
-              item.location.lat
-            ),
-            common: {
-              label: {
-                //⽂字标签
-                text: item.name,
-                font: "500 30px Helvetica", // 15pt monospace
-                scale: 0.5,
-                style: Cesium.LabelStyle.FILL,
-                fillColor: Cesium.Color.WHITE,
-                pixelOffset: new Cesium.Cartesian2(-8, -50), //偏移量
-                showBackground: true,
-                heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
-              },
-            },
-            image:
-              process.env.VUE_APP_PUBLIC_URL +
-              "/Vue/Maps/Gaode/PoiQuery/position.png",
-            verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
-            heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
-            width: 40,
-            height: 40,
-          });
-          EntityArr.push(_Entity_);
-        }
-        return await EntityArr;
-      };
-
-      this._GaodeMap
-        .placeSearch(placeSearchData)
-        .then((res) => {
-          this.searchList = res.pois;
-          this.count = res.count;
-          setPointPosition(res.pois).then((entityRes) => {
-            this.EntityArr = entityRes;
-          });
-        })
-        .catch((err) => {
-          this.$notify.error({
-            title: "错误",
-            message: "请重新搜索",
-          });
-        });
-    },
-    /**
-     * 表格行点击
-     * @param {*} e
-     */
-    rowClick(e) {
-      this.startCamera(e);
-    },
-    /**
-     * 设置详细窗口
-     */
-    setDetails(location) {
-      const Cesium = this.cesium;
-      const dom = this.markerDetailedDom;
-
-      this.viewer.scene.preRender.addEventListener(() => {
-        const position = Cesium.Cartesian3.fromDegrees(
-          location.lng,
-          location.lat,
-          0
-        );
-        var canvasPosition = this.viewer.scene.cartesianToCanvasCoordinates(
-          position,
-          new Cesium.Cartesian2()
-        );
-        if (Cesium.defined(canvasPosition)) {
-          dom.style.top = canvasPosition.y - dom.offsetHeight - 20 + "px";
-          dom.style.left = canvasPosition.x + dom.offsetWidth / 2 + "px";
-        }
-      });
-      this.is_detailed = true;
-    },
-    /**
-     * 相机视角调整到选中地址
-     * @param {Object} data 地址数据
-     */
-    startCamera(data) {
-      const Cesium = this.cesium;
-      for (let i = 0; i < this.EntityArr.length; i++) {
-        const item = this.EntityArr[i];
-        if (item.id == data.id) {
-          item.billboard.image =
-            process.env.VUE_APP_PUBLIC_URL +
-            "/Vue/Maps/Gaode/PoiQuery/position-active.png";
-        } else {
-          setTimeout(() => {
-            item.billboard.image =
-              process.env.VUE_APP_PUBLIC_URL +
-              "/Vue/Maps/Gaode/PoiQuery/position.png";
-          }, 1000);
-        }
-      }
-
-      this._GaodeMap.getDetails(data.id).then((res) => {
-        if (res.poiList.pois.length != 0) {
-          this.detailed = res.poiList.pois[0];
-          this.setDetails({
-            lat: data.location.lat,
-            lng: data.location.lng,
-          });
-        }
-      });
-
       this.viewer.camera.flyTo({
         destination: Cesium.Cartesian3.fromDegrees(
-          data.location.lng,
-          data.location.lat,
+          e.location[0],
+          e.location[1],
           3000
         ),
       });
+    },
+    /**
+     * 操作面板加载回调
+     */
+    load(e) {
+      this.setPointPosition(e).then((res) => {
+        this.EntityArr = res;
+        this.viewer.flyTo(res);
+      });
+    },
+    /**
+     * 设置标点
+     */
+    async setPointPosition(arr) {
+      const Cesium = this.cesium;
+      this.viewer.entities.removeAll();
+      const EntityArr = [];
+      for (let i = 0; i < arr.length; i++) {
+        const item = arr[i];
+        //坐标系转换
+        const result = gcoord.transform(
+          [item.location.lng, item.location.lat], // 经纬度坐标
+          gcoord.AMap, // 当前坐标系
+          gcoord.WGS84 // 目标坐标系
+        );
+        const _Entity_ = this._Entity.createBillboard({
+          id: item.id,
+          name: item.name,
+          position: Cesium.Cartesian3.fromDegrees(result[0], result[1]),
+          common: {
+            label: {
+              //⽂字标签
+              text: item.name,
+              font: "500 30px Helvetica", // 15pt monospace
+              scale: 0.5,
+              style: Cesium.LabelStyle.FILL_AND_OUTLINE,
+              fillColor: Cesium.Color.WHITE,
+              pixelOffset: new Cesium.Cartesian2(-8, -50), //偏移量
+              showBackground: false,
+              heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
+              distanceDisplayCondition: new Cesium.DistanceDisplayCondition(
+                0.0,
+                20000.0
+              ),
+            },
+          },
+          image:
+            process.env.VUE_APP_PUBLIC_URL +
+            "/Vue/Maps/Gaode/PoiQuery/position.png",
+          verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
+          heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
+          width: 16,
+          height: 22,
+        });
+        EntityArr.push(_Entity_);
+      }
+      return await EntityArr;
     },
   },
 };
