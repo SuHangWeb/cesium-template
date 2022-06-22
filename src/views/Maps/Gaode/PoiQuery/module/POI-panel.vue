@@ -360,6 +360,7 @@ export default {
               }
               this.$emit("load", {
                 type: "navigation",
+                style: "driving",
                 data: routeLocationArr,
               });
             }
@@ -380,6 +381,40 @@ export default {
       }
       //骑行
       if (e == "3") {
+        this._GaodeMap
+          .Riding({
+            panel: "panel",
+            start,
+            end,
+          })
+          .then((res) => {
+            if (res.routes.length != 0) {
+              let routeLocationArr = [];
+              const rides = res.routes[0].rides;
+              const len = rides.length;
+              for (let i = 0; i < len; i++) {
+                const item = rides[i];
+                routeLocationArr.push([
+                  item.start_location.lng,
+                  item.start_location.lat,
+                ]);
+                if (len - 1 == i) {
+                  routeLocationArr.push([
+                    item.end_location.lng,
+                    item.end_location.lat,
+                  ]);
+                }
+              }
+              this.$emit("load", {
+                type: "navigation",
+                style: "riding",
+                data: routeLocationArr,
+              });
+            }
+          });
+      }
+      //步行
+      if (e == "4") {
         this._GaodeMap
           .Walking({
             panel: "panel",
@@ -406,6 +441,7 @@ export default {
               }
               this.$emit("load", {
                 type: "navigation",
+                style: "walking",
                 data: routeLocationArr,
               });
             }

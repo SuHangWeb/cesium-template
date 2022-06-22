@@ -105,14 +105,25 @@ export default {
         });
       }
       if (e.type == "navigation") {
-        this.setDrawRoute(e.data);
+        this.setDrawRoute(e.data, e.style);
       }
     },
     /**
      * 绘制路线
      * @param {*} arr
      */
-    setDrawRoute(arr) {
+    setDrawRoute(arr, style) {
+      let color = "";
+      if (style == "") {
+        color = "";
+      }
+      if (style == "") {
+        color = "";
+      }
+      if (style == "") {
+        color = "";
+      }
+
       const Cesium = this.cesium;
       const arrData = [];
       arr.map((item) => {

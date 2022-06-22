@@ -79,6 +79,10 @@ class GaodeMap {
                 value: "Transfer"
             },
             {
+                label: "骑行路线规划服务",
+                value: "Riding"
+            },
+            {
                 label: "步行路线规划服务",
                 value: "Walking"
             }
@@ -451,11 +455,70 @@ class GaodeMap {
     }
 
     /**
+     * 骑行路线规划服务
+     * @param {Object} params 配置参数 文档：https://lbs.amap.com/api/jsapi-v2/documentation#riding
+     * @returns {Object} 骑行路线规划服务数据
+     */
+    Riding(params) {
+        const AMap = this.AMap
+        const ridingParams = {
+            /**
+             * AMap.Map对象, 展现结果的地图实例。当指定此参数后，搜索结果的标注、线路等均会自动添加到此地图上。可选
+             * cesium 不需要当前参数
+             */
+            map: params?.map ? params.map : undefined,
+            /**
+             * 骑行路线规划策略；
+             * 默认值：0
+             * 可选值为： 
+             * 0：推荐路线及最快路线综合 
+             * 1：推荐路线 
+             * 2：最快路线
+             */
+            policy: params?.policy ? params.policy : 0,
+            /**
+             * 结果列表的HTML容器id或容器元素，提供此参数后，结果列表将在此容器中进行展示。可选值
+             */
+            panel: params?.panel ? params.panel : "",
+            /**
+             * 设置隐藏路径规划的起始点图标 设置为true：隐藏图标；设置false：显示图标
+             * 默认值为：false
+             */
+            hideMarkers: params?.hideMarkers ? params.hideMarkers : false,
+            /**
+             * 使用map属性时，绘制的规划线路是否显示描边。缺省为true
+             */
+            isOutline: params?.isOutline ? params.isOutline : undefined,
+            /**
+             * 使用map属性时，绘制的规划线路的描边颜色。缺省为'white'
+             */
+            outlineColor: params?.outlineColor ? params.outlineColor : undefined,
+            /**
+             * 用于控制在路径规划结束后，是否自动调整地图视野使绘制的路线处于视口的可见范围
+             */
+            autoFitView: params?.autoFitView ? params.autoFitView : undefined,
+        }
+        return new Promise((resolve, reject) => {
+            AMap.plugin("AMap.Riding", () => {
+                const riding = new AMap.Riding(ridingParams);
+                riding.search(params.start, params.end, (status, result) => {
+                    if (status == "complete") {
+                        resolve(result)
+                    } else {
+                        reject("Error")
+                    }
+                });
+            });
+        })
+    }
+
+    /**
      * 步行路线规划服务
      * @param {Object} params 配置参数 文档：https://lbs.amap.com/api/jsapi-v2/documentation#walking
      * @returns {Object} 步行路线规划服务数据
      */
     Walking(params) {
+        const AMap = this.AMap
         const walkingParams = {
             /**
              * AMap.Map对象, 展现结果的地图实例。当指定此参数后，搜索结果的标注、线路等均会自动添加到此地图上。可选
