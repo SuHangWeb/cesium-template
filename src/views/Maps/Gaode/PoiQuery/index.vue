@@ -59,10 +59,11 @@ export default {
         infoBox: false,
         selectionIndicator: false,
       });
-      //设置贴地效果
+      //地形侦测
       this.viewer.scene.globe.depthTestAgainstTerrain = false;
 
       this._Entity = new Entity(Cesium, this.viewer);
+      window._Entity = new Entity(Cesium, this.viewer);
     },
     /**
      * 兴趣点触发
@@ -97,10 +98,37 @@ export default {
      * 操作面板加载回调
      */
     load(e) {
-      this.setPointPosition(e).then((res) => {
-        this.EntityArr = res;
-        this.viewer.flyTo(res);
+      if (e.type == "pois") {
+        this.setPointPosition(e.data).then((res) => {
+          this.EntityArr = res;
+          this.viewer.flyTo(res);
+        });
+      }
+      if (e.type == "navigation") {
+        this.setDrawRoute(e.data);
+      }
+    },
+    /**
+     * 绘制路线
+     * @param {*} arr
+     */
+    setDrawRoute(arr) {
+      const Cesium = this.cesium;
+      const arrData = [];
+      arr.map((item) => {
+        const result = gcoord.transform(
+          [item[0], item[1]], // 经纬度坐标
+          gcoord.AMap, // 当前坐标系
+          gcoord.WGS84 // 目标坐标系
+        );
+        arrData.push(result[0], result[1]);
       });
+      const Route = window._Entity.createPolyline({
+        positions: Cesium.Cartesian3.fromDegreesArray(arrData),
+        // clampToGround: true,
+        width: 10,
+      });
+      this.viewer.flyTo(Route);
     },
     /**
      * 设置标点

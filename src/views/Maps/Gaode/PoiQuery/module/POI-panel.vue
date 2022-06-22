@@ -7,7 +7,7 @@
     :before-close="handleClose"
   >
     <div class="POI-panel">
-      <el-tabs v-model="panelType">
+      <el-tabs v-model="panelType" @tab-click="tabClick">
         <el-tab-pane
           v-for="(item, index) in panelTypeArr"
           :key="index"
@@ -152,7 +152,6 @@
                 placeholder="请输入起始位置"
                 id="startPosition"
                 v-model.trim="startPosition"
-                clearable
               >
               </el-input>
             </el-form-item>
@@ -162,12 +161,19 @@
                 placeholder="请输入终点位置"
                 id="endPosition"
                 v-model.trim="endPosition"
-                clearable
               >
               </el-input>
             </el-form-item>
             <el-form-item label="类型：">
-              <el-radio-group v-model="navigationType" size="mini">
+              <el-radio-group
+                v-model="navigationType"
+                :disabled="
+                  JSON.stringify(startPositionResult) == '{}' ||
+                  JSON.stringify(endPositionResult) == '{}'
+                "
+                size="mini"
+                @change="navigationTypeChange"
+              >
                 <el-radio-button
                   v-for="(item, index) in navigationTypeArr"
                   :key="index"
@@ -178,6 +184,7 @@
             </el-form-item>
           </el-form>
         </div>
+        <div id="panel" class="steps-view"></div>
       </section>
       <!-- 路线规划与导航 End -->
     </div>
@@ -234,8 +241,10 @@ export default {
 
       poisList: [], //兴趣点搜索结果
 
-      startPosition: "",
-      endPosition: "",
+      startPosition: "", //起始输入位置数据
+      endPosition: "", //终点输入位置数据
+      startPositionResult: {}, //起始结果位置数据
+      endPositionResult: {}, //终点结果位置数据
       navigationTypeArr: [
         {
           label: "驾车",
@@ -246,17 +255,28 @@ export default {
           value: "2",
         },
         {
-          label: "步行",
+          label: "骑行",
           value: "3",
+        },
+        {
+          label: "步行",
+          value: "4",
         },
       ],
       navigationType: "",
+      //路线位置集合
+      routeLocationArr: [],
     };
   },
   watch: {
     show: {
       handler(newValue, oldValue) {
         this.drawer = newValue;
+        //等标签加载成功以后在调用
+        if (newValue) {
+          //初始化表单筛选
+          this.initAutoComplete();
+        }
       },
       deep: true,
       immediate: true,
@@ -271,27 +291,178 @@ export default {
     };
 
     this._Utils = new Utils();
+
     /**
      * 加载高德api
      */
+
     this._Utils
       .loadJs(
-        `https://webapi.amap.com/maps?v=2.0&key=${process.env.VUE_APP_GAODE_KEY_WEB_TERMINAL}&plugin=AMap.Autocomplete,AMap.PlaceSearch,AMap.DistrictSearch`,
-        true
+        `https://webapi.amap.com/maps?v=2.0&key=${
+          process.env.VUE_APP_GAODE_KEY_WEB_TERMINAL
+        }&plugin=${new GaodeMap().plugin}`,
+        { append: "body", defer: true }
       )
       .then(() => {
         this._GaodeMap = new GaodeMap(AMap);
-        this._GaodeMap.districtList({ subdistrict: 2 }).then((res) => {
-          this.cityOptions = res;
-        });
-        this.placeSearchType = this._GaodeMap.placeSearchType;
-
-        this._GaodeMap.AutoComplete({
-          input: "startPosition",
+        this.$nextTick(() => {
+          //行政列表
+          this._GaodeMap.districtList({ subdistrict: 2 }).then((res) => {
+            this.cityOptions = res;
+          });
+          //搜索数据的兴趣点类别
+          this.placeSearchType = this._GaodeMap.placeSearchType;
         });
       });
   },
   methods: {
+    /**
+     * 类型触发 开始检索数据
+     */
+    navigationTypeChange(e) {
+      document.getElementById("panel").innerHTML = "";
+      // this.viewer.entities.removeAll();
+      // console.log(e);
+      const start = [
+        this.startPositionResult.poi.location.lng,
+        this.startPositionResult.poi.location.lat,
+      ];
+      const end = [
+        this.endPositionResult.poi.location.lng,
+        this.endPositionResult.poi.location.lat,
+      ];
+      //驾车
+      if (e == "1") {
+        this._GaodeMap
+          .Driving({
+            panel: "panel",
+            start,
+            end,
+          })
+          .then((res) => {
+            // console.log(res.routes);
+            if (res.routes.length != 0) {
+              let routeLocationArr = [];
+              const steps = res.routes[0].steps;
+              const len = steps.length;
+              for (let i = 0; i < len; i++) {
+                const item = steps[i];
+                routeLocationArr.push([
+                  item.start_location.lng,
+                  item.start_location.lat,
+                ]);
+                if (len - 1 == i) {
+                  routeLocationArr.push([
+                    item.end_location.lng,
+                    item.end_location.lat,
+                  ]);
+                }
+              }
+              this.$emit("load", {
+                type: "navigation",
+                data: routeLocationArr,
+              });
+            }
+          });
+      }
+      //公交车
+      if (e == "2") {
+        this._GaodeMap
+          .Transfer({
+            panel: "panel",
+            start,
+            end,
+            city: "沈阳市",
+          })
+          .then((res) => {
+            // console.log(res);
+          });
+      }
+      //骑行
+      if (e == "3") {
+        this._GaodeMap
+          .Walking({
+            panel: "panel",
+            start,
+            end,
+          })
+          .then((res) => {
+            if (res.routes.length != 0) {
+              let routeLocationArr = [];
+              const steps = res.routes[0].steps;
+              const len = steps.length;
+              for (let i = 0; i < len; i++) {
+                const item = steps[i];
+                routeLocationArr.push([
+                  item.start_location.lng,
+                  item.start_location.lat,
+                ]);
+                if (len - 1 == i) {
+                  routeLocationArr.push([
+                    item.end_location.lng,
+                    item.end_location.lat,
+                  ]);
+                }
+              }
+              this.$emit("load", {
+                type: "navigation",
+                data: routeLocationArr,
+              });
+            }
+          });
+      }
+    },
+    /**
+     * tab切换触发
+     */
+    tabClick(e) {
+      if (e.name == "2") {
+        this.initAutoComplete();
+      }
+    },
+    /**
+     * 初始化路线规划和导航的表单筛选
+     */
+    initAutoComplete() {
+      setTimeout(() => {
+        //搜素组件
+        this._GaodeMap
+          .AutoComplete({
+            input: "startPosition",
+          })
+          .then((res) => {
+            res.on("select", (result) => {
+              if (!result.poi.location) {
+                this.$notify({
+                  title: "警告",
+                  message: "输入的地址有误，请重新输入",
+                  type: "warning",
+                });
+                return;
+              }
+              this.startPositionResult = result;
+            });
+          });
+
+        this._GaodeMap
+          .AutoComplete({
+            input: "endPosition",
+          })
+          .then((res) => {
+            res.on("select", (result) => {
+              if (!result.poi.location) {
+                this.$notify({
+                  title: "警告",
+                  message: "输入的地址有误，请重新输入",
+                  type: "warning",
+                });
+                return;
+              }
+              this.endPositionResult = result;
+            });
+          });
+      }, 500);
+    },
     /**
      * 点击兴趣点
      * @param {*} item
@@ -334,7 +505,7 @@ export default {
             this.$refs.poisList.scrollTop = 0;
           });
           this.loading = false;
-          this.$emit("load", this.poisList);
+          this.$emit("load", { type: "pois", data: this.poisList });
         })
         .catch((err) => {
           this.$notify.error({

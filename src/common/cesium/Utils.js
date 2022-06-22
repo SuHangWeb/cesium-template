@@ -127,22 +127,34 @@ class Utils {
 
     /**
      * 加载外部js
-     * @param {*} src js地址
+     * @param {String} src js地址
+     * @param {Object} params 参数
+     *  append {String} 插入标签 例如：head、body
+     *  async {Boolean} 脚本相对于页面的其余部分异步地执行（当页面继续进行解析时，脚本将被执行）
+     *  defer {Boolean} 脚本将在页面完成解析时执行
+     *  注意：如果既不使用 async 也不使用 defer；在浏览器继续解析页面之前，立即读取并执行脚本
      * @returns 
      * 使用方法
      * import Utils from "@/common/cesium/Utils.js";
      * const _Utils = new Utils()
      * _Utils.loadJs(js地址).then(() => {加载成功，进行后续操作});
      */
-    loadJs(src, async) {
+    loadJs(src, params) {
         return new Promise((resolve, reject) => {
             let script = document.createElement('script');
             script.type = "text/javascript";
-            if (async) {
+            if (params?.async && params.async) {
                 script.async = "async";
             }
+            if (params?.defer && params.defer) {
+                script.defer = "defer";
+            }
+            let append = "body"
+            if (params?.append && params.append && (params.append == "body" || params.append == "head")) {
+                append = params.append;
+            }
             script.src = src;
-            document.body.appendChild(script);
+            document[append].appendChild(script);
 
             script.onload = () => {
                 resolve();

@@ -143,8 +143,16 @@
     }
 
     &.navigation {
+      height: calc(100% - 54px);
+      display: flex;
+      flex-direction: column;
       ::v-deep .el-form-item {
         margin-bottom: 0;
+      }
+      .steps-view {
+        margin: 10px 0;
+        flex: 1;
+        overflow-y: auto;
       }
     }
   }
