@@ -114,14 +114,14 @@ export default {
      */
     setDrawRoute(arr, style) {
       let color = "";
-      if (style == "") {
-        color = "";
+      if (style == "driving") {
+        color = "#409EFF";
       }
-      if (style == "") {
-        color = "";
+      if (style == "riding") {
+        color = "#67C23A";
       }
-      if (style == "") {
-        color = "";
+      if (style == "walking") {
+        color = "#E6A23C";
       }
 
       const Cesium = this.cesium;
@@ -137,6 +137,7 @@ export default {
       const Route = window._Entity.createPolyline({
         positions: Cesium.Cartesian3.fromDegreesArray(arrData),
         // clampToGround: true,
+        material: new Cesium.Color.fromCssColorString(color),
         width: 10,
       });
       this.viewer.flyTo(Route);
