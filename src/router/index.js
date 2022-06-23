@@ -167,6 +167,12 @@ export const constantRoutes = [
         meta: { title: 'Canvas 图片点', icon: 'el-icon-pie-chart', highlight: true }
       },
       {
+        path: 'wall',
+        name: 'Wall',
+        component: () => import('@/views/Entity/wall'),
+        meta: { title: '墙体', icon: 'el-icon-full-screen', highlight: true }
+      },
+      {
         path: 'dynamicPosition',
         name: 'DynamicPosition',
         component: () => import('@/views/Entity/dynamicPosition'),
