@@ -13,36 +13,36 @@ export default (Cesium) => {
         if (options && options.get) {
             var materail =
                 "czm_material czm_getMaterial(czm_materialInput materialInput)\n\
-    {\n\
-        czm_material material = czm_getDefaultMaterial(materialInput);\n\
-        vec2 st = materialInput.st;";
-            if (options.freely == "vertical") {
-                //（由下到上）
-                materail +=
-                    "vec4 colorImage = texture2D(image, vec2(fract(st.s), fract(float(" +
-                    options.count +
-                    ")*st.t" +
-                    options.direction +
-                    " time)));\n ";
-            } else {
-                //（逆时针）
-                materail +=
-                    "vec4 colorImage = texture2D(image, vec2(fract(float(" +
-                    options.count +
-                    ")*st.s " +
-                    options.direction +
-                    " time), fract(st.t)));\n ";
-            }
-            //泛光
-            materail +=
-                "vec4 fragColor;\n\
-        fragColor.rgb = (colorImage.rgb+color.rgb) / 1.0;\n\
-        fragColor = czm_gammaCorrect(fragColor);\n\
-        material.diffuse = colorImage.rgb;\n\
-        material.alpha = colorImage.a;\n\
-        material.emission = fragColor.rgb;\n\
-        return material;\n\
-    }";
+                    {\n\
+                        czm_material material = czm_getDefaultMaterial(materialInput);\n\
+                        vec2 st = materialInput.st;";
+                            if (options.freely == "vertical") {
+                                //（由下到上）
+                                materail +=
+                                    "vec4 colorImage = texture2D(image, vec2(fract(st.s), fract(float(" +
+                                    options.count +
+                                    ")*st.t" +
+                                    options.direction +
+                                    " time)));\n ";
+                            } else {
+                                //（逆时针）
+                                materail +=
+                                    "vec4 colorImage = texture2D(image, vec2(fract(float(" +
+                                    options.count +
+                                    ")*st.s " +
+                                    options.direction +
+                                    " time), fract(st.t)));\n ";
+                            }
+                            //泛光
+                            materail +=
+                                "vec4 fragColor;\n\
+                        fragColor.rgb = (colorImage.rgb+color.rgb) / 1.0;\n\
+                        fragColor = czm_gammaCorrect(fragColor);\n\
+                        material.diffuse = colorImage.rgb;\n\
+                        material.alpha = colorImage.a;\n\
+                        material.emission = fragColor.rgb;\n\
+                        return material;\n\
+                    }";
             return materail;
         }
     };

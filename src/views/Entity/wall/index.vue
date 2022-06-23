@@ -29,7 +29,8 @@ import Material from "@/common/cesium/Materials/index.js";
 import Entity from "@/common/cesium/Entity.js";
 import wallData from "./module/data";
 import Utils from "@/common/cesium/Utils.js";
-import DynamicWallMaterialPropertys from "./module/material/DynamicWallMaterialPropertys";
+import DynamicWallMaterialPropertys from "./module/material/DynamicWallMaterialPropertys"; //波纹墙
+import TrailLineMaterialProperty from "./module/material/TrailLineMaterialProperty"; //流动墙
 export default {
   name: "wall",
   data() {
@@ -82,6 +83,11 @@ export default {
       const obj = filter_data[0];
       let material = null;
 
+      //流动墙
+      if (obj.value == "1") {
+        this._Material.create(TrailLineMaterialProperty(Cesium));
+        material = new Cesium.Material_TrailLineMaterialProperty();
+      }
       //波纹墙
       if (obj.value == "2") {
         this._Material.create(DynamicWallMaterialPropertys(Cesium));
@@ -90,9 +96,9 @@ export default {
 
       const positions = Cesium.Cartesian3.fromDegreesArray(obj.position);
       const wallEntity = this._Entity.createWall({
-        id: "DynamicWallMaterialPropertys",
         positions,
         material,
+        // common: { clampToGround: true },
         // 设置高度
         maximumHeights: new Array(positions.length).fill(200), //一个属性，它指定要用于墙顶的高度数组，而不是每个位置的高度
         minimunHeights: new Array(positions.length).fill(0), //一个属性，它指定要用于墙底而不是地球表面的高度数组。

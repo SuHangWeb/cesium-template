@@ -72,10 +72,9 @@ class Material {
         };
 
         MaterialFun.prototype.equals = function (other) {
-            return this === other ||
-                (other instanceof MaterialFun
-                    && Cesium.Property.equals(this._color, other._color))
+            return this === other || (other instanceof MaterialFun && Cesium.Property.equals(this._color, other._color))
         };
+
 
         Cesium.Material._materialCache.addMaterial(MaterialType, {
             fabric: {
@@ -87,6 +86,7 @@ class Material {
                 return true;
             }
         });
+
         Cesium[cesiumName] = MaterialFun;
         return MaterialFun
     }
