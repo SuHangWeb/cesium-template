@@ -11,3 +11,11 @@ https://blog.csdn.net/weixin_37548620/article/details/106734830
 [各种地图的坐标系转换](https://www.npmjs.com/package/gcoord)
 
 [参考效果](https://blog.csdn.net/weixin_45782925/article/details/123269490)
+
+材质参考
+https://blog.csdn.net/qq_34447899/article/details/123224443
+https://blog.csdn.net/weixin_45782925/article/details/123351541
+https://www.freesion.com/article/2742689999/
+https://segmentfault.com/a/1190000041846107?utm_source=sf-similar-article
+https://download.csdn.net/download/qq_42425561/85103188
+https://www.freesion.com/article/48051431037/

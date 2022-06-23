@@ -69,6 +69,22 @@ class Transform {
             positions
         );
         return Promise.resolve(promise)
+
+        // return new Promise((resolve, reject) => {
+            
+        // })
+
+        // // Query the terrain height of two Cartographic positions
+        // const terrainProvider = Cesium.createWorldTerrain();
+        // const positions = [
+        //     Cesium.Cartographic.fromDegrees(86.925145, 27.988257),
+        //     Cesium.Cartographic.fromDegrees(87.0, 28.0)
+        // ];
+        // const promise = Cesium.sampleTerrain(terrainProvider, 11, positions);
+        // Promise.resolve(promise).then(function (updatedPositions) {
+        //     // positions[0].height and positions[1].height have been updated.
+        //     // updatedPositions is just a reference to positions.
+        // });
     }
     /**
      * 流动曲线/赛贝尔曲线

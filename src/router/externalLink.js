@@ -4,9 +4,13 @@ export default [
         path: "http://cesium.xin/cesium/cn/Documentation1.72/index.html"
     },
     {
-        title: "cesium 英文文档（版本最新）",
+        title: "cesium 英文文档",
         path: "https://cesium.com/learn/cesiumjs/ref-doc/"
     },
+    // {
+    //     title: "cesium 官方案例",
+    //     path: "https://blog.csdn.net/qq98281642/category_11294524.html"
+    // },
     {
         title: "mars3d 参考",
         path: "http://mars3d.cn/example.html"

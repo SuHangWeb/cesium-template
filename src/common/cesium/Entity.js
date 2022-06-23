@@ -16,6 +16,8 @@ const timeStamp = () => {
 
     方法名称 | 概要
     --- | ---
+    getEntity | 通过id 查询实体
+    removeEntity | 删除实体（查询删除、直接删除、删除所有）
     create | 创建任意实体（需要根据官方的格式来创建）
     createPoint | 点
     createPolyline | 线
@@ -34,6 +36,40 @@ class Entity {
         this.Cesium = Cesium
         this.viewer = viewer
     }
+
+    /**
+     * 根据实体ID 查询是否存在当前实体
+     * @param {*} id 
+     * @returns  有/返回实体 无/返回undefined
+     */
+    getEntity(id) {
+        return this.viewer.entities.getById(id);
+    }
+
+    /**
+     * 删除实体
+     * @param {Object} params 
+     *  id 实体id
+     *  type get/先查询后删除 direct/直接删除 all/删除所有 默认get
+     */
+    removeEntity(params) {
+        const id = params?.id ? params.id : ""
+        const type = params?.type ? params.type : "get"
+        //先查后删
+        if (type == "get") {
+            const entity = this.viewer.entities.getById(id);
+            this.viewer.entities.remove(entity)
+        }
+        //直接删除
+        if (type == "direct") {
+            this.viewer.entities.removeById(id)
+        }
+        //删除所有
+        if (type == "all") {
+            this.viewer.entities.removeAll()
+        }
+    }
+
 
     /**
     * 创建任意实体

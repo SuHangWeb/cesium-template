@@ -6,7 +6,6 @@ export default [
     {
         label: "波纹墙",
         value: "2",
-        material: "DynamicWallMaterialPropertys.js",
         position: [
             123.38624525883692, 41.794068393526416,
             123.38687089890857, 41.79395971222164,
