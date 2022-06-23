@@ -227,7 +227,7 @@ export default {
           value: "2",
         },
       ],
-      panelType: "2", //面板类型tab
+      panelType: "1", //面板类型tab
       range: "city", //范围
       cityOptions: [], //城市数据
       city: ["210000", "210100"], //城市

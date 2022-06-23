@@ -23,6 +23,8 @@ import Utils from "@/common/cesium/Utils.js";
 import Entity from "@/common/cesium/Entity.js";
 import GaodeMap from "@/common/cesium/Map/Gaode";
 import gcoord from "gcoord";
+import TrailLineMaterialProperty from "./module/material/TrailLineMaterialProperty"; //流动
+import Material from "@/common/cesium/Materials/index.js";
 export default {
   name: "PoiQuery",
   components: { poiPanel },
@@ -63,7 +65,7 @@ export default {
       this.viewer.scene.globe.depthTestAgainstTerrain = false;
 
       this._Entity = new Entity(Cesium, this.viewer);
-      window._Entity = new Entity(Cesium, this.viewer);
+      this._Material = new Material(Cesium, this.viewer);
     },
     /**
      * 兴趣点触发
@@ -113,6 +115,7 @@ export default {
      * @param {*} arr
      */
     setDrawRoute(arr, style) {
+      const Cesium = this.cesium;
       let color = "";
       if (style == "driving") {
         color = "#409EFF";
@@ -124,7 +127,6 @@ export default {
         color = "#E6A23C";
       }
 
-      const Cesium = this.cesium;
       const arrData = [];
       arr.map((item) => {
         const result = gcoord.transform(
@@ -134,10 +136,15 @@ export default {
         );
         arrData.push(result[0], result[1]);
       });
-      const Route = window._Entity.createPolyline({
+
+      this._Material.create(TrailLineMaterialProperty(Cesium));
+
+      const Route = this._Entity.createPolyline({
         positions: Cesium.Cartesian3.fromDegreesArray(arrData),
         // clampToGround: true,
-        material: new Cesium.Color.fromCssColorString(color),
+        // material: new Cesium.Color.fromCssColorString(color),
+        material: new Cesium.Material_TrailLineMaterialProperty(),
+        arcType: Cesium.ArcType.GEODESIC,
         width: 10,
       });
       this.viewer.flyTo(Route);
