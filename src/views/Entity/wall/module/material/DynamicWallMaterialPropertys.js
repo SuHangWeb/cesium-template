@@ -49,7 +49,7 @@ export default (Cesium) => {
 
     return {
         cesiumName: "Material_DynamicWallMaterialPropertys",
-        image: "/Vue/Entity/wall/wl.png",
+        image: process.env.VUE_APP_PUBLIC_URL + "/Vue/Entity/wall/wl.png",
         color: Cesium.Color.CYAN,
         duration: 1500,
         uniforms: {

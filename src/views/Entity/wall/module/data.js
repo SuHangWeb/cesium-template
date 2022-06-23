@@ -1,8 +1,8 @@
 export default [
-    {
-        label: "普通",
-        value: "1",
-    },
+    // {
+    //     label: "普通",
+    //     value: "1",
+    // },
     {
         label: "波纹墙",
         value: "2",
