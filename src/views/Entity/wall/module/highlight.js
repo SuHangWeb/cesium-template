@@ -6,32 +6,82 @@ export default [
         label: "Entity.js",
         url: "cesium/Entity.js"
       },
+      {
+        label: "Materials/index.js",
+        url: "cesium/Materials/index.js"
+      },
+      {
+        label: "Utils.js",
+        url: "cesium/Utils.js"
+      },
+      {
+        label: "DynamicWallMaterialPropertys.js",
+        url: "Vue/Entity/wall/material/DynamicWallMaterialPropertys.js"
+      },
+      {
+        label: "TrailLineMaterialProperty.js",
+        url: "Vue/Entity/wall/material/TrailLineMaterialProperty.js"
+      },
+      {
+        label: "data.js",
+        url: "Vue/Entity/wall/data.js"
+      },
+      {
+        label: "wl.png",
+        url: "Vue/Entity/wall/wl.png"
+      },
+      {
+        label: "flow.png",
+        url: "Vue/Entity/wall/flow.png"
+      },
     ],
     code: [
       {
         codeLanguage: "html",
-        content: `<div class="container">
-                    <div id="cesiumContainer"></div>
-                    <div class="tip-view">
-                      <div class="tip">鼠标右键点击 停止绘制</div>
-                      <el-button class="button" type="primary" @click="start" plain
-                        >开始绘制</el-button
-                      >
-                    </div>
-                  </div>`
+        content: `<template>
+                      <div class="container">
+                        <div id="cesiumContainer"></div>
+                        <div class="operation-panel">
+                          <el-select size="mini" v-model="wallType" placeholder="请选择墙体类型">
+                            <el-option
+                              v-for="item in wallTypeArr"
+                              :key="item.value"
+                              :label="item.label"
+                              :value="item.value"
+                            >
+                            </el-option>
+                          </el-select>
+                          <el-button
+                            size="mini"
+                            :disabled="wallType == ''"
+                            @click="startDraw"
+                            class="startButton"
+                            type="primary"
+                            plain
+                            >开始绘制</el-button
+                          >
+                        </div>
+                      </div>
+                    </template>`
       },
       {
         codeLanguage: "js",
-        content: `import Entity from "@/common/cesium/Entity.js";
+        content: `import Material from "@/common/cesium/Materials/index.js";
+                  import Entity from "@/common/cesium/Entity.js";
+                  import wallData from "./module/data.js";//数据
+                  import Utils from "@/common/cesium/Utils.js";
+                  import DynamicWallMaterialPropertys from "./module/material/DynamicWallMaterialPropertys"; //波纹墙
+                  import TrailLineMaterialProperty from "./module/material/TrailLineMaterialProperty"; //流动墙
                   export default {
-                    name: "drawPoint",
+                    name: "wall",
                     data() {
                       return {
                         viewer: null,
                         _Entity: null,
-                        handler: null,
-                        cesiumContainer: null,
-                        EntityData: [],
+                        _Utils: null,
+                        _Material: null,
+                        wallTypeArr: wallData,
+                        wallType: "",
                       };
                     },
                     mounted() {
@@ -53,58 +103,48 @@ export default [
                           infoBox: false,
                           selectionIndicator: false,
                         });
-                        //设置贴地效果
-                        this.viewer.scene.globe.depthTestAgainstTerrain = false;
+                        //深度监听  在当前效果里可以设置贴地效果
+                        this.viewer.scene.globe.depthTestAgainstTerrain = true;
                         this._Entity = new Entity(Cesium, this.viewer);
-                        this.cesiumContainer = document.getElementById("cesiumContainer");
-                        // this.start();
-                  
-                        //相机
-                        this.viewer.camera.flyTo({
-                          //setView是直接跳到 flyTo// 是镜头飞行到  网速不好或者电脑配置不高 还是不要fly了吧
-                          destination: Cesium.Cartesian3.fromDegrees(
-                            -75.59742934002912,
-                            40.03824624260394,
-                            5000
-                          ), //经纬度坐标转换为 笛卡尔坐标(世界坐标)
-                          orientation: {
-                            heading: Cesium.Math.toRadians(0.0), // east, default value is 0.0 (north) //东西南北朝向
-                            pitch: Cesium.Math.toRadians(-90), // default value (looking down)  //俯视仰视视觉
-                            roll: 0.0, // default value
-                          },
-                          duration: 3, //3秒到达战场
-                        });
+                        this._Utils = new Utils();
+                        this._Material = new Material(Cesium, this.viewer);
                       },
                       /**
-                       * 开始
-                       */
-                      start() {
+                      * 开始绘制
+                      */
+                      startDraw() {
                         const Cesium = this.cesium;
-                        this.handler = new Cesium.ScreenSpaceEventHandler(
-                          this.viewer.scene.canvas
+                        //删除所有实体
+                        this._Entity.removeEntity({ type: "all" });
+                        //过滤出来需要的数据对象
+                        const filter_data = this.wallTypeArr.filter(
+                          (item) => item.value == this.wallType
                         );
-                        this.cesiumContainer.style.cursor = "crosshair";
-                        //鼠标左键点击
-                        this.handler.setInputAction((event) => {
-                          const ray = this.viewer.camera.getPickRay(event.position);
-                          if (!ray) return null;
-                          const position = this.viewer.scene.globe.pick(ray, this.viewer.scene);
-                          const _EntityData = this._Entity.createPoint({
-                            position,
-                            color: Cesium.Color.SKYBLUE,
-                            pixelSize: 10,
-                            outlineColor: Cesium.Color.YELLOW,
-                            outlineWidth: 3,
-                            disableDepthTestDistance: Number.POSITIVE_INFINITY,
-                          });
-                          this.EntityData.push(_EntityData);
-                        }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
-                        //鼠标右键点击
-                        this.handler.setInputAction((event) => {
-                          this.handler.destroy(); //关闭事件句柄
-                          this.handler = null;
-                          this.cesiumContainer.style.cursor = "unset";
-                        }, Cesium.ScreenSpaceEventType.RIGHT_CLICK);
+                        if (filter_data.length == 0) return;
+                        const obj = filter_data[0];
+                        let material = null;
+                  
+                        //流动墙
+                        if (obj.value == "1") {
+                          this._Material.create(TrailLineMaterialProperty(Cesium));
+                          material = new Cesium.Material_TrailLineMaterialProperty();
+                        }
+                        //波纹墙
+                        if (obj.value == "2") {
+                          this._Material.create(DynamicWallMaterialPropertys(Cesium));
+                          material = new Cesium.Material_DynamicWallMaterialPropertys();
+                        }
+                  
+                        const positions = Cesium.Cartesian3.fromDegreesArray(obj.position);
+                        const wallEntity = this._Entity.createWall({
+                          positions,
+                          material,
+                          // common: { clampToGround: true },
+                          // 设置高度
+                          maximumHeights: new Array(positions.length).fill(200), //一个属性，它指定要用于墙顶的高度数组，而不是每个位置的高度
+                          minimunHeights: new Array(positions.length).fill(0), //一个属性，它指定要用于墙底而不是地球表面的高度数组。
+                        });
+                        this.viewer.flyTo(wallEntity);
                       },
                     },
                   };`
@@ -118,19 +158,15 @@ export default [
                         width: 100%;
                         height: 100%;
                       }
-                      .tip-view {
+                      .operation-panel {
                         position: fixed;
                         bottom: 0;
                         right: 0;
-                        background-color: rgba(255, 255, 255, 1);
-                        z-index: 2;
+                        background-color: #fff;
+                        border-radius: 6px 0 0 0;
                         padding: 20px;
-                        border-radius: 10px 0 0 0;
-                        .tip {
-                          color: #e6a23c;
-                        }
-                        .button {
-                          margin-top: 10px;
+                        .startButton {
+                          margin-left: 10px;
                         }
                       }
                     }`

@@ -21,7 +21,7 @@
           <div class="form-item">
             <div class="form-label">范围：</div>
             <div class="form-value">
-              <el-radio-group v-model="range" size="mini">
+              <el-radio-group @change="search" v-model="range" size="mini">
                 <el-radio label="city">城市</el-radio>
                 <el-radio label="all">全国</el-radio>
               </el-radio-group>
@@ -33,6 +33,7 @@
               <el-cascader
                 size="mini"
                 clearable
+                @change="search"
                 :disabled="range == 'all'"
                 v-model="city"
                 :props="{
@@ -54,6 +55,7 @@
                 size="mini"
                 v-model="searchType"
                 multiple
+                @change="search"
                 placeholder="请选择兴趣类别（可多选）"
               >
                 <el-option
@@ -64,6 +66,19 @@
                 >
                 </el-option>
               </el-select>
+            </div>
+          </div>
+          <div class="form-item multiple">
+            <div class="form-label">是否聚合：</div>
+            <div class="form-value">
+              <el-switch
+                size="mini"
+                v-model="polymerization"
+                active-color="#13ce66"
+                inactive-color="#ff4949"
+                @change="search"
+              >
+              </el-switch>
             </div>
           </div>
           <div class="form-item search">
@@ -195,6 +210,7 @@
 // https://blog.csdn.net/u014556081/article/details/113185855 路线规划与导航
 import Utils from "@/common/cesium/Utils.js";
 import GaodeMap from "@/common/cesium/Map/Gaode";
+
 export default {
   props: {
     show: {
@@ -233,10 +249,11 @@ export default {
       city: ["210000", "210100"], //城市
       placeSearchType: [], //兴趣类别
       searchType: ["餐饮服务", "商务住宅", "生活服务"], //选择的类别
+      polymerization: false, //是否聚合
       keyword: "", //搜索关键词
 
       pageIndex: 1, //页码
-      pageSize: 10, //页数量
+      pageSize: 20, //页数量
       total: 0, //总数
 
       poisList: [], //兴趣点搜索结果
@@ -510,6 +527,7 @@ export default {
      * 搜索
      */
     search() {
+      if (this.keyword == "") return;
       if (this.range == "city") {
         if (this.city.length == 0) {
           this.$message({
@@ -541,7 +559,11 @@ export default {
             this.$refs.poisList.scrollTop = 0;
           });
           this.loading = false;
-          this.$emit("load", { type: "pois", data: this.poisList });
+          this.$emit("load", {
+            type: "pois",
+            polymerization: this.polymerization,
+            data: this.poisList,
+          });
         })
         .catch((err) => {
           this.$notify.error({

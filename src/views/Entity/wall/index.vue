@@ -27,10 +27,11 @@
 <script>
 import Material from "@/common/cesium/Materials/index.js";
 import Entity from "@/common/cesium/Entity.js";
-import wallData from "./module/data";
+import wallData from "./module/data.js";//数据
 import Utils from "@/common/cesium/Utils.js";
 import DynamicWallMaterialPropertys from "./module/material/DynamicWallMaterialPropertys"; //波纹墙
 import TrailLineMaterialProperty from "./module/material/TrailLineMaterialProperty"; //流动墙
+import code from "./module/highlight";
 export default {
   name: "wall",
   data() {
@@ -42,6 +43,9 @@ export default {
       wallTypeArr: wallData,
       wallType: "",
     };
+  },
+  created() {
+    this.$store.dispatch("highlight/set_code", code);
   },
   mounted() {
     this.init();

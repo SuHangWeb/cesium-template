@@ -1,6 +1,15 @@
 
 /**
  * 获取基元的集合
+ * 使用方法如下 
+   const _Primitives = new Primitives(cenium上下文,场景viewer)
+    _Primitives.方法函数(根据当前方法所需参数进行传递)
+    
+    方法目录如下：
+
+    方法名称 | 概要
+    --- | ---
+    createParticleSystem | 粒子
  */
 class Primitives {
     constructor(Cesium, viewer) {

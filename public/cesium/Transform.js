@@ -1,6 +1,18 @@
 
 /**
  * 转换操作
+ * 使用方法如下 
+   const _Transform = new Transform(cenium上下文,场景viewer)
+    _Transform.方法函数(根据当前方法所需参数进行传递)
+    
+    方法目录如下：
+
+    方法名称 | 概要
+    --- | ---
+    formCssColorString | 十六进制颜色 转换成 cesium所需要的颜色
+    getPosition | 位置拾取器 （经度、纬度、相机高度）
+    terrainProviderHeight | 坐标位置获取地形高度
+    getSeibelCurve | 流动曲线/赛贝尔曲线
  */
 class Transform {
     constructor(Cesium, viewer) {
@@ -57,6 +69,22 @@ class Transform {
             positions
         );
         return Promise.resolve(promise)
+
+        // return new Promise((resolve, reject) => {
+            
+        // })
+
+        // // Query the terrain height of two Cartographic positions
+        // const terrainProvider = Cesium.createWorldTerrain();
+        // const positions = [
+        //     Cesium.Cartographic.fromDegrees(86.925145, 27.988257),
+        //     Cesium.Cartographic.fromDegrees(87.0, 28.0)
+        // ];
+        // const promise = Cesium.sampleTerrain(terrainProvider, 11, positions);
+        // Promise.resolve(promise).then(function (updatedPositions) {
+        //     // positions[0].height and positions[1].height have been updated.
+        //     // updatedPositions is just a reference to positions.
+        // });
     }
     /**
      * 流动曲线/赛贝尔曲线

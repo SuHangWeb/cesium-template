@@ -1,6 +1,6 @@
 
 // import Utils from "@/common/cesium/Utils.js";
-// import "./module/BaiDuImageryProvider" //百度地图依赖
+// import "./Baidu/module/BaiDuImageryProvider" //百度地图依赖
 
 /**
  * 地图操作
