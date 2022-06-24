@@ -25,6 +25,7 @@ import gcoord from "gcoord";
 import TrailLineMaterialProperty from "./module/material/TrailLineMaterialProperty"; //流动
 import Material from "@/common/cesium/Materials/index.js";
 import GeoJSON from "geojson";
+import code from "./module/highlight";
 export default {
   name: "PoiQuery",
   components: { poiPanel },
@@ -38,6 +39,9 @@ export default {
 
       EntityArr: [],
     };
+  },
+  created() {
+    this.$store.dispatch("highlight/set_code", code);
   },
   mounted() {
     this.init();

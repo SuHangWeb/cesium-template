@@ -53,10 +53,15 @@
             <el-button size="mini" type="primary">
               依赖文件<i class="el-icon-connection el-icon--right"></i>
             </el-button>
-            <el-dropdown-menu slot="dropdown">
+            <el-dropdown-menu class="dropdown-menu" slot="dropdown">
               <el-dropdown-item disabled
                 >当前示例依赖文件（注意顺序）</el-dropdown-item
               >
+              <!-- <el-dropdown-item
+                v-if="subCodeComputed.relyOn.length > 6"
+                command="all"
+                >下载全部</el-dropdown-item
+              > -->
               <el-dropdown-item
                 :command="item"
                 v-for="(item, index) in subCodeComputed.relyOn"
@@ -202,6 +207,24 @@ export default {
      * 点击菜单
      */
     handleCommand(e) {
+      //废弃 测试最多一次性下载10个 后期修改成zip压缩包
+      if (e == "all") {
+        const f_externalLinks = this.subCodeComputed.relyOn.filter(
+          (item) => !item?.externalLinks || !item.externalLinks
+        );
+        if (f_externalLinks.length != this.subCodeComputed.relyOn.length) {
+          this.$notify({
+            title: "警告",
+            message: "存在 npm包 需要单独点击下载",
+            type: "warning",
+          });
+        }
+        for (let i = 0; i < f_externalLinks.length; i++) {
+          downloadLocalFile(f_externalLinks[i].url);
+        }
+        return;
+      }
+      
       if (e?.externalLinks && e.externalLinks) {
         window.open(e.url);
       } else {
@@ -219,6 +242,10 @@ export default {
 </script>
   
 <style scoped lang="scss">
+.dropdown-menu {
+  max-height: 300px;
+  overflow-y: auto;
+}
 .highlight {
   .title-view {
     display: flex;
