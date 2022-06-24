@@ -147,6 +147,7 @@
           </div>
           <div class="pagination">
             <el-pagination
+              hide-on-single-page
               layout="prev, pager, next"
               @current-change="currentPaginationChange"
               :total="total"
