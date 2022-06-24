@@ -1,5 +1,19 @@
 /**
  * 工具
+ * 使用方法如下 
+   const _Utils = new Utils(cenium上下文,场景viewer)
+    _Utils.方法函数(根据当前方法所需参数进行传递)
+    
+    方法目录如下：
+
+    方法名称 | 概要
+    --- | ---
+    getRandomColor | 获取随机十六进制颜色
+    operationDom | 操作dom
+    debounce | 防抖函数
+    throttle | 节流函数
+    createScript | 原生创建脚本
+    loadJs | 加载外部js（es6）
  */
 class Utils {
     constructor(Cesium, viewer) {
@@ -109,6 +123,46 @@ class Utils {
         script.setAttribute("type", "text/javascript");
         script.setAttribute("src", url);
         document.getElementsByTagName('head')[0].appendChild(script);
+    }
+
+    /**
+     * 加载外部js
+     * @param {String} src js地址
+     * @param {Object} params 参数
+     *  append {String} 插入标签 例如：head、body
+     *  async {Boolean} 脚本相对于页面的其余部分异步地执行（当页面继续进行解析时，脚本将被执行）
+     *  defer {Boolean} 脚本将在页面完成解析时执行
+     *  注意：如果既不使用 async 也不使用 defer；在浏览器继续解析页面之前，立即读取并执行脚本
+     * @returns 
+     * 使用方法
+     * import Utils from "@/common/cesium/Utils.js";
+     * const _Utils = new Utils()
+     * _Utils.loadJs(js地址).then(() => {加载成功，进行后续操作});
+     */
+    loadJs(src, params) {
+        return new Promise((resolve, reject) => {
+            let script = document.createElement('script');
+            script.type = "text/javascript";
+            if (params?.async && params.async) {
+                script.async = "async";
+            }
+            if (params?.defer && params.defer) {
+                script.defer = "defer";
+            }
+            let append = "body"
+            if (params?.append && params.append && (params.append == "body" || params.append == "head")) {
+                append = params.append;
+            }
+            script.src = src;
+            document[append].appendChild(script);
+
+            script.onload = () => {
+                resolve();
+            }
+            script.onerror = () => {
+                reject();
+            }
+        })
     }
 }
 

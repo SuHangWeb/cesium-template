@@ -8,12 +8,81 @@ const timeStamp = () => {
 
 /**
  * 实体实例将多种形式的可视化聚集到单个高级对象中
+ * 使用方法如下 
+   const _Entity = new Entity(cenium上下文,场景viewer)
+    _Entity.方法函数(根据当前方法所需参数进行传递)
+    
+    方法目录如下：
+
+    方法名称 | 概要
+    --- | ---
+    getEntity | 通过id 查询实体
+    removeEntity | 删除实体（查询删除、直接删除、删除所有）
+    create | 创建任意实体（需要根据官方的格式来创建）
+    createPoint | 点
+    createPolyline | 线
+    createPolygon | 多边形线
+    createWall | 墙
+    createModel | 模型
+    createBox | 盒子
+    createRectangle | 矩形
+    createBillboard | 广告牌
+    createEllipse | 椭圆
+    createCylinder | 圆柱体
+    createPolylineVolume | 多线段柱体
  */
 class Entity {
     constructor(Cesium, viewer) {
         this.Cesium = Cesium
         this.viewer = viewer
     }
+
+    /**
+     * 根据实体ID 查询是否存在当前实体
+     * @param {*} id 
+     * @returns  有/返回实体 无/返回undefined
+     */
+    getEntity(id) {
+        return this.viewer.entities.getById(id);
+    }
+
+    /**
+     * 删除实体
+     * @param {Object} params 
+     *  id 实体id
+     *  type get/先查询后删除 direct/直接删除 all/删除所有 默认get
+     */
+    removeEntity(params) {
+        const id = params?.id ? params.id : ""
+        const type = params?.type ? params.type : "get"
+        //先查后删
+        if (type == "get") {
+            const entity = this.viewer.entities.getById(id);
+            this.viewer.entities.remove(entity)
+        }
+        //直接删除
+        if (type == "direct") {
+            this.viewer.entities.removeById(id)
+        }
+        //删除所有
+        if (type == "all") {
+            this.viewer.entities.removeAll()
+        }
+    }
+
+
+    /**
+    * 创建任意实体
+    * @param {Object} params 配置参数
+    * @returns {Entity} 实体
+    */
+    create(params) {
+        const entity = this.viewer.entities.add({
+            ...params
+        })
+        return entity
+    }
+
     /**
      * 创建点
      * @param {Object} params 配置参数
@@ -81,7 +150,7 @@ class Entity {
         return entity;
     }
     /**
-     * 绘制线
+     * 创建线
      * @param {Object} params 配置参数
      * 注：通用参数使用 params.common
      * @returns {Entity} 实体线
@@ -155,7 +224,7 @@ class Entity {
         return entity;
     }
     /**
-     * 绘制多边形线
+     * 创建多边形线
      * @param {Object} params 配置参数
      * 注：通用参数使用 params.common
      * @returns {Entity} 实体多边形线
@@ -264,7 +333,7 @@ class Entity {
         return entity;
     }
     /**
-    * 绘制墙体
+    * 创建墙体
     * @param {Object} params 配置参数
     * 注：通用参数使用 params.common
     * @returns {Entity} 实体墙体

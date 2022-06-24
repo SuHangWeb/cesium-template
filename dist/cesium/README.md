@@ -12,5 +12,6 @@
 ├─Echarts.js        转换方法
 ├─Transform.js      转换方法
 ├─Canvas.js         原生canvas操作
-└─index.js          入口文件
+├─index.js          入口文件
+└─readme            自述文件夹
 ```

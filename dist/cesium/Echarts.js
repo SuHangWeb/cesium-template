@@ -11,6 +11,16 @@ import Transform from "@/common/cesium/Transform.js";
 import { v4 as uuidv4 } from "uuid";
 /**
  * 仿造Echarts 使用Cesium 生成 3D图表
+ * 使用方法如下 
+   const _Echarts3D = new Echarts3D(cenium上下文,场景viewer)
+    _Echarts3D.方法函数(根据当前方法所需参数进行传递)
+    
+    方法目录如下：
+
+    方法名称 | 概要
+    --- | ---
+    createBar | 柱状图
+    createWaterPolo | 动态水球
  */
 class Echarts3D {
     constructor(Cesium, viewer) {
@@ -243,13 +253,42 @@ class Echarts3D {
     /**
      * 创建动态水球
      * @param {*} params 
+     * @use 使用方法如下:
+     * const _Echarts3D = new Echarts3D(Cesium, viewer)
+     * _Echarts3D.createWaterPolo({
+     *  data:[{
+     *      name:"当前组名称:String",
+     *      position:[经度:Number,纬度:Number,高程:Number],
+     *      data:{Number} 0-100之间的值,
+     *      color:{十六进制、rgb、rgba...} 可选值 ,
+     *        
+     *  }],
+     * nodeId:{String}, 必选参数：需要插入信息框的父元素id名称
+     * id:{String}, 可选参数：如果不存在id 默认会自动随机赋予id
+     * color:{Array}, 可选参数： 颜色数组 默认会存在一组色值 也可以自定义传递 取值从索引0 开始
+     * padding:{Number}, 可选参数： 球体内容的 内间距
+     * size:{Number}, 可选参数：球体的直径 默认是100/单位：px
+     * zIndex:{Number},可选参数：定位层级
+     * border：{Objedt}, 可选参数： 边框=》{
+     *      width:{Number} ,边框宽度
+     *      color:{色值},边框的颜色
+     * }
+     * background:{Object},可选参数：背景=》{
+     *      color:{色值},背景色 默认：白色
+     * }
+     * font:{Object},可选参数：文字=》{
+     *      size:{Number},文字字号 默认是 直径的四分之一大小
+     *      color:{色值},文字颜色 默认：黑色  
+     * }
+     *  
+     * })
      */
     createWaterPolo(params) {
         if (params.data.length == 0) return
 
         const _Utils = new Utils();
+
         const Cesium = this.Cesium
-        const _Transform = new Transform(Cesium, this.viewer)
         //节点id 用来插入当前节点内元素使用
         const nodeId = params?.nodeId ? params.nodeId : ""
         //初始化背景色
@@ -435,18 +474,44 @@ class Echarts3D {
         //插入到页面中
         _Utils.operationDom("append", nodeId, _createDom)
 
+        // const watchUpdatedPositions = (dom, height, latitude, longitude) => {
+        //     /**
+        //      * scene = 场景
+        //      * preRender = Event 事件订阅
+        //      * addEventListener = 注册一个在事件引发时执行的回调函数
+        //      *
+        //      */
+        //     this.viewer.scene.preRender.addEventListener(() => {
+        //         const position = Cesium.Cartesian3.fromDegrees(latitude, longitude, height);
+        //         /**
+        //          * 转换为画布坐标
+        //          * cartesianToCanvasCoordinates = 将笛卡尔坐标中的位置转换为画布坐标。这通常用于放置与场景中的对象位于同一屏幕位置的HTML元素。
+        //          */
+        //         const canvasPosition = this.viewer.scene.cartesianToCanvasCoordinates(
+        //             position,
+        //             new Cesium.Cartesian2()
+        //         );
+
+        //         if (Cesium.defined(canvasPosition)) {
+        //             dom.style.top = canvasPosition.y + "px";
+        //             dom.style.left = canvasPosition.x + "px";
+        //         }
+        //     });
+        // }
+
         //定位到页面中
         for (let i = 0; i < data.length; i++) {
             const item = data[i]
             const dom = document.getElementById(item.id);
             // let cartographics = [Cesium.Cartographic.fromDegrees(item.position[0], item.position[1])];
-            // // sampleTerrain=采样地形 三个参数分别备注如下
+            // sampleTerrain=采样地形 三个参数分别备注如下
             // Cesium.sampleTerrain(
             //     this.viewer.scene.terrainProvider, //地形相关的
             //     14, //地形高度级别
             //     cartographics
             // ).then((updatedPositions) => {
             //     const { height, latitude, longitude } = updatedPositions[0]
+            //     watchUpdatedPositions(dom, height, item.position[0], item.position[1])
             // });
 
             /**
