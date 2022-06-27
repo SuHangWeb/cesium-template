@@ -5,6 +5,9 @@
 ```
 ┌─Tripartite        三方依赖库
 ├─Map               地图
+│  ├─Baidu          百度  
+│  └─Gaode          高德 
+├─Materials         材质
 ├─Config.js         配置项
 ├─Entity.js         实体创建
 ├─Primitives.js     图元
