@@ -260,29 +260,29 @@ export const constantRoutes = [
   },
 
 
-  {
-    path: '/test',
-    component: Layout,
-    redirect: '/Test/TestPage',
-    name: 'Test',
-    meta: { title: '测试', icon: 'el-icon-menu', highlight: true },
-    children: [
-      {
-        path: 'test',
-        name: 'Test',
-        component: () => import('@/views/Test/TestPage'),
-        meta: { title: '测试页面', icon: 'el-icon-monitor', highlight: true }
-      },
-    ]
-  },
+  // {
+  //   path: '/test',
+  //   component: Layout,
+  //   redirect: '/Test/TestPage',
+  //   name: 'Test',
+  //   meta: { title: '测试', icon: 'el-icon-menu', highlight: true },
+  //   children: [
+  //     {
+  //       path: 'test',
+  //       name: 'Test',
+  //       component: () => import('@/views/Test/TestPage'),
+  //       meta: { title: '测试页面', icon: 'el-icon-monitor', highlight: true }
+  //     },
+  //   ]
+  // },
 
-  {
-    path: 'external-link',
-    component: Layout,
-    name: 'External-link',
-    meta: { title: '文档', icon: 'el-icon-folder-opened' },
-    children: externalLinkArr
-  },
+  // {
+  //   path: 'external-link',
+  //   component: Layout,
+  //   name: 'External-link',
+  //   meta: { title: '文档外链', icon: 'el-icon-folder-opened' },
+  //   children: externalLinkArr
+  // },
 
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
