@@ -3,8 +3,18 @@
 // import { v4 as uuidv4 } from "uuid";
 /**
  * 仿造Echarts 使用Cesium 生成 3D图表
+ * 使用方法如下 
+   const _Echarts3D = new Echarts3D(cenium上下文,场景viewer)
+    _Echarts3D.方法函数(根据当前方法所需参数进行传递)
+    
+    方法目录如下：
+
+    方法名称 | 概要
+    --- | ---
+    createBar | 柱状图
+    createWaterPolo | 动态水球
  */
- class Echarts3D {
+class Echarts3D {
     constructor(Cesium, viewer) {
         this.Cesium = Cesium
         this.viewer = viewer
