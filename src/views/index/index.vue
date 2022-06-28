@@ -1,5 +1,23 @@
 <template>
   <div class="container">
+    <viewer
+      :images="images"
+      :options="options"
+      @inited="inited"
+      class="viewer"
+      ref="viewer"
+    >
+      <template #default="scope">
+        <img
+          class="hide"
+          v-for="(item, index) in scope.images"
+          :src="item"
+          :key="index"
+        />
+        <!-- {{ scope.options }} -->
+      </template>
+    </viewer>
+
     <el-card class="box-card" style="margin-bottom: 16px">
       <div slot="header" class="clearfix">
         <span>参考文档</span>
@@ -27,10 +45,7 @@
             :content="item.describe"
             placement="top-start"
           >
-            <div
-              :class="`pan-btn ${item.style}`"
-              @click="link(item)"
-            >
+            <div :class="`pan-btn ${item.style}`" @click="link(item)">
               {{ item.title }}
             </div>
           </el-tooltip>
@@ -42,20 +57,50 @@
  
 <script>
 import { doc, tripartite } from "./module/data";
+import "viewerjs/dist/viewer.css";
+import { component as Viewer } from "v-viewer";
 export default {
+  components: { Viewer },
   name: "Files",
   data() {
     return {
       doc: doc,
       tripartite: tripartite,
+      images: [],
+      options: {
+        inline: false,
+        button: true,
+        navbar: false,
+        title: true,
+        toolbar: false,
+        tooltip: true,
+        movable: true,
+        zoomable: true,
+        rotatable: true,
+        scalable: true,
+        transition: true,
+        fullscreen: true,
+        keyboard: true,
+      },
     };
   },
   methods: {
+    inited(viewer) {
+      this.$viewer = viewer;
+    },
+    show() {
+      this.$viewer.show();
+    },
     /**
      * 跳转
      */
     link(item) {
-      window.open(item.link);
+      if (item?.externalLinks && item.externalLinks) {
+        window.open(item.link);
+      } else {
+        this.images = [item.link];
+        this.$viewer.show();
+      }
     },
   },
 };
@@ -73,5 +118,8 @@ export default {
     display: flex;
     flex-wrap: wrap;
   }
+}
+.hide {
+  display: none;
 }
 </style>

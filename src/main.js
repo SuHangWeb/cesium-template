@@ -19,6 +19,7 @@ import '@/permission' // permission control
 import '@/assets/iconfont/iconfont.css';
 
 
+
 //引入cesium相关文件
 var cesium = require('cesium/Cesium');
 var widgets = require('cesium/Widgets/widgets.css');
