@@ -18,6 +18,9 @@ import '@/icons' // icon
 import '@/permission' // permission control
 import '@/assets/iconfont/iconfont.css';
 
+//拷贝
+import VueClipBoard from 'vue-clipboard2'
+Vue.use(VueClipBoard)
 
 
 //引入cesium相关文件

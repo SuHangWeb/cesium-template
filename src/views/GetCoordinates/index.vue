@@ -80,27 +80,27 @@ export default {
         });
         // 获取点击位置
         const getPosition = this._Transform.getPosition(event);
-        // const getPositionAll = JSON.stringify(getPosition);
-        // const longitude = getPosition.longitude;
-        // const latitude = getPosition.latitude;
-        // const cameraHeight = getPosition.cameraHeight;
-        // const Alert =
-        //   getPositionAll +
-        //   "\n经度：" +
-        //   longitude +
-        //   "、纬度：" +
-        //   latitude +
-        //   "、相机高度：" +
-        //   cameraHeight;
-        // const Alert = getPositionAll + '\n' +'经度：' +longitude+'、纬度：'+latitude、相机高度：cameraHeight
-
         const Alert = `${JSON.stringify(getPosition)}\n经度：${
           getPosition.longitude
         }、纬度：${getPosition.latitude}、相机高度：${
           getPosition.cameraHeight
         }`;
         console.log(Alert);
-        alert(Alert);
+        this.$copyText(`${getPosition.longitude},${getPosition.latitude}`).then(
+          (e) => {
+            this.$notify({
+              title: "成功",
+              message: "位置信息已拷贝到粘贴板",
+              type: "success",
+            });
+          },
+          (e) => {
+            this.$notify.error({
+              title: "错误",
+              message: "位置信息拷贝失败",
+            });
+          }
+        );
       }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
     },
   },

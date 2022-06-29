@@ -5,8 +5,9 @@
 </template>
  
 <script>
-// https://blog.csdn.net/weixin_42776111/article/details/122981291
-
+// https://www.csdn.net/tags/MtTaEg2sNjE4OTc2LWJsb2cO0O0O.html
+// https://www.freesion.com/article/1179473126/
+// http://t.zoukankan.com/airduce-p-10417538.html
 import Entity from "@/common/cesium/Entity.js";
 import Utils from "@/common/cesium/Utils.js";
 export default {
@@ -55,11 +56,7 @@ export default {
 
       let start = Cesium.JulianDate.fromDate(new Date()); // 设置时间轴当前时间为开始时间
       start = Cesium.JulianDate.addHours(start, 8, new Cesium.JulianDate()); // 开始时间加8小时改为北京时间
-      let stop = Cesium.JulianDate.addSeconds(
-        start,
-        400,
-        new Cesium.JulianDate()
-      ); // 设置结束时间为开始时间加400秒
+      let stop = Cesium.JulianDate.addSeconds(start, 400, new Cesium.JulianDate()); // 设置结束时间为开始时间加400秒
       // 设置时钟开始时间
       this.viewer.clock.startTime = start.clone();
       // 设置时钟当前时间
@@ -77,6 +74,11 @@ export default {
       this._Utils = new Utils(Cesium, this.viewer);
       this.start();
 
+      const randomStart = [123.43414668444673, 41.811367093937214];
+      const endStart = [123.43414668444673, 41.811367093937214];
+      // setInterval(() => {
+      //   console.log(this._Utils.randomPoint(randomStart, endStart));
+      // }, 5000);
       //相机
       this.viewer.camera.setView({
         //setView是直接跳到 flyTo// 是镜头飞行到  网速不好或者电脑配置不高 还是不要fly了吧
@@ -94,38 +96,10 @@ export default {
       });
     },
     /**
-     * 时间轴与位置绑定
-     */
-    computeFlight(source) {
-      const Cesium = this.cesium;
-      let property = new Cesium.SampledPositionProperty();
-      for (let i = 0; i < source.length; i++) {
-        let time = Cesium.JulianDate.addSeconds(
-          start,
-          source[i].time,
-          new Cesium.JulianDate()
-        );
-        let position = Cesium.Cartesian3.fromDegrees(
-          source[i].longitude,
-          source[i].dimension,
-          source[i].height
-        );
-        // 添加位置，和时间对应
-        property.addSample(time, position);
-      }
-      return property;
-    },
-    /**
      * 开始
      */
     start() {
       const Cesium = this.cesium;
-
-      
-      // let property = this.computeFlight(data)
-
-
-
       let startPosition = new Cesium.Cartesian3.fromDegrees(
         123.43414668444673,
         41.811367093937214
