@@ -161,7 +161,7 @@ export default {
         },
         position,
         //控制位偏移
-        uri: "/Vue/Entity/dynamicPosition/qiche.gltf",
+        uri: process.env.VUE_APP_PUBLIC_URL + "/Vue/Entity/dynamicPosition/qiche.gltf",
         maximumScale: 100,
         minimumPixelSize: 30,
         heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
