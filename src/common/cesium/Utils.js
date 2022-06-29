@@ -202,7 +202,6 @@ class Utils {
 
     /**
      * 获取当前实体的位置
-     * 参考文章：https://www.jianshu.com/p/7ebeb5963eee
      * @param {*} entity 
      */
     getEntityPosition(entity) {

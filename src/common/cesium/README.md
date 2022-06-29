@@ -18,3 +18,6 @@
 ├─index.js          入口文件
 └─readme            自述文件夹
 ```
+
+
+(工具类部分方法借鉴)[https://www.jianshu.com/p/e27dd92263e0]

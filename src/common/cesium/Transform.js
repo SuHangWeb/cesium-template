@@ -13,6 +13,13 @@
     getPosition | 位置拾取器 （经度、纬度、相机高度）
     terrainProviderHeight | 坐标位置获取地形高度
     getSeibelCurve | 流动曲线/赛贝尔曲线
+    getCatesian3FromPX | 屏幕坐标转笛卡尔 地形坐标 
+    meter2Lat | 距离（米）转换为纬度  一米对应的纬度为定值
+    meter2Lng | 距离（米）转换为经度  不同纬度下一米对应的经度不同
+    isDegreesOrCartesian | 判断该点是否是经纬度或者笛卡尔坐标
+    toDegrees | 转化成经纬度
+    toCartesian | 转化成笛卡尔坐标
+    toWindowCoordinates | 转屏幕坐标
  */
 class Transform {
     constructor(Cesium, viewer) {
