@@ -8,15 +8,15 @@
 // https://www.csdn.net/tags/MtTaEg2sNjE4OTc2LWJsb2cO0O0O.html
 // https://www.freesion.com/article/1179473126/
 // http://t.zoukankan.com/airduce-p-10417538.html
+
+// https://blog.csdn.net/ly1074106000/article/details/111220425
 import Entity from "@/common/cesium/Entity.js";
-import Utils from "@/common/cesium/Utils.js";
 export default {
   name: "dynamicPosition",
   data() {
     return {
       viewer: null,
       _Entity: null,
-      _Utils: null,
     };
   },
   mounted() {
@@ -37,7 +37,7 @@ export default {
         timeline: true,
         infoBox: false,
         selectionIndicator: false,
-        // sceneMode: 2,
+        sceneMode: 2,
         // scale: 0.1,
       });
       //启用使用场景的光源为地球照明
@@ -48,14 +48,7 @@ export default {
       Cesium.Math.setRandomNumberSeed(3);
 
       this._Entity = new Entity(Cesium, this.viewer);
-      this._Utils = new Utils(Cesium, this.viewer);
       this.start();
-
-      const randomStart = [123.43414668444673, 41.811367093937214];
-      const endStart = [123.43414668444673, 41.811367093937214];
-      // setInterval(() => {
-      //   console.log(this._Utils.randomPoint(randomStart, endStart));
-      // }, 5000);
       //相机
       this.viewer.camera.setView({
         //setView是直接跳到 flyTo// 是镜头飞行到  网速不好或者电脑配置不高 还是不要fly了吧
@@ -77,47 +70,34 @@ export default {
      */
     start() {
       const Cesium = this.cesium;
-      let startPosition = new Cesium.Cartesian3.fromDegrees(
-        123.43414668444673,
-        41.811367093937214
-      );
-      let endPosition = new Cesium.Cartesian3.fromDegrees(
-        123.41625747004427,
-        41.830387309925065
-      );
-      let factor = 0;
-      const position = new Cesium.CallbackProperty(function (time) {
-        if (factor > 5000) {
-          factor = 0;
-        }
-        factor++;
-        // 动态更新位置
-        return Cesium.Cartesian3.lerp(
-          startPosition,
-          endPosition,
-          factor / 5000.0,
-          new Cesium.Cartesian3()
-        );
-      }, false);
-      // 创建模型 start
-      const createModel = this._Entity.createModel({
-        // position: new Cesium.Cartesian3.fromDegrees(
-        //   123.43382736814452,
-        //   41.811201240193164,
-        //   3000
-        // ),
-        common: {
-          //模型姿态
-          orientation: new Cesium.VelocityOrientationProperty(position),
+      var p1 = new Cesium.Cartesian3.fromDegrees(123.43382736814452, 41.811201240193164, 3000);
+      var p2 = new Cesium.Cartesian3.fromDegrees(123.38490962816378, 41.88254440941469, 3000);
+
+      var current = Cesium.JulianDate.now();
+      var endTime = Cesium.JulianDate.addSeconds(
+        current,
+        30,
+        new Cesium.JulianDate()
+      ); //5秒
+      var property = new Cesium.SampledProperty(Cesium.Cartesian3);
+      property.addSample(current, p1); //动点开始
+      property.addSample(endTime, p2); //动点结束
+
+      var point = this.viewer.entities.add({
+        position: p1,
+        point: {
+          color: Cesium.Color.WHITE,
+          pixelSize: 10,
+          //heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
         },
-        position,
-        //控制位偏移
-        uri: "/Vue/Entity/dynamicPosition/qiche.gltf",
-        maximumScale: 100,
-        minimumPixelSize: 30,
-        heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
+        model: {
+          uri: "/Vue/Entity/dynamicPosition/qiche.gltf",
+          minimumPixelSize: 16,
+          maximumScale: 16,
+          heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
+        },
       });
-      // 创建模型 end
+      point.position = property;
     },
   },
 };

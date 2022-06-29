@@ -12,6 +12,8 @@ https://blog.csdn.net/weixin_37548620/article/details/106734830
 
 [参考效果](https://blog.csdn.net/weixin_45782925/article/details/123269490)
 
+[方法参考](https://www.jianshu.com/nb/35513242)
+
 材质参考
 https://blog.csdn.net/qq_34447899/article/details/123224443
 https://blog.csdn.net/weixin_45782925/article/details/123351541
