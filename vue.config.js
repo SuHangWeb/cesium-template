@@ -90,7 +90,13 @@ module.exports = {
     ],
     module: {
       unknownContextCritical: /^.\/.*$/,
-      unknownContextCritical: false
+      unknownContextCritical: false,
+      rules: [
+        {
+          test: /\.(gltf)$/,
+          loader: 'url-loader'
+        }
+      ],
     }
   },
   chainWebpack(config) {
