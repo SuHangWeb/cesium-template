@@ -1140,6 +1140,83 @@ class Entity {
         return entity;
     }
 
+
+    /**
+    * 创建标签
+    * @param {Object} params 配置参数
+    * 注：通用参数使用 params.common
+    * @returns {Entity} 实体标签
+    */
+    createLabel(params) {
+        const Cesium = this.Cesium
+        /**
+         * 仅使用部分参数 多余参数可迭代
+         * add 内部参数 中文文档
+         * http://cesium.xin/cesium/cn/Documentation1.72/Entity.html
+         */
+        const entity = this.viewer.entities.add({
+            //唯一ID
+            id: params.id || `Label-${timeStamp()}`,
+            //设置对象的名称。该名称适用于最终用户消费，并不需要唯一。
+            name: params.name || `Label-${timeStamp()}`,
+            //位置信息
+            position: params.position,
+            //通用参数
+            ...params.common,
+            label: {
+                //用于指定可见性。
+                show: params.show || true,
+                /**
+                 * 文本的属性。支持显式换行符 '\n'
+                 * 类型：String
+                 * 默认值：undefined
+                 */
+                text: params.text || undefined,
+                /**
+                 * 指定 CSS 字体的属性
+                 * 类型：String
+                 * 默认值：'30px sans-serif'
+                 */
+                font: params.font || '30px sans-serif',
+                /**
+                 * 标签样式填充
+                 * Cesium.LabelStyle.[值]
+                 * 值：
+                 * FILL/填写标签的文本，但不要勾勒轮廓。
+                 * OUTLINE/概述标签的文本，但不要填写。
+                 * FILL_AND_OUTLINE/填写并标记标签文本。
+                 */
+                style: params.style || undefined,
+                /**
+                 * 文本的缩放比例
+                 * 类型：Number
+                 */
+                scale: params.scale || 1.0,
+                /**
+                 * 指定标签背景的可见性
+                 * 类型：Boolean
+                 * 默认：false
+                 */
+                showBackground: params.showBackground || false,
+                // backgroundColor,
+                // backgroundPadding,
+                // pixelOffset,
+                // eyeOffset,
+                // horizontalOrigin,
+                // verticalOrigin,
+                // heightReference,
+                // outlineColor,
+                // outlineWidth,
+                // translucencyByDistance,
+                // pixelOffsetScaleByDistance,
+                // scaleByDistance,
+                // distanceDisplayCondition,
+                // disableDepthTestDistance
+            }
+        });
+        return entity;
+    }
+
 }
 
 export default Entity

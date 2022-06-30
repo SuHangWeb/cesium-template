@@ -79,15 +79,15 @@ export default {
           this.viewer.entities.add({
             position: polyCenter,
             label: {
-              font: "24px sans-serif",
+              font: "25px 楷体",
               text: entity._name,
-              showBackground: true,
-              scale: 0.6,
+              showBackground: false,
+              scale: 0.8,
               horizontalOrigin: Cesium.HorizontalOrigin.CENTER,
               verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
               distanceDisplayCondition: new Cesium.DistanceDisplayCondition(
                 0.0,
-                1000000.0
+                2000000.0
               ),
             },
           });
