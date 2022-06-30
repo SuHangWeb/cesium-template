@@ -182,23 +182,37 @@ class Utils {
         })
     }
 
+
     /**
      * 取区域内的随机坐标点
-     * @param {Array} start [经度,纬度]
-     * @param {Array} end [经度,纬度]
-     * @param {Number} range 范围
-     * @returns 
+     * @param {*} params 
+     * start {Array} 必填 [经度,纬度]
+     * end {Array} 必填 [经度,纬度]
+     * range {Number} 选填 默认：1000 范围 保留几位小数
+     * height {Number} 选填 默认：0 高度
+     * type {String} 选填 默认：cartesian3  返回类型 cartesian3=笛卡尔 jwd=经纬度
+     * @returns {cartesian3 | Array}  位置 笛卡尔/经纬度
      */
-    randomPoint(start, end, range = 1000) {
+    randomPoint(params) {
+        const start = params.start
+        const end = params.end
+        const range = params.range || 1000
+        const height = params.height || 0
+        const type = params.type || "cartesian3"
         let Cesium = this.Cesium
         function random(min, max) {
             return Math.floor(Math.random() * (max - min + 1) + min)
         }
         const jd = random(start[0] * range, end[0] * range) / range
         const wd = random(start[1] * range, end[1] * range) / range
-        return Cesium.Cartesian3.fromDegrees(jd, wd, 30)
-    }
 
+        if (type == "cartesian3") {
+            return Cesium.Cartesian3.fromDegrees(jd, wd, height)
+        }
+        if (type == "jwd") {
+            return [jd, wd, height]
+        }
+    }
 
     /**
      * 获取当前实体的位置
@@ -206,14 +220,18 @@ class Utils {
      */
     getEntityPosition(entity) {
         const Cesium = this.Cesium
-        return (
-            entity.position._value ||
-            Cesium.Property.getValueOrUndefined(
-                entity.position,
-                this.viewer.clock.currentTime || Cesium.JulianDate.now(),
-                new Cesium.Cartesian3()
-            )
-        );
+        if (entity.position) {
+            return (
+                entity.position._value ||
+                Cesium.Property.getValueOrUndefined(
+                    entity.position,
+                    this.viewer.clock.currentTime || Cesium.JulianDate.now(),
+                    new Cesium.Cartesian3()
+                )
+            );
+        } else {
+            return undefined
+        }
     }
 
     /**

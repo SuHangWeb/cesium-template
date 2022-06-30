@@ -412,7 +412,7 @@ class Entity {
             //设置对象的名称。该名称适用于最终用户消费，并不需要唯一。
             name: params.name || `Model-${timeStamp()}`,
             //位置信息
-            position: params.position,
+            position: params.position || undefined,
             //控制位偏移
             viewFrom: params.viewFrom || undefined,
             //通用参数

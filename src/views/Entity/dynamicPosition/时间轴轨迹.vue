@@ -5,11 +5,11 @@
 </template>
  
 <script>
-// https://www.csdn.net/tags/MtTaEg2sNjE4OTc2LWJsb2cO0O0O.html
-// https://www.freesion.com/article/1179473126/
-// http://t.zoukankan.com/airduce-p-10417538.html
+// https://blog.csdn.net/weixin_42776111/article/details/122981291
+
 import Entity from "@/common/cesium/Entity.js";
 import Utils from "@/common/cesium/Utils.js";
+import { v4 as uuidv4 } from "uuid";
 export default {
   name: "dynamicPosition",
   data() {
@@ -17,6 +17,10 @@ export default {
       viewer: null,
       _Entity: null,
       _Utils: null,
+      ModelEntityArr: [],
+      startTime: "",
+      stopTime: "",
+      animationTime: 0,
     };
   },
   mounted() {
@@ -56,7 +60,13 @@ export default {
 
       let start = Cesium.JulianDate.fromDate(new Date()); // 设置时间轴当前时间为开始时间
       start = Cesium.JulianDate.addHours(start, 8, new Cesium.JulianDate()); // 开始时间加8小时改为北京时间
-      let stop = Cesium.JulianDate.addSeconds(start, 400, new Cesium.JulianDate()); // 设置结束时间为开始时间加400秒
+      this.startTime = start;
+      let stop = Cesium.JulianDate.addSeconds(
+        start,
+        400,
+        new Cesium.JulianDate()
+      ); // 设置结束时间为开始时间加400秒
+      this.stopTime = stop;
       // 设置时钟开始时间
       this.viewer.clock.startTime = start.clone();
       // 设置时钟当前时间
@@ -74,11 +84,6 @@ export default {
       this._Utils = new Utils(Cesium, this.viewer);
       this.start();
 
-      const randomStart = [123.43414668444673, 41.811367093937214];
-      const endStart = [123.43414668444673, 41.811367093937214];
-      // setInterval(() => {
-      //   console.log(this._Utils.randomPoint(randomStart, endStart));
-      // }, 5000);
       //相机
       this.viewer.camera.setView({
         //setView是直接跳到 flyTo// 是镜头飞行到  网速不好或者电脑配置不高 还是不要fly了吧
@@ -96,51 +101,86 @@ export default {
       });
     },
     /**
+     * 时间轴与位置绑定
+     */
+    computeFlight(source) {
+      const Cesium = this.cesium;
+      let property = new Cesium.SampledPositionProperty();
+      let time = Cesium.JulianDate.addSeconds(
+        this.startTime,
+        source[3],
+        new Cesium.JulianDate()
+      );
+      let position = Cesium.Cartesian3.fromDegrees(
+        source[0],
+        source[1],
+        source[2]
+      );
+      // 添加位置，和时间对应
+      property.addSample(time, position);
+      return property;
+    },
+
+    /**
      * 开始
      */
     start() {
       const Cesium = this.cesium;
-      let startPosition = new Cesium.Cartesian3.fromDegrees(
-        123.43414668444673,
-        41.811367093937214
-      );
-      let endPosition = new Cesium.Cartesian3.fromDegrees(
-        123.41625747004427,
-        41.830387309925065
-      );
-      let factor = 0;
-      const position = new Cesium.CallbackProperty(function (time) {
-        if (factor > 5000) {
-          factor = 0;
-        }
-        factor++;
-        // 动态更新位置
-        return Cesium.Cartesian3.lerp(
-          startPosition,
-          endPosition,
-          factor / 5000.0,
-          new Cesium.Cartesian3()
-        );
-      }, false);
-      // 创建模型 start
-      const createModel = this._Entity.createModel({
-        // position: new Cesium.Cartesian3.fromDegrees(
-        //   123.43382736814452,
-        //   41.811201240193164,
-        //   3000
-        // ),
-        common: {
-          //模型姿态
-          orientation: new Cesium.VelocityOrientationProperty(position),
-        },
-        position,
-        //控制位偏移
-        uri: "/Vue/Entity/dynamicPosition/qiche.gltf",
-        maximumScale: 100,
-        minimumPixelSize: 30,
-        heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
-      });
-      // 创建模型 end
+
+      let ModelEntity = [];
+      for (let i = 0; i < 1; i++) {
+        // 创建模型 start
+        const createModel = this._Entity.createModel({
+          // common: {
+          //   //模型姿态
+          //   orientation: new Cesium.VelocityOrientationProperty(position),
+          // },
+          // position,
+          // //控制位偏移
+          id: uuidv4(),
+          uri:
+            process.env.VUE_APP_PUBLIC_URL +
+            "/Vue/Entity/dynamicPosition/qiche.gltf",
+          maximumScale: 100,
+          minimumPixelSize: 30,
+          heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
+        });
+        // 创建模型 end
+        ModelEntity.push(createModel);
+      }
+      this.ModelEntityArr = ModelEntity;
+      this.setModelPosition();
+      setInterval(() => {
+        this.setModelPosition();
+      }, 20000);
+    },
+    setModelPosition() {
+      const Cesium = this.cesium;
+      for (let i = 0; i < this.ModelEntityArr.length; i++) {
+        // const item = this.ModelEntityArr[i];
+        const randomPoint = this._Utils.randomPoint({
+          start: [123.43408676397446, 41.81120812753955],
+          end: [123.45099649125092, 41.81138896519967],
+          type: "jwd",
+          range: 100000000000000,
+        });
+        let property = this.computeFlight([...randomPoint, this.animationTime]);
+        console.log(property);
+        console.log(this.ModelEntityArr[i])
+        this.ModelEntityArr[i].position = property;
+        // this.ModelEntityArr[i].availability = new Cesium.TimeIntervalCollection(
+        //   [
+        //     new Cesium.TimeInterval({
+        //       start: this.startTime,
+        //       stop: this.stopTime,
+        //     }),
+        //   ]
+        // );
+        // this.ModelEntityArr[i].orientation =
+        //   new Cesium.VelocityOrientationProperty(property);
+        // console.log(this.ModelEntityArr[i]);
+      }
+      this.animationTime += 20;
     },
   },
 };
