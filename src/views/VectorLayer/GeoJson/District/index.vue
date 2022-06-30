@@ -71,8 +71,6 @@ export default {
           } else {
             entity.polygon.material = Cesium.Color.fromRandom({ alpha: 0.5 });
           }
-          entity.polygon.distanceDisplayCondition =
-            new Cesium.DistanceDisplayCondition(0.0, 1000000.0);
           let polyCenter = Cesium.Cartesian3.fromDegrees(
             entity._properties.centroid._value[0],
             entity._properties.centroid._value[1],
