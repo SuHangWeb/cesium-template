@@ -260,6 +260,31 @@ export const constantRoutes = [
   },
 
 
+  {
+    path: '/vectorLayer',
+    component: Layout,
+    redirect: '/VectorLayer/GeoJson',
+    name: 'VectorLayer',
+    meta: { title: '矢量图层', icon: 'el-icon-picture-outline', highlight: true },
+    children: [
+      {
+        path: 'geoJson',
+        name: 'GeoJson',
+        component: () => import('@/views/VectorLayer/GeoJson/District'),
+        meta: { title: 'GeoJson矢量图层', icon: 'el-icon-picture-outline', highlight: true },
+        children: [
+          {
+            path: 'district',
+            component: () => import('@/views/VectorLayer/GeoJson/District'),
+            name: 'District',
+            meta: { title: '行政区', icon: 'el-icon-map-location', highlight: true }
+          },
+        ]
+      },
+    ]
+  },
+
+
   // {
   //   path: '/test',
   //   component: Layout,
