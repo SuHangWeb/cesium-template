@@ -17,7 +17,7 @@
 ├─Entity.js         实体创建
 ├─Primitives.js     图元
 ├─Utils.js          工具
-├─Echarts.js        转换方法
+├─Echarts.js        图表
 ├─Transform.js      转换方法
 ├─Canvas.js         原生canvas操作
 ├─index.js          入口文件

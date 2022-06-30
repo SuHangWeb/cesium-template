@@ -6,10 +6,10 @@
  
 <script>
 // https://blog.csdn.net/weixin_42776111/article/details/122981291
-
 import Entity from "@/common/cesium/Entity.js";
 import Utils from "@/common/cesium/Utils.js";
 import { v4 as uuidv4 } from "uuid";
+import code from "./module/highlight";
 export default {
   name: "dynamicPosition",
   data() {
@@ -19,6 +19,9 @@ export default {
       _Utils: null,
       ModelEntityArr: [],
     };
+  },
+  created() {
+    this.$store.dispatch("highlight/set_code", code);
   },
   mounted() {
     this.init();
@@ -34,10 +37,6 @@ export default {
         terrainProvider: new Cesium.CesiumTerrainProvider({
           url: "http://data.marsgis.cn/terrain",
         }),
-        // terrainProvider: Cesium.createWorldTerrain({
-        //   requestWaterMask: true, // required for water effects
-        //   requestVertexNormals: true, // required for terrain lighting
-        // }),
         shouldAnimate: true,
         timeline: true,
         infoBox: false,
