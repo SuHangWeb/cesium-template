@@ -7,6 +7,7 @@
 <script>
 // https://blog.csdn.net/qq_32341603/article/details/117707277
 //https://www.giserdqy.com/gis/opengis/3d/cesium/junior/7446/ 渐变  http://qa.supermap.com/95360
+// https://www.freesion.com/article/4713678917/ 着色器
 import Entity from "@/common/cesium/Entity.js";
 import { v4 as uuidv4 } from "uuid";
 export default {
@@ -48,9 +49,36 @@ export default {
       this.start();
     },
     /**
+     * 纹理图绘制
+     */
+    getColorRamp(elevationRamp) {
+      var ramp = document.createElement("canvas");
+      ramp.width = 400;
+      ramp.height = 400;
+      var ctx = ramp.getContext("2d");
+      // var values = elevationRamp;
+      // var grd = ctx.createLinearGradient(0, 0, 0, 100);
+      // grd.addColorStop(values[0], "#000000"); //black
+      // grd.addColorStop(values[1], "#2747E0"); //blue
+      // grd.addColorStop(values[2], "#D33B7D"); //pink
+      // grd.addColorStop(values[3], "#D33038"); //red
+      // grd.addColorStop(values[4], "#FF9742"); //orange
+      // grd.addColorStop(values[5], "#ffd700"); //yellow
+      // grd.addColorStop(values[6], "#ffffff"); //white
+
+      var grad = ctx.createRadialGradient(200, 200, 50, 200, 200, 200); //创建一个渐变色线性对象
+      grad.addColorStop(0, "yellow"); //定义渐变色颜色
+      grad.addColorStop(1, "green");
+
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, 400, 400);
+      return ramp;
+    },
+    /**
      * 开始
      */
     start() {
+      console.log(this.getColorRamp())
       const Cesium = this.cesium;
       const JsonUrl =
         process.env.VUE_APP_PUBLIC_URL +
@@ -77,6 +105,7 @@ export default {
             entity.polygon.material = Cesium.Color.RED.withAlpha(0.5);
           } else {
             entity.polygon.material = Cesium.Color.fromRandom({ alpha: 0.5 });
+            // entity.polygon.material = this.getColorRamp();
           }
 
           //添加标签
