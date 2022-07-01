@@ -9,9 +9,21 @@ export const doc = [
         externalLinks: true
     },
     {
-        title: "Cesium官方文档（英文）",
+        title: "Cesium官方文档（英文）-版本1",
         link: "https://cesium.com/learn/cesiumjs/ref-doc/",
         style: "light-blue-btn",
+        externalLinks: true
+    },
+    // {
+    //     title: "Cesium官方文档（英文）版本2",
+    //     link: "https://cesium.com/downloads/cesiumjs/releases/b30/Build/Documentation/index.html",
+    //     style: "light-blue-btn",
+    //     externalLinks: true
+    // },
+    {
+        title: "Cesium官方案例",
+        link: "https://sandcastle.cesium.com/index.html?src=Polygon.html",
+        style: "green-btn",
         externalLinks: true
     },
     {
@@ -36,6 +48,36 @@ export const doc = [
         title: "Cesium核心类-思维导图",
         style: "yellow-btn",
         link: process.env.VUE_APP_PUBLIC_URL + "/static/images/heart-class.jpg",
+    },
+    {
+        title: "Cesium中文网-社区",
+        style: "blue-btn",
+        link: "http://cesium.coinidea.com/",
+        externalLinks: true
+    },
+    {
+        title: "Cesium中文网-简书",
+        style: "light-blue-btn",
+        link: "https://www.jianshu.com/u/217c80f1e0a9",
+        externalLinks: true
+    },
+    {
+        title: "GIS开发者",
+        style: "pink-btn",
+        link: "https://www.giserdqy.com/",
+        externalLinks: true
+    },
+    {
+        title: "supermap",
+        style: "green-btn",
+        link: "http://support.supermap.com.cn:8090/webgl/examples/webgl/examples.html#layer",
+        externalLinks: true
+    },
+    {
+        title: "xt3d实例",
+        style: "light-blue-btn",
+        link: "http://www.xtgis.cc/basiccategorylist",
+        externalLinks: true
     }
 ]
 /**
