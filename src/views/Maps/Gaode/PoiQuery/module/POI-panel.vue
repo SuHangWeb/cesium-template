@@ -107,6 +107,7 @@
               class="pois-item"
               v-for="(item, index) in poisList"
               :key="item.id + index"
+              :class="{ active: poisClickId == item.id }"
               @click="poisClick(item)"
             >
               <div class="pois-item-image">
@@ -226,6 +227,12 @@ export default {
         return {};
       },
     },
+    poisId: {
+      type: String,
+      default: () => {
+        return "";
+      },
+    },
   },
   data() {
     return {
@@ -252,6 +259,8 @@ export default {
       searchType: ["餐饮服务", "商务住宅", "生活服务"], //选择的类别
       polymerization: false, //是否聚合
       keyword: "", //搜索关键词
+
+      poisClickId: "", //兴趣点高亮id
 
       pageIndex: 1, //页码
       pageSize: 20, //页数量
@@ -295,6 +304,14 @@ export default {
           //初始化表单筛选
           this.initAutoComplete();
         }
+      },
+      deep: true,
+      immediate: true,
+    },
+    //兴趣点高亮id
+    poisId: {
+      handler(newValue, oldValue) {
+        this.poisClickId = newValue;
       },
       deep: true,
       immediate: true,
@@ -354,11 +371,13 @@ export default {
         this._GaodeMap
           .Driving({
             panel: "panel",
+            extensions:"all",
+            hideMarkers:true,
             start,
             end,
           })
           .then((res) => {
-            // console.log(res.routes);
+            console.log(res);
             if (res.routes.length != 0) {
               let routeLocationArr = [];
               const steps = res.routes[0].steps;
@@ -522,6 +541,7 @@ export default {
      * @param {*} item
      */
     poisClick(item) {
+      this.poisClickId = item.id;
       this.$emit("poisClick", item);
     },
     /**

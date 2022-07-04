@@ -1,4 +1,26 @@
 
+/**
+ * 常用的高德在线地图网址
+ // 1.影像图
+ https://webst01.is.autonavi.com/appmaptile?x=54658&y=26799&z=16&style=6
+ // 2.道路纯图
+ https://wprd01.is.autonavi.com/appmaptile?lang=zh_cn&size=1&style=7&x=54658&y=26799&z=16&scl=1&ltype=2
+ // 3.道路简图
+ http://webrd01.is.autonavi.com/appmaptile?x=54658&y=26799&z=16&size=1&scale=1&style=7
+ // 4.道路详图
+ http://webrd01.is.autonavi.com/appmaptile?x=54658&y=26799&z=16&lang=zh_cn&size=1&scale=1&style=8
+ // 5.纯道路图
+ http://wprd01.is.autonavi.com/appmaptile?x=54658&y=26799&z=16&lang=zh_cn&size=1&scl=1&style=8&ltype=11
+ // 6.纯地标图
+ https://wprd01.is.autonavi.com/appmaptile?lang=zh_cn&size=1&style=8&x=54658&y=26799&z=16&scl=1&ltype=4
+ // 7.路网注记图
+ http://webst01.is.autonavi.com/appmaptile?x=54658&y=26799&z=16&lang=zh_cn&size=1&scale=1&style=8
+
+ 高德在线地图的瓦片地址及规律参数： 
+ lang：显示语言，zh_cn：中文，en：英文
+ scl：设置标注还是底图，1表示标注，2表示底图
+ style：地图类型控制，6卫星（st）,7简图（st rd），8详图（不透明rd，透明st）
+ */
 class GaodeMap {
     constructor(AMap) {
         this.AMap = AMap

@@ -10,6 +10,7 @@
     ></el-button>
     <poi-Panel
       :show="poiPanelShow"
+      :poisId="poisClickId"
       @close="poiPanelShow = false"
       @load="load"
       @poisClick="poisClick"
@@ -36,8 +37,10 @@ export default {
       viewer: null,
       _Entity: null,
       _Canvas: null,
+      handler: null,
 
       EntityArr: [],
+      poisClickId: "", //兴趣点高亮id
     };
   },
   created() {
@@ -47,8 +50,6 @@ export default {
     this.init();
   },
   methods: {
-    // https://blog.csdn.net/weixin_38676065/article/details/123776236 坐标系转换
-    // https://blog.csdn.net/weixin_52469620/article/details/124397586 坐标系转换
     init() {
       const Cesium = this.cesium;
       Cesium.Ion.defaultAccessToken = process.env.VUE_APP_TOKEN;
@@ -56,20 +57,41 @@ export default {
         imageryProvider: new Cesium.ArcGisMapServerImageryProvider({
           url: "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer",
         }),
-        terrainProvider: new Cesium.CesiumTerrainProvider({
-          //加载火星在线地形
-          url: "http://data.marsgis.cn/terrain",
-        }),
+        // terrainProvider: new Cesium.CesiumTerrainProvider({
+        //   //加载火星在线地形
+        //   url: "http://data.marsgis.cn/terrain",
+        // }),
         shouldAnimate: true,
         infoBox: false,
         selectionIndicator: false,
       });
       //地形侦测
-      this.viewer.scene.globe.depthTestAgainstTerrain = false;
+      // this.viewer.scene.globe.depthTestAgainstTerrain = false;
+      //去锯齿 使文字清晰
+      this.viewer.scene.postProcessStages.fxaa.enabled = false;
 
       this._Entity = new Entity(Cesium, this.viewer);
       this._Material = new Material(Cesium, this.viewer);
       this._Canvas = new Canvas(Cesium, this.viewer);
+
+      this.handler = new Cesium.ScreenSpaceEventHandler(
+        this.viewer.scene.canvas
+      );
+
+      //去掉双击事件
+      this.viewer.cesiumWidget.screenSpaceEventHandler.removeInputAction(
+        Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK
+      );
+
+      //鼠标左键点击
+      this.handler.setInputAction((event) => {
+        const pick = this.viewer.scene.pick(event.position);
+        if (pick) {
+          if (!pick.id) return;
+          this.setPoisActive(pick.id._id);
+          this.viewer.flyTo(pick.id);
+        }
+      }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
     },
     /**
      * 兴趣点触发
@@ -84,7 +106,26 @@ export default {
       );
       this.setCamera({
         location: result,
+        id: e.id,
       });
+    },
+    /**
+     * 设置兴趣点高亮
+     * @param {*} id
+     */
+    setPoisActive(id) {
+      this.poisClickId = id || "";
+      for (let i = 0; i < this.EntityArr.length; i++) {
+        if (this.EntityArr[i].id == id) {
+          this.EntityArr[i].billboard.image =
+            process.env.VUE_APP_PUBLIC_URL +
+            "/Vue/Maps/Gaode/PoiQuery/position-active.png";
+        } else {
+          this.EntityArr[i].billboard.image =
+            process.env.VUE_APP_PUBLIC_URL +
+            "/Vue/Maps/Gaode/PoiQuery/position.png";
+        }
+      }
     },
     /**
      * 设置相机位置
@@ -92,6 +133,9 @@ export default {
      */
     setCamera(e) {
       const Cesium = this.cesium;
+      //设置兴趣点高亮
+      this.setPoisActive(e.id || "");
+
       this.viewer.camera.flyTo({
         destination: Cesium.Cartesian3.fromDegrees(
           e.location[0],
@@ -104,9 +148,10 @@ export default {
      * 操作面板加载回调
      */
     load(e) {
-      this.viewer.entities.removeAll();
+      this.clearEntity();
       if (e.type == "pois") {
         this.setPointPosition(e).then((res) => {
+          // console.log(res);
           this.EntityArr = res;
           this.viewer.flyTo(res);
         });
@@ -142,24 +187,30 @@ export default {
         arrData.push(result[0], result[1]);
       });
 
-      this._Material.create(TrailLineMaterialProperty(Cesium));
+      // this._Material.create(TrailLineMaterialProperty(Cesium));
 
       const Route = this._Entity.createPolyline({
         positions: Cesium.Cartesian3.fromDegreesArray(arrData),
         // clampToGround: true,
-        // material: new Cesium.Color.fromCssColorString(color),
-        material: new Cesium.Material_TrailLineMaterialProperty(),
+        material: new Cesium.Color.fromCssColorString(color),
+        // material: new Cesium.Material_TrailLineMaterialProperty(),
         arcType: Cesium.ArcType.GEODESIC,
-        width: 10,
+        width: 3,
       });
       this.viewer.flyTo(Route);
+    },
+    /**
+     * 清空实体
+     */
+    clearEntity() {
+      this.viewer.entities.removeAll();
     },
     /**
      * 设置标点
      */
     async setPointPosition(data) {
       const Cesium = this.cesium;
-      
+
       //实体数据
       const EntityArr = [];
       //是否聚合
@@ -184,13 +235,23 @@ export default {
               const entity = dataSource.entities.values[i];
               // 将点拉伸一定高度，防止被地形压盖
               entity.position._value.z += 50.0;
-              // 使用大小为64*64的icon，缩小展示poi
-              entity.billboard = {
-                image:
+              entity._id = entity._properties._id._value;
+              let image = "";
+              if (entity._id == this.poisClickId) {
+                image =
                   process.env.VUE_APP_PUBLIC_URL +
-                  "/Vue/Maps/Gaode/PoiQuery/position.png",
+                  "/Vue/Maps/Gaode/PoiQuery/position-active.png";
+              } else {
+                image =
+                  process.env.VUE_APP_PUBLIC_URL +
+                  "/Vue/Maps/Gaode/PoiQuery/position.png";
+              }
+              entity.billboard = {
+                image,
                 width: 16,
                 height: 22,
+                verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
+                heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
               };
               //⽂字标签
               entity.label = {
@@ -209,7 +270,6 @@ export default {
               };
               EntityArr.push(entity);
             }
-
             // 添加监听函数
             dataSource.clustering.clusterEvent.addEventListener(
               (clusteredEntities, cluster) => {
@@ -263,10 +323,9 @@ export default {
               }
             );
           });
-          setTimeout(()=>{
-            resolve(EntityArr)
-          },1000)
-          // return await EntityArr;
+          setTimeout(() => {
+            resolve(EntityArr);
+          }, 1000);
         } else {
           for (let i = 0; i < arr.length; i++) {
             const item = arr[i];
@@ -307,10 +366,9 @@ export default {
             });
             EntityArr.push(_Entity_);
           }
-           setTimeout(()=>{
-            resolve(EntityArr)
-          },1000)
-          // return await EntityArr;
+          setTimeout(() => {
+            resolve(EntityArr);
+          }, 1000);
         }
       });
     },
