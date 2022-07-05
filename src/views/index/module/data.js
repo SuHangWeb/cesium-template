@@ -78,6 +78,12 @@ export const doc = [
         style: "light-blue-btn",
         link: "http://www.xtgis.cc/basiccategorylist",
         externalLinks: true
+    },
+    {
+        title: "内链测试空白页-开发使用",
+        style: "yellow-btn",
+        link: "/test/blankPage",
+        innerChain: true
     }
 ]
 /**

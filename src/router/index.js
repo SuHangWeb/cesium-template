@@ -285,21 +285,22 @@ export const constantRoutes = [
   },
 
 
-  // {
-  //   path: '/test',
-  //   component: Layout,
-  //   redirect: '/Test/TestPage',
-  //   name: 'Test',
-  //   meta: { title: '测试', icon: 'el-icon-menu', highlight: true },
-  //   children: [
-  //     {
-  //       path: 'test',
-  //       name: 'Test',
-  //       component: () => import('@/views/Test/TestPage'),
-  //       meta: { title: '测试页面', icon: 'el-icon-monitor', highlight: true }
-  //     },
-  //   ]
-  // },
+  {
+    path: '/test',
+    component: Layout,
+    redirect: '/Test/BlankPage',
+    name: 'Test',
+    meta: { title: '测试', icon: 'el-icon-menu' },
+    hidden: true,
+    children: [
+      {
+        path: 'blankPage',
+        name: 'BlankPage',
+        component: () => import('@/views/Test/BlankPage'),
+        meta: { title: '测试页面', icon: 'el-icon-monitor' }
+      },
+    ]
+  },
 
   // {
   //   path: 'external-link',

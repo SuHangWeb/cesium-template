@@ -97,6 +97,8 @@ export default {
     link(item) {
       if (item?.externalLinks && item.externalLinks) {
         window.open(item.link);
+      } else if (item?.innerChain && item.innerChain) {
+        this.$router.push({ path: item.link });
       } else {
         this.images = [item.link];
         this.$viewer.show();
