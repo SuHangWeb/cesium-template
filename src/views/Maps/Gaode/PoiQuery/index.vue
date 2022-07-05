@@ -173,12 +173,40 @@ export default {
       return result;
     },
     /**
+     * 绘制起点和终点广告牌
+     * @param {Array} start
+     * @param {Array} end
+     */
+    setStartAndEndPosition(start, end) {
+      const Cesium = this.cesium;
+      this._Entity.createBillboard({
+        id: uuidv4(),
+        position: Cesium.Cartesian3.fromDegrees(start[0], start[1]),
+        image:
+          process.env.VUE_APP_PUBLIC_URL + "/Vue/Maps/Gaode/PoiQuery/start.png",
+        verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
+        heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
+        width: 23,
+        height: 35,
+      });
+      this._Entity.createBillboard({
+        id: uuidv4(),
+        position: Cesium.Cartesian3.fromDegrees(end[0], end[1]),
+        image:
+          process.env.VUE_APP_PUBLIC_URL + "/Vue/Maps/Gaode/PoiQuery/end.png",
+        verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
+        heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
+        width: 23,
+        height: 35,
+      });
+    },
+    /**
      * 绘制路线
      * @param {Object} parameter
      */
     setDrawRoute(parameter) {
       console.log(parameter);
-      const { data, style, pointPosition } = parameter;
+      const { data, style } = parameter;
       const Cesium = this.cesium;
       let color = "";
       if (style == "driving") {
@@ -198,6 +226,11 @@ export default {
       });
 
       // this._Material.create(TrailLineMaterialProperty(Cesium));
+      //设置广告牌哦
+      this.setStartAndEndPosition(
+        [arrData[0], arrData[1]],
+        [arrData[arrData.length - 2], arrData[arrData.length - 1]]
+      );
 
       const Route = this._Entity.createPolyline({
         positions: Cesium.Cartesian3.fromDegreesArray(arrData),
@@ -207,26 +240,7 @@ export default {
         arcType: Cesium.ArcType.GEODESIC,
         width: 3,
       });
-      this._Entity.createBillboard({
-        id: uuidv4(),
-        position: Cesium.Cartesian3.fromDegrees(arrData[0], arrData[1]),
-        image:
-          process.env.VUE_APP_PUBLIC_URL + "/Vue/Maps/Gaode/PoiQuery/start.png",
-        verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
-        heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
-        width: 23,
-        height: 35,
-      });
-      this._Entity.createBillboard({
-        id: uuidv4(),
-        position: Cesium.Cartesian3.fromDegrees(arrData[arrData.length-2], arrData[arrData.length-1]),
-        image:
-          process.env.VUE_APP_PUBLIC_URL + "/Vue/Maps/Gaode/PoiQuery/end.png",
-        verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
-        heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
-        width: 23,
-        height: 35,
-      });
+
       this.viewer.flyTo(Route);
     },
     /**

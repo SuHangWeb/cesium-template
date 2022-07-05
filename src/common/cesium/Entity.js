@@ -988,6 +988,8 @@ class Entity {
             id: params.id || `Ellipsoid-${timeStamp()}`,
             //设置对象的名称。该名称适用于最终用户消费，并不需要唯一。
             name: params.name || `Ellipsoid-${timeStamp()}`,
+            //位置信息
+            position: params.position,
             //通用参数
             ...params.common,
             //椭圆体
