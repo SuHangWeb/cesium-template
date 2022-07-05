@@ -371,8 +371,7 @@ export default {
         this._GaodeMap
           .Driving({
             panel: "panel",
-            extensions:"all",
-            hideMarkers:true,
+            extensions: "all",
             start,
             end,
           })
@@ -382,16 +381,17 @@ export default {
               let routeLocationArr = [];
               const steps = res.routes[0].steps;
               const len = steps.length;
+
               for (let i = 0; i < len; i++) {
                 const item = steps[i];
-                routeLocationArr.push([
-                  item.start_location.lng,
-                  item.start_location.lat,
-                ]);
-                if (len - 1 == i) {
+                if (item.path.length != 0) {
+                  for (let j = 0; j < item.path.length; j++) {
+                    routeLocationArr.push([item.path[j].lng, item.path[j].lat]);
+                  }
+                } else {
                   routeLocationArr.push([
-                    item.end_location.lng,
-                    item.end_location.lat,
+                    item.start_location.lng,
+                    item.start_location.lat,
                   ]);
                 }
               }
@@ -399,6 +399,10 @@ export default {
                 type: "navigation",
                 style: "driving",
                 data: routeLocationArr,
+                pointPosition: {
+                  start: [res.start.location.lng, res.start.location.lat],
+                  end: [res.end.location.lng, res.end.location.lat],
+                },
               });
             }
           });

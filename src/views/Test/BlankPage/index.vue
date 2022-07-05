@@ -1,6 +1,16 @@
 <template>
   <div class="container">
-    <diricon :value="value" type="vehicle" bgColor="#EE782E" />
+    <!-- <diricon :value="value" type="vehicle" bgColor="#EE782E" /> -->
+    <input
+      type="range"
+      max="100"
+      min="0"
+      step="1"
+      defaultValue="0"
+      value="0"
+      name="range"
+      id="range"
+    />
   </div>
 </template>
  
@@ -14,7 +24,39 @@ export default {
       value: "metro",
     };
   },
-  mounted() {},
+  mounted() {
+    const range = document.getElementById("range");
+    let number = 0;
+
+    let setI = setInterval(() => {
+      if (number > 100) {
+        number = 0;
+      } else {
+        number++;
+      }
+      range.value = number;
+    }, 1000);
+
+    range.onchange = (e) => {
+      number = e.target.value
+    };
+
+    range.onfocus = () => {
+      clearInterval(setI);
+      setI = null;
+    };
+
+    range.onblur = () => {
+      setI = setInterval(() => {
+        if (number > 100) {
+          number = 0;
+        } else {
+          number++;
+        }
+        range.value = number;
+      }, 1000);
+    };
+  },
   methods: {},
 };
 </script>

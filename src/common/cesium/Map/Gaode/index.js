@@ -108,6 +108,10 @@ class GaodeMap {
             {
                 label: "步行路线规划服务",
                 value: "Walking"
+            },
+            {
+                label: "轨迹纠偏",
+                value: "GraspRoad"
             }
         ]
         const arrMap = arr.map(item => {

@@ -27,6 +27,7 @@ import TrailLineMaterialProperty from "./module/material/TrailLineMaterialProper
 import Material from "@/common/cesium/Materials/index.js";
 import GeoJSON from "geojson";
 import code from "./module/highlight";
+import { v4 as uuidv4 } from "uuid";
 export default {
   name: "PoiQuery",
   components: { poiPanel },
@@ -157,14 +158,27 @@ export default {
         });
       }
       if (e.type == "navigation") {
-        this.setDrawRoute(e.data, e.style);
+        this.setDrawRoute(e);
       }
     },
     /**
-     * 绘制路线
-     * @param {*} arr
+     * 坐标转换
      */
-    setDrawRoute(arr, style) {
+    gcoordTransform(position) {
+      const result = gcoord.transform(
+        position, // 经纬度坐标
+        gcoord.AMap, // 当前坐标系
+        gcoord.WGS84 // 目标坐标系
+      );
+      return result;
+    },
+    /**
+     * 绘制路线
+     * @param {Object} parameter
+     */
+    setDrawRoute(parameter) {
+      console.log(parameter);
+      const { data, style, pointPosition } = parameter;
       const Cesium = this.cesium;
       let color = "";
       if (style == "driving") {
@@ -178,12 +192,8 @@ export default {
       }
 
       const arrData = [];
-      arr.map((item) => {
-        const result = gcoord.transform(
-          [item[0], item[1]], // 经纬度坐标
-          gcoord.AMap, // 当前坐标系
-          gcoord.WGS84 // 目标坐标系
-        );
+      data.map((item) => {
+        const result = this.gcoordTransform([item[0], item[1]]);
         arrData.push(result[0], result[1]);
       });
 
@@ -196,6 +206,26 @@ export default {
         // material: new Cesium.Material_TrailLineMaterialProperty(),
         arcType: Cesium.ArcType.GEODESIC,
         width: 3,
+      });
+      this._Entity.createBillboard({
+        id: uuidv4(),
+        position: Cesium.Cartesian3.fromDegrees(arrData[0], arrData[1]),
+        image:
+          process.env.VUE_APP_PUBLIC_URL + "/Vue/Maps/Gaode/PoiQuery/start.png",
+        verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
+        heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
+        width: 23,
+        height: 35,
+      });
+      this._Entity.createBillboard({
+        id: uuidv4(),
+        position: Cesium.Cartesian3.fromDegrees(arrData[arrData.length-2], arrData[arrData.length-1]),
+        image:
+          process.env.VUE_APP_PUBLIC_URL + "/Vue/Maps/Gaode/PoiQuery/end.png",
+        verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
+        heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
+        width: 23,
+        height: 35,
       });
       this.viewer.flyTo(Route);
     },

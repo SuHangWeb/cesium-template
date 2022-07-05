@@ -28,6 +28,7 @@ const timeStamp = () => {
     createRectangle | 矩形
     createBillboard | 广告牌
     createEllipse | 椭圆
+    createEllipsoid  | 椭圆体
     createCylinder | 圆柱体
     createPolylineVolume | 多线段柱体
  */
@@ -967,6 +968,114 @@ class Entity {
 
         });
         return entity;
+    }
+
+    /**
+     * 创建椭圆体
+     * @param {Object} params 配置参数
+     * 注：通用参数使用 params.common
+     * @returns {Entity} 实体椭圆体
+     */
+    createEllipsoid(params) {
+        const Cesium = this.Cesium
+        /**
+         * 仅使用部分参数 多余参数可迭代
+         * add 内部参数 中文文档
+         * http://cesium.xin/cesium/cn/Documentation1.72/Entity.html
+         */
+        const entity = this.viewer.entities.add({
+            //唯一ID
+            id: params.id || `Ellipsoid-${timeStamp()}`,
+            //设置对象的名称。该名称适用于最终用户消费，并不需要唯一。
+            name: params.name || `Ellipsoid-${timeStamp()}`,
+            //通用参数
+            ...params.common,
+            //椭圆体
+            ellipsoid: {
+                //用于指定可见性。
+                show: params.show || true,
+                // test: params.test || undefined,
+                /**
+                 * 指定椭球的半径
+                 * 类型：Cartesian3/卡迪尔3
+                 */
+                radii: params.radii || undefined,
+                /**
+                 * 指定椭球的内部半径
+                 * 类型：Cartesian3/卡迪尔3
+                 */
+                innerRadii: params.innerRadii || undefined,
+                /**
+                 * 指定椭圆形的最小时钟角度
+                 * 类型：Number
+                 */
+                minimumClock: params.minimumClock || 0.0,
+                /**
+                 * 指定椭球的最大时钟角度
+                 * 类型：Number
+                 */
+                maximumClock: params.maximumClock || 2 * Math.PI,
+                /**
+                 * 指定椭圆形的最小圆锥角
+                 * 类型：Number
+                 */
+                minimumCone: params.minimumCone || 0.0,
+                /**
+                 * 椭球的最大圆锥角
+                 * 类型：Number
+                 */
+                maximumCone: params.maximumCone || Math.PI,
+                /**
+                 * 相对于高度的高度 默认值 ： Cesium.HeightReference.NONE
+                 * NONE/位置绝对
+                 * CLAMP_TO_GROUND/位置固定在地形上。
+                 * RELATIVE_TO_GROUND/位置高度是指地形上方的高度。
+                 */
+                heightReference: params.heightReference || Cesium.HeightReference.NONE,
+                //指定多边形是否被所提供的材料填充
+                fill: params.fill || true,
+                //材质
+                material: params.material || Cesium.Color.WHITE,
+                //是否有轮廓/描边
+                outline: params.outline || false,
+                //轮廓/描边的颜色
+                outlineColor: params.outlineColor || Cesium.Color.BLACK,
+                //轮廓/描边的尺寸 像素/px 为单位
+                outlineWidth: params.outlineWidth || 1.0,
+                /**
+                 * 指定堆栈数的属性
+                 * 类型：Number
+                 */
+                stackPartitions: params.stackPartitions || 64,
+                /**
+                 * 指定径向切片数量的属性
+                 * 类型：Number
+                 */
+                slicePartitions: params.slicePartitions || 64,
+                /**
+                 * 指定每个轮廓环的样本数，确定曲率的粒度
+                 * 类型：Number
+                 */
+                subdivisions: params.subdivisions || 128,
+                /**
+                 * 指定是否 折线投射或接收来自光源的阴影
+                 * DISABLED/对象不投射或接收阴影
+                 * ENABLED/对象投射并接收阴影
+                 * CAST_ONLY/对象仅投射阴影
+                 * RECEIVE_ONLY/该对象仅接收阴影
+                 */
+                shadows: params.shadows || Cesium.ShadowMode.DISABLED,
+                /**
+                 * 指定将在距相机的距离显示
+                 * new Cesium.DistanceDisplayCondition(0, 4.8e10)
+                 * DistanceDisplayCondition 两个参数分别为
+                 * 名称：near | 类型：{Number} |默认值：0.0 | （可选）可见物体的间隔中的最小距离。
+                 * 名称：far | 类型：{Number} |默认值：Number.MAX_VALUE | （可选）在物体可见的间隔中最大的距离。
+                 */
+                distanceDisplayCondition: params.distanceDisplayCondition || undefined,
+            }
+        })
+        return entity
     }
 
 
