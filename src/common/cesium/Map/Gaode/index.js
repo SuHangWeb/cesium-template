@@ -408,9 +408,40 @@ class GaodeMap {
             });
         })
     }
+
+    /**
+     * 获取公交数据的返回数据参数枚举
+     */
+    get transit_mode_parameter() {
+        return [
+            {
+                value: "BUS",
+                label: "公共汽车"
+            },
+            {
+                value: "SUBWAY",
+                label: "地铁"
+            }, {
+                value: "WALK",
+                label: "步行"
+            }, {
+                value: "METRO_RAIL",
+                label: "地铁轨道"
+            }, {
+                value: "RAILWAY",
+                label: "铁路"
+            }, {
+                value: "TAXI",
+                label: "出租车"
+            }
+        ]
+    }
+
     /**
      * 公交换乘服务
-     * @param {Object} params 配置参数 文档：https://lbs.amap.com/api/jsapi-v2/documentation#transfer
+     * @param {Object} params 配置参数 文档：
+     * https://lbs.amap.com/api/jsapi-v2/documentation#transfer
+     * https://lbs.amap.com/api/javascript-api/reference/route-search#m_AMap.Transfer
      * @returns {Object} 公交换乘服务数据
      */
     Transfer(params) {

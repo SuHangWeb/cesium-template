@@ -1,16 +1,16 @@
 <template>
   <div class="container">
     <div class="view">
-      <path-planning-driving />
+      <path-planning-transfer />
     </div>
   </div>
 </template>
  
 <script>
-import pathPlanningDriving from "@/common/cesium/Map/Gaode/components/pathPlanning/driving.vue";
+import pathPlanningTransfer from "@/common/cesium/Map/Gaode/components/pathPlanning/transfer.vue";
 export default {
   name: "BlankPage",
-  components: { pathPlanningDriving },
+  components: { pathPlanningTransfer },
   data() {
     return {};
   },

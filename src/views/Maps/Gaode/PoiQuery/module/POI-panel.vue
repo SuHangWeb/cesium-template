@@ -458,12 +458,13 @@ export default {
         this._GaodeMap
           .Transfer({
             panel: "panel",
+            extensions: "all",
             start,
             end,
             city: "沈阳市",
           })
           .then((res) => {
-            // console.log(res);
+            console.log(res);
           });
       }
       //骑行

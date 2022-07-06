@@ -176,6 +176,8 @@ export default class Diricon {
     get iconTypeRiding() {
         return this.iconTypeDriving
     }
+
+
     /**
      * 获取icon的类名
      * @param {*} type 导航类型 例如 驾车、骑行等 driving=驾车  walking=步行  transfer=公交 riding=骑行  vehicle=交通工具 text=文字

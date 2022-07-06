@@ -175,3 +175,19 @@ div:focus {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
   background-color: #c8c8c8;
 }
+
+/*选中状态颜色*/
+*::selection {
+  background: #324157;
+  color: #fff;
+}
+
+*::-moz-selection {
+  background: #324157;
+  color: #fff;
+}
+
+*::-webkit-selection {
+  background: #324157;
+  color: #fff;
+}
