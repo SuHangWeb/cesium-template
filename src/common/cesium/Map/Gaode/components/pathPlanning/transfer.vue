@@ -112,12 +112,14 @@
                     :class="{ open: open }"
                   >
                     <div class="multiple-step-content-item-info-text">
-                      上车站 首：{{
-                        stringToTime(segments_item.transit.lines[0].stime)
-                      }}
-                      末：{{
-                        stringToTime(segments_item.transit.lines[0].etime)
-                      }}
+                      <template v-if="segments_item.transit.lines[0].stime.length != 0">
+                        上车站 首：{{
+                          stringToTime(segments_item.transit.lines[0].stime)
+                        }}
+                        末：{{
+                          stringToTime(segments_item.transit.lines[0].etime)
+                        }}
+                      </template>
                     </div>
                     <div
                       class="multiple-step-content-item-info-leng"
@@ -176,6 +178,12 @@ export default {
     };
   },
   computed: {
+    /**
+     * 处理原始数据
+     */
+    handleArrData(){
+      
+    },
     // 米转换公里
     metreToKilometre() {
       return (metre) => {

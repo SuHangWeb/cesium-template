@@ -113,6 +113,7 @@ export default {
   width: 100%;
   height: 100%;
   padding: 16px;
+  overflow-y: auto;
   .pan-btn {
     margin: 5px;
   }
