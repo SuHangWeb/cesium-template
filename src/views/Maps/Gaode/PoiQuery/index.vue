@@ -14,6 +14,7 @@
       @close="poiPanelShow = false"
       @load="load"
       @poisClick="poisClick"
+      @stepsClick="setStepsCamera"
     />
   </div>
 </template>
@@ -129,6 +130,16 @@ export default {
       }
     },
     /**
+     * 设置点击位置相机位置
+     * @param {*} e
+     */
+    setStepsCamera(e) {
+      const Cesium = this.cesium;
+      this.viewer.camera.flyTo({
+        destination: Cesium.Cartesian3.fromDegrees(e.lng, e.lat, 3000),
+      });
+    },
+    /**
      * 设置相机位置
      * @param {*} e
      */
@@ -238,7 +249,7 @@ export default {
         material: new Cesium.Color.fromCssColorString(color),
         // material: new Cesium.Material_TrailLineMaterialProperty(),
         arcType: Cesium.ArcType.GEODESIC,
-        width: 3,
+        width: 10,
       });
 
       this.viewer.flyTo(Route);

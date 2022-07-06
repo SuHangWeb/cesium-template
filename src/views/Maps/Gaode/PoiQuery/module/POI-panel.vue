@@ -201,7 +201,15 @@
             </el-form-item>
           </el-form>
         </div>
-        <div id="panel" class="steps-view"></div>
+        <div id="panel" class="steps-view">
+          <path-planning-driving
+            v-if="drivingData.length != 0"
+            :data-arr="drivingData"
+            :start="startPositionResult.poi"
+            :end="endPositionResult.poi"
+            @stepsClick="stepsClick"
+          />
+        </div>
       </section>
       <!-- 路线规划与导航 End -->
     </div>
@@ -212,8 +220,9 @@
 // https://blog.csdn.net/u014556081/article/details/113185855 路线规划与导航
 import Utils from "@/common/cesium/Utils.js";
 import GaodeMap from "@/common/cesium/Map/Gaode";
-
+import pathPlanningDriving from "@/common/cesium/Map/Gaode/components/pathPlanning/driving.vue";
 export default {
+  components: { pathPlanningDriving },
   props: {
     show: {
       type: Boolean,
@@ -293,6 +302,9 @@ export default {
       navigationType: "",
       //路线位置集合
       routeLocationArr: [],
+
+      //驾车路线
+      drivingData: [],
     };
   },
   watch: {
@@ -355,7 +367,7 @@ export default {
      * 类型触发 开始检索数据
      */
     navigationTypeChange(e) {
-      document.getElementById("panel").innerHTML = "";
+      // document.getElementById("panel").innerHTML = "";
       // this.viewer.entities.removeAll();
       // console.log(e);
       const start = [
@@ -370,13 +382,14 @@ export default {
       if (e == "1") {
         this._GaodeMap
           .Driving({
-            panel: "panel",
             extensions: "all",
+            policy: 10,
             start,
             end,
           })
           .then((res) => {
             console.log(res);
+            this.drivingData = res.routes;
             if (res.routes.length != 0) {
               let routeLocationArr = [];
               const steps = res.routes[0].steps;
@@ -496,6 +509,12 @@ export default {
       }
     },
     /**
+     * 导航单条位置点击
+     */
+    stepsClick(e){
+      this.$emit("stepsClick",e)
+    },
+    /**
      * 初始化路线规划和导航的表单筛选
      */
     initAutoComplete() {
@@ -516,6 +535,7 @@ export default {
                 return;
               }
               this.startPositionResult = result;
+              this.startPosition = result.poi.name;
             });
           });
 
@@ -534,6 +554,7 @@ export default {
                 return;
               }
               this.endPositionResult = result;
+              this.endPosition = result.poi.name;
             });
           });
       }, 500);
