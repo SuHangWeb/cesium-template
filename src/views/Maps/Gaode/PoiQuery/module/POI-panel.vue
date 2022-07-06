@@ -232,6 +232,16 @@
               @change="setLine"
             />
           </template>
+          <template v-if="navigationType == 'transfer'">
+            <path-planning-transfer
+              v-if="transferData.length != 0"
+              :data-arr="transferData"
+              :start="startPositionResult.poi"
+              :end="endPositionResult.poi"
+              @stepsClick="stepsClick"
+              @change="setLine"
+            />
+          </template>
         </div>
       </section>
       <!-- 路线规划与导航 End -->
@@ -246,8 +256,14 @@ import GaodeMap from "@/common/cesium/Map/Gaode";
 import pathPlanningDriving from "@/common/cesium/Map/Gaode/components/pathPlanning/driving.vue";
 import pathPlanningRiding from "@/common/cesium/Map/Gaode/components/pathPlanning/riding.vue";
 import pathPlanningWalking from "@/common/cesium/Map/Gaode/components/pathPlanning/walking.vue";
+import pathPlanningTransfer from "@/common/cesium/Map/Gaode/components/pathPlanning/transfer.vue";
 export default {
-  components: { pathPlanningDriving, pathPlanningRiding, pathPlanningWalking },
+  components: {
+    pathPlanningDriving,
+    pathPlanningRiding,
+    pathPlanningWalking,
+    pathPlanningTransfer,
+  },
   props: {
     show: {
       type: Boolean,
@@ -334,6 +350,8 @@ export default {
       ridingData: [],
       //步行路线
       walkingData: [],
+      //公交路线
+      transferData: [],
     };
   },
   watch: {
@@ -457,7 +475,7 @@ export default {
       if (e == "transfer") {
         this._GaodeMap
           .Transfer({
-            panel: "panel",
+            // panel: "panel",
             extensions: "all",
             start,
             end,
@@ -465,6 +483,7 @@ export default {
           })
           .then((res) => {
             console.log(res);
+            this.transferData = res.plans;
           });
       }
       //骑行
