@@ -20,7 +20,7 @@
               <div class="channel-label">途径：</div>
               <div class="channel-info">
                 <span
-                  v-for="(channelItem, channelIndex) in channel(item.steps)"
+                  v-for="(channelItem, channelIndex) in channel(item.rides)"
                   :key="`channel${channelIndex}`"
                 >
                   <i v-if="channelIndex != 0" class="el-icon-arrow-right"></i>
@@ -41,7 +41,7 @@
 
           <div
             class="step-item"
-            v-for="(stepsItem, stepsIndex) in item.steps"
+            v-for="(stepsItem, stepsIndex) in item.rides"
             :key="`steps${stepsIndex}`"
             @click="
               stepsClick(
@@ -50,7 +50,7 @@
               )
             "
           >
-            <diricon class="diricon" type="driving" :value="stepsItem.action" />
+            <diricon class="diricon" type="riding" :value="stepsItem.action" />
             <div class="label">{{ stepsItem.instruction }}</div>
           </div>
 
@@ -157,5 +157,5 @@ export default {
 </script>
   
 <style scoped lang="scss">
-@import "./driving.scss";
+@import "./riding.scss";
 </style>

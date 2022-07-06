@@ -50,7 +50,7 @@
               )
             "
           >
-            <diricon class="diricon" type="driving" :value="stepsItem.action" />
+            <diricon class="diricon" type="walking" :value="stepsItem.action" />
             <div class="label">{{ stepsItem.instruction }}</div>
           </div>
 
@@ -157,5 +157,5 @@ export default {
 </script>
   
 <style scoped lang="scss">
-@import "./driving.scss";
+@import "./walking.scss";
 </style>

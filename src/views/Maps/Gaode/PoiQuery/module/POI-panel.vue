@@ -202,13 +202,36 @@
           </el-form>
         </div>
         <div id="panel" class="steps-view">
-          <path-planning-driving
-            v-if="drivingData.length != 0"
-            :data-arr="drivingData"
-            :start="startPositionResult.poi"
-            :end="endPositionResult.poi"
-            @stepsClick="stepsClick"
-          />
+          <template v-if="navigationType == 'driving'">
+            <path-planning-driving
+              v-if="drivingData.length != 0"
+              :data-arr="drivingData"
+              :start="startPositionResult.poi"
+              :end="endPositionResult.poi"
+              @stepsClick="stepsClick"
+              @change="setLine"
+            />
+          </template>
+          <template v-if="navigationType == 'riding'">
+            <path-planning-riding
+              v-if="ridingData.length != 0"
+              :data-arr="ridingData"
+              :start="startPositionResult.poi"
+              :end="endPositionResult.poi"
+              @stepsClick="stepsClick"
+              @change="setLine"
+            />
+          </template>
+          <template v-if="navigationType == 'walking'">
+            <path-planning-walking
+              v-if="walkingData.length != 0"
+              :data-arr="walkingData"
+              :start="startPositionResult.poi"
+              :end="endPositionResult.poi"
+              @stepsClick="stepsClick"
+              @change="setLine"
+            />
+          </template>
         </div>
       </section>
       <!-- 路线规划与导航 End -->
@@ -221,8 +244,10 @@
 import Utils from "@/common/cesium/Utils.js";
 import GaodeMap from "@/common/cesium/Map/Gaode";
 import pathPlanningDriving from "@/common/cesium/Map/Gaode/components/pathPlanning/driving.vue";
+import pathPlanningRiding from "@/common/cesium/Map/Gaode/components/pathPlanning/riding.vue";
+import pathPlanningWalking from "@/common/cesium/Map/Gaode/components/pathPlanning/walking.vue";
 export default {
-  components: { pathPlanningDriving },
+  components: { pathPlanningDriving, pathPlanningRiding, pathPlanningWalking },
   props: {
     show: {
       type: Boolean,
@@ -284,19 +309,19 @@ export default {
       navigationTypeArr: [
         {
           label: "驾车",
-          value: "1",
+          value: "driving",
         },
         {
           label: "公交",
-          value: "2",
+          value: "transfer",
         },
         {
           label: "骑行",
-          value: "3",
+          value: "riding",
         },
         {
           label: "步行",
-          value: "4",
+          value: "walking",
         },
       ],
       navigationType: "",
@@ -305,6 +330,10 @@ export default {
 
       //驾车路线
       drivingData: [],
+      //骑行路线
+      ridingData: [],
+      //步行路线
+      walkingData: [],
     };
   },
   watch: {
@@ -364,6 +393,36 @@ export default {
   },
   methods: {
     /**
+     * 处理路线数据
+     * @param {Array} arr 数据
+     * @param {Number} index 索引
+     * @param {String} key 根据数据自定义key名称
+     */
+    handleRoutes(arr, index = 0, key) {
+      let routeLocationArr = [];
+      const steps = arr[index][key];
+      const len = steps.length;
+
+      for (let i = 0; i < len; i++) {
+        const item = steps[i];
+        if (item.path.length != 0) {
+          for (let j = 0; j < item.path.length; j++) {
+            routeLocationArr.push([item.path[j].lng, item.path[j].lat]);
+          }
+        } else {
+          routeLocationArr.push([
+            item.start_location.lng,
+            item.start_location.lat,
+          ]);
+        }
+      }
+      this.$emit("load", {
+        type: "navigation",
+        style: this.navigationType,
+        data: routeLocationArr,
+      });
+    },
+    /**
      * 类型触发 开始检索数据
      */
     navigationTypeChange(e) {
@@ -379,7 +438,7 @@ export default {
         this.endPositionResult.poi.location.lat,
       ];
       //驾车
-      if (e == "1") {
+      if (e == "driving") {
         this._GaodeMap
           .Driving({
             extensions: "all",
@@ -388,36 +447,14 @@ export default {
             end,
           })
           .then((res) => {
-            console.log(res);
             this.drivingData = res.routes;
             if (res.routes.length != 0) {
-              let routeLocationArr = [];
-              const steps = res.routes[0].steps;
-              const len = steps.length;
-
-              for (let i = 0; i < len; i++) {
-                const item = steps[i];
-                if (item.path.length != 0) {
-                  for (let j = 0; j < item.path.length; j++) {
-                    routeLocationArr.push([item.path[j].lng, item.path[j].lat]);
-                  }
-                } else {
-                  routeLocationArr.push([
-                    item.start_location.lng,
-                    item.start_location.lat,
-                  ]);
-                }
-              }
-              this.$emit("load", {
-                type: "navigation",
-                style: "driving",
-                data: routeLocationArr,
-              });
+              this.handleRoutes(res.routes, 0, "steps");
             }
           });
       }
       //公交车
-      if (e == "2") {
+      if (e == "transfer") {
         this._GaodeMap
           .Transfer({
             panel: "panel",
@@ -430,74 +467,48 @@ export default {
           });
       }
       //骑行
-      if (e == "3") {
+      if (e == "riding") {
         this._GaodeMap
           .Riding({
-            panel: "panel",
             extensions: "all",
             start,
             end,
           })
           .then((res) => {
+            this.ridingData = res.routes;
             if (res.routes.length != 0) {
-              let routeLocationArr = [];
-              const steps = res.routes[0].rides;
-              const len = steps.length;
-              for (let i = 0; i < len; i++) {
-                const item = steps[i];
-                if (item.path.length != 0) {
-                  for (let j = 0; j < item.path.length; j++) {
-                    routeLocationArr.push([item.path[j].lng, item.path[j].lat]);
-                  }
-                } else {
-                  routeLocationArr.push([
-                    item.start_location.lng,
-                    item.start_location.lat,
-                  ]);
-                }
-              }
-              this.$emit("load", {
-                type: "navigation",
-                style: "riding",
-                data: routeLocationArr,
-              });
+              this.handleRoutes(res.routes, 0, "rides");
             }
           });
       }
       //步行
-      if (e == "4") {
+      if (e == "walking") {
         this._GaodeMap
           .Walking({
-            panel: "panel",
-            extensions: "all",
             start,
             end,
           })
           .then((res) => {
+            this.walkingData = res.routes;
             if (res.routes.length != 0) {
-              let routeLocationArr = [];
-              const steps = res.routes[0].steps;
-              const len = steps.length;
-              for (let i = 0; i < len; i++) {
-                const item = steps[i];
-                if (item.path.length != 0) {
-                  for (let j = 0; j < item.path.length; j++) {
-                    routeLocationArr.push([item.path[j].lng, item.path[j].lat]);
-                  }
-                } else {
-                  routeLocationArr.push([
-                    item.start_location.lng,
-                    item.start_location.lat,
-                  ]);
-                }
-              }
-              this.$emit("load", {
-                type: "navigation",
-                style: "walking",
-                data: routeLocationArr,
-              });
+              this.handleRoutes(res.routes, 0, "steps");
             }
           });
+      }
+    },
+    /**
+     * 设置线
+     * @param {*} i 数据的索引
+     */
+    setLine(i) {
+      if (this.navigationType == "driving") {
+        this.handleRoutes(this.drivingData, i, "steps");
+      }
+      if (this.navigationType == "riding") {
+        this.handleRoutes(this.ridingData, i, "rides");
+      }
+      if (this.navigationType == "walking") {
+        this.handleRoutes(this.walkingData, i, "steps");
       }
     },
     /**
@@ -511,8 +522,8 @@ export default {
     /**
      * 导航单条位置点击
      */
-    stepsClick(e){
-      this.$emit("stepsClick",e)
+    stepsClick(e) {
+      this.$emit("stepsClick", e);
     },
     /**
      * 初始化路线规划和导航的表单筛选

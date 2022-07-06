@@ -118,19 +118,19 @@ export default class Diricon {
                 value: "2",
             },
             {
-                label: "向左前方",
+                label: "向左前方行走",
                 value: "3",
             },
             {
-                label: "右左前方",
+                label: "向右前方行走",
                 value: "4",
             },
             {
-                label: "向左后方",
+                label: "向左后方行走",
                 value: "5",
             },
             {
-                label: "向右后方",
+                label: "向右后方行走",
                 value: "6",
             },
             {
@@ -167,14 +167,14 @@ export default class Diricon {
      * 公交
      */
     get iconTypeTransfer() {
-        return this.iconTypeWalking
+        return this.iconTypeDriving
     }
 
     /**
      * 骑行
      */
     get iconTypeRiding() {
-        return this.iconTypeWalking
+        return this.iconTypeDriving
     }
     /**
      * 获取icon的类名

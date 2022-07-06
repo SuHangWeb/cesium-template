@@ -157,5 +157,5 @@ export default {
 </script>
   
 <style scoped lang="scss">
-@import "./driving.scss";
+@import "./transfer.scss";
 </style>
