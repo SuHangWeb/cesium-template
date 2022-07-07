@@ -33,6 +33,21 @@
         />
       </div>
     </el-card>
+    <el-card class="box-card" style="margin-bottom: 16px">
+      <div slot="header" class="clearfix">
+        <span>参考效果</span>
+      </div>
+      <div>
+        <Button-linear-color
+          v-for="(item, index) in effect"
+          :key="index"
+          :title="item.title"
+          :index="index"
+          identifier="effect"
+          @trigger="link"
+        />
+      </div>
+    </el-card>
     <el-card class="box-card">
       <div slot="header" class="clearfix">
         <span>三方依赖（根据需求酌情使用）</span>
@@ -59,7 +74,7 @@
 </template>
  
 <script>
-import { doc, tripartite } from "./module/data";
+import { doc, effect, tripartite } from "./module/data";
 import "viewerjs/dist/viewer.css";
 import { component as Viewer } from "v-viewer";
 import ButtonLinearColor from "@/components/Button-linear-color";
@@ -69,6 +84,7 @@ export default {
   data() {
     return {
       doc: doc,
+      effect: effect,
       tripartite: tripartite,
       images: [],
       options: {
@@ -102,6 +118,9 @@ export default {
       let item;
       if (data.identifier == "doc") {
         item = this.doc[data.data];
+      }
+      if (data.identifier == "effect") {
+        item = this.effect[data.data];
       }
       if (data.identifier == "tripartite") {
         item = this.tripartite[data.data];

@@ -19,26 +19,13 @@ export const doc = [
     //     style: "light-blue-btn",
     //     externalLinks: true
     // },
-    {
-        title: "Cesium官方案例",
-        link: "https://sandcastle.cesium.com/index.html?src=Polygon.html",
-        externalLinks: true
-    },
-    {
-        title: "Mars3D效果",
-        link: "http://mars3d.cn/example.html",
-        externalLinks: true
-    },
+
     {
         title: "CSDN-大神文章-cesium之家",
         link: "https://blog.csdn.net/qq98281642/category_11294524.html",
         externalLinks: true
     },
-    {
-        title: "EarthSDK示例集",
-        link: "http://earthsdk.com/v/last/Apps/Examples/?menu=true&url=./cesium-primitive-createCube.html",
-        externalLinks: true
-    },
+
     {
         title: "Cesium核心类-思维导图",
         link: process.env.VUE_APP_PUBLIC_URL + "/static/images/heart-class.jpg",
@@ -58,6 +45,32 @@ export const doc = [
         link: "https://www.giserdqy.com/",
         externalLinks: true
     },
+
+    {
+        title: "内链测试空白页-开发使用",
+        link: "/test/blankPage",
+        innerChain: true
+    }
+]
+/**
+ * 参考效果
+ */
+export const effect = [
+    {
+        title: "Cesium官方案例",
+        link: "https://sandcastle.cesium.com/index.html?src=Polygon.html",
+        externalLinks: true
+    },
+    {
+        title: "Mars3D效果",
+        link: "http://mars3d.cn/example.html",
+        externalLinks: true
+    },
+    {
+        title: "EarthSDK示例集",
+        link: "http://earthsdk.com/v/last/Apps/Examples/?menu=true&url=./cesium-primitive-createCube.html",
+        externalLinks: true
+    },
     {
         title: "supermap",
         link: "http://support.supermap.com.cn:8090/webgl/examples/webgl/examples.html#layer",
@@ -68,11 +81,6 @@ export const doc = [
         link: "http://www.xtgis.cc/basiccategorylist",
         externalLinks: true
     },
-    {
-        title: "内链测试空白页-开发使用",
-        link: "/test/blankPage",
-        innerChain: true
-    }
 ]
 /**
  * 三方依赖
