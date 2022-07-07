@@ -1,0 +1,200 @@
+// base color
+$blue:#324157;
+$light-blue:#3A71A8;
+$red:#C03639;
+$pink: #E65D6E;
+$green: #30B08F;
+$tiffany: #4AB7BD;
+$yellow:#FEC171;
+$panGreen: #30B08F;
+
+
+@mixin colorBtn($color) {
+  background: $color;
+
+  &:hover {
+    color: $color;
+
+    &:before,
+    &:after {
+      background: $color;
+    }
+  }
+}
+
+.color-324157 {
+  @include colorBtn(#324157)
+}
+
+.color-3A71A8 {
+  @include colorBtn(#3A71A8)
+}
+
+.color-C03639 {
+  @include colorBtn(#C03639)
+}
+
+.color-E65D6E {
+  @include colorBtn(#E65D6E)
+}
+
+.color-30B08F {
+  @include colorBtn(#30B08F)
+}
+
+.color-4AB7BD {
+  @include colorBtn(#4AB7BD)
+}
+
+.color-FEC171 {
+  @include colorBtn(#FEC171)
+}
+
+.color-006600 {
+  @include colorBtn(#006600)
+}
+
+.color-006666 {
+  @include colorBtn(#006666)
+}
+
+.color-006699 {
+  @include colorBtn(#006699)
+}
+
+.color-0066FF {
+  @include colorBtn(#0066FF)
+}
+
+.color-330000 {
+  @include colorBtn(#330000)
+}
+
+
+.color-660000 {
+  @include colorBtn(#660000)
+}
+
+.color-663399 {
+  @include colorBtn(#663399)
+}
+
+.color-666600 {
+  @include colorBtn(#666600)
+}
+
+.color-666699 {
+  @include colorBtn(#666699)
+}
+
+.color-666699 {
+  @include colorBtn(#990000)
+}
+
+.color-666699 {
+  @include colorBtn(#990099)
+}
+
+.color-666699 {
+  @include colorBtn(#CC33CC)
+}
+
+.color-666699 {
+  @include colorBtn(#CC9933)
+}
+
+.color-666699 {
+  @include colorBtn(#CCCCFF)
+}
+
+.color-666699 {
+  @include colorBtn(#FF9900)
+}
+
+.color-666699 {
+  @include colorBtn(#FFFF66)
+}
+
+.color-666699 {
+  @include colorBtn(#FF6600)
+}
+
+.color-666699 {
+  @include colorBtn(#33CCCC)
+}
+
+.color-666699 {
+  @include colorBtn(#666633)
+}
+
+
+
+
+.blue-btn {
+  @include colorBtn($blue)
+}
+
+.light-blue-btn {
+  @include colorBtn($light-blue)
+}
+
+.red-btn {
+  @include colorBtn($red)
+}
+
+.pink-btn {
+  @include colorBtn($pink)
+}
+
+.green-btn {
+  @include colorBtn($green)
+}
+
+.tiffany-btn {
+  @include colorBtn($tiffany)
+}
+
+.yellow-btn {
+  @include colorBtn($yellow)
+}
+
+.pan-btn {
+  font-size: 14px;
+  color: #fff;
+  padding: 14px 36px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  transition: 600ms ease all;
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+
+  &:hover {
+    background: #fff;
+
+    &:before,
+    &:after {
+      width: 100%;
+      transition: 600ms ease all;
+    }
+  }
+
+  &:before,
+  &:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 2px;
+    width: 0;
+    transition: 400ms ease all;
+  }
+
+  &::after {
+    right: inherit;
+    top: inherit;
+    left: 0;
+    bottom: 0;
+  }
+}

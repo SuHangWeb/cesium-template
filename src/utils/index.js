@@ -143,3 +143,13 @@ export const downloadLocalFile = (file, fileName) => {
   // 添加点击
   a.click();
 }
+
+
+/**
+ * 获取随机数
+ * @param {Number} min 最小 
+ * @param {Number} max 最大
+ */
+ export const getRandom = (min, max) => {
+	return Math.floor(Math.random() * (max - min + 1)) + min;
+}

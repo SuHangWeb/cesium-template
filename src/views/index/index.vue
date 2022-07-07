@@ -23,14 +23,14 @@
         <span>参考文档</span>
       </div>
       <div>
-        <div
+        <Button-linear-color
           v-for="(item, index) in doc"
           :key="index"
-          :class="`pan-btn ${item.style}`"
-          @click="link(item)"
-        >
-          {{ item.title }}
-        </div>
+          :title="item.title"
+          :index="index"
+          identifier="doc"
+          @trigger="link"
+        />
       </div>
     </el-card>
     <el-card class="box-card">
@@ -45,9 +45,12 @@
             :content="item.describe"
             placement="top-start"
           >
-            <div :class="`pan-btn ${item.style}`" @click="link(item)">
-              {{ item.title }}
-            </div>
+            <Button-linear-color
+              :title="item.title"
+              :index="index"
+              identifier="tripartite"
+              @trigger="link"
+            />
           </el-tooltip>
         </div>
       </div>
@@ -59,8 +62,9 @@
 import { doc, tripartite } from "./module/data";
 import "viewerjs/dist/viewer.css";
 import { component as Viewer } from "v-viewer";
+import ButtonLinearColor from "@/components/Button-linear-color";
 export default {
-  components: { Viewer },
+  components: { Viewer, ButtonLinearColor },
   name: "Files",
   data() {
     return {
@@ -94,7 +98,14 @@ export default {
     /**
      * 跳转
      */
-    link(item) {
+    link(data) {
+      let item;
+      if (data.identifier == "doc") {
+        item = this.doc[data.data];
+      }
+      if (data.identifier == "tripartite") {
+        item = this.tripartite[data.data];
+      }
       if (item?.externalLinks && item.externalLinks) {
         window.open(item.link);
       } else if (item?.innerChain && item.innerChain) {
