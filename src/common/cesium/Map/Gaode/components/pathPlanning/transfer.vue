@@ -1,146 +1,156 @@
 <template>
   <div class="pathPlanning">
-    <el-collapse accordion v-model="collapseIndex" @change="collapseChange">
-      <el-collapse-item
-        :name="index"
-        v-for="(item, index) in dataArr"
-        :key="index"
-      >
-        <template slot="title">
-          <div class="head">
-            <div class="head-step-view">
-              <div
-                class="head-step-item-for"
-                v-for="(step_item, step_index) in step(item.segments)"
-                :key="step_index"
-              >
-                <i v-if="step_index != 0" class="el-icon-arrow-right icon"></i>
-                <div class="head-step-item">
-                  <img
-                    src="@/common/cesium/Map/Gaode/components/diricon/image/busline.png"
-                    alt=""
-                  />
-                  {{ step_item.transit.lines[0].name }}
+    <template v-if="handleArr.length != 0">
+      <el-collapse accordion v-model="collapseIndex" @change="collapseChange">
+        <el-collapse-item
+          :name="index"
+          v-for="(item, index) in handleArr"
+          :key="index"
+        >
+          <template slot="title">
+            <div class="head">
+              <div class="head-step-view">
+                <div
+                  class="head-step-item-for"
+                  v-for="(step_item, step_index) in step(item.segments)"
+                  :key="step_index"
+                >
+                  <i
+                    v-if="step_index != 0"
+                    class="el-icon-arrow-right icon"
+                  ></i>
+                  <div class="head-step-item">
+                    <img
+                      src="@/common/cesium/Map/Gaode/components/diricon/image/busline.png"
+                      alt=""
+                    />
+                    {{ step_item.transit.lines[0].name }}
+                  </div>
+                </div>
+              </div>
+              <div class="info-view">
+                <div class="info">
+                  <div class="info-item">
+                    约{{ secondToTime(item.time) }}（{{
+                      metreToKilometre(item.transit_distance)
+                    }}）
+                  </div>
+                  <span>|</span>
+                  <div class="info-item">
+                    步行{{ metreToKilometre(item.walking_distance) }}
+                  </div>
+                  <span>|</span>
+                  <div class="info-item" style="color: red">
+                    {{ item.cost }}元
+                  </div>
                 </div>
               </div>
             </div>
-            <div class="info-view">
-              <div class="info">
-                <div class="info-item">
-                  约{{ secondToTime(item.time) }}（{{
-                    metreToKilometre(item.transit_distance)
-                  }}）
-                </div>
-                <span>|</span>
-                <div class="info-item">
-                  步行{{ metreToKilometre(item.walking_distance) }}
-                </div>
-                <span>|</span>
-                <div class="info-item" style="color: red">
-                  {{ item.cost }}元
-                </div>
-              </div>
+          </template>
+          <div class="step-main">
+            <div class="step-item start">
+              <diricon class="diricon" type="text" value="起" />
+              <div class="label">{{ start.name }}</div>
             </div>
-          </div>
-        </template>
-        <div class="step-main">
-          <div class="step-item start">
-            <diricon class="diricon" type="text" value="起" />
-            <div class="label">{{ start.name }}</div>
-          </div>
 
-          <div
-            v-for="(segments_item, segments_index) in item.segments"
-            :key="segments_index"
-          >
             <div
-              class="step-item WALK"
-              v-if="segments_item.transit_mode == 'WALK'"
+              v-for="(segments_item, segments_index) in item.segments"
+              :key="segments_index"
             >
-              <div class="label">{{ segments_item.instruction }}</div>
-            </div>
-            <div class="step-item Multiple" v-else>
-              <div class="spot"></div>
-              <diricon
-                class="diricon"
-                type="vehicle"
-                value="transfer"
-                bgColor="#418AEC"
-              />
-              <div class="multiple-step">
-                <div class="multiple-step-head">
-                  {{ segments_item.instruction }}
-                </div>
-                <div class="multiple-step-content">
-                  <div class="multiple-step-content-item">
-                    <div class="multiple-step-content-item-value">
-                      {{ segments_item.transit.on_station.name }}
-                    </div>
-                    <div class="multiple-step-content-item-label">
-                      上车
-                      <template v-if="segments_item.transit.entrance">{{
-                        segments_item.transit.entrance.name
-                      }}</template>
-                    </div>
+              <div
+                class="step-item WALK"
+                v-if="segments_item.transit_mode == 'WALK'"
+              >
+                <div class="label">{{ segments_item.instruction }}</div>
+              </div>
+              <div class="step-item Multiple" v-else>
+                <div class="spot"></div>
+                <diricon
+                  class="diricon"
+                  type="vehicle"
+                  value="transfer"
+                  bgColor="#418AEC"
+                />
+                <div class="multiple-step">
+                  <div class="multiple-step-head">
+                    {{ segments_item.instruction }}
                   </div>
+                  <div class="multiple-step-content">
+                    <div class="multiple-step-content-item">
+                      <div class="multiple-step-content-item-value">
+                        {{ segments_item.transit.on_station.name }}
+                      </div>
+                      <div class="multiple-step-content-item-label">
+                        上车
+                        <template v-if="segments_item.transit.entrance">{{
+                          segments_item.transit.entrance.name
+                        }}</template>
+                      </div>
+                    </div>
 
-                  <div class="list" :class="{ hide: open }">
-                    <ul>
-                      <li
-                        v-for="(
-                          via_stops_item, via_stops_index
-                        ) in segments_item.transit.via_stops"
-                        :key="via_stops_index"
-                      >
-                        {{ via_stops_item.name }}
-                      </li>
-                    </ul>
-                  </div>
-                  <div class="multiple-step-content-item">
-                    <div class="multiple-step-content-item-value">
-                      {{ segments_item.transit.off_station.name }}
+                    <div class="list" :class="{ hide: segments_item.open }">
+                      <ul>
+                        <li
+                          v-for="(
+                            via_stops_item, via_stops_index
+                          ) in segments_item.transit.via_stops"
+                          :key="via_stops_index"
+                        >
+                          {{ via_stops_item.name }}
+                        </li>
+                      </ul>
                     </div>
-                    <div class="multiple-step-content-item-label">
-                      下车
-                      <template v-if="segments_item.transit.exit">{{
-                        segments_item.transit.exit.name
-                      }}</template>
-                    </div>
-                  </div>
-                  <div
-                    class="multiple-step-content-item-info"
-                    :class="{ open: open }"
-                  >
-                    <div class="multiple-step-content-item-info-text">
-                      <template v-if="segments_item.transit.lines[0].stime.length != 0">
-                        上车站 首：{{
-                          stringToTime(segments_item.transit.lines[0].stime)
-                        }}
-                        末：{{
-                          stringToTime(segments_item.transit.lines[0].etime)
-                        }}
-                      </template>
+                    <div class="multiple-step-content-item">
+                      <div class="multiple-step-content-item-value">
+                        {{ segments_item.transit.off_station.name }}
+                      </div>
+                      <div class="multiple-step-content-item-label">
+                        下车
+                        <template v-if="segments_item.transit.exit">{{
+                          segments_item.transit.exit.name
+                        }}</template>
+                      </div>
                     </div>
                     <div
-                      class="multiple-step-content-item-info-leng"
-                      @click="open = !open"
+                      class="multiple-step-content-item-info"
+                      :class="{ open: segments_item.open }"
                     >
-                      <span>{{ segments_item.transit.via_num + 1 }}站</span>
-                      <i class="el-icon-arrow-up icon"></i>
+                      <div class="multiple-step-content-item-info-text">
+                        <template
+                          v-if="
+                            segments_item.transit.lines[0].stime.length != 0
+                          "
+                        >
+                          上车站 首：{{
+                            stringToTime(segments_item.transit.lines[0].stime)
+                          }}
+                          末：{{
+                            stringToTime(segments_item.transit.lines[0].etime)
+                          }}
+                        </template>
+                      </div>
+                      <div
+                        class="multiple-step-content-item-info-leng"
+                        @click="openPlatformStep(index, segments_index)"
+                        v-if="segments_item.transit.via_num > 0"
+                      >
+                        <span>{{ segments_item.transit.via_num + 1 }}站</span>
+                        <i class="el-icon-arrow-up icon"></i>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <div class="step-item end">
-            <diricon class="diricon" type="text" value="终" />
-            <div class="label">{{ end.name }}</div>
+            <div class="step-item end">
+              <diricon class="diricon" type="text" value="终" />
+              <div class="label">{{ end.name }}</div>
+            </div>
           </div>
-        </div>
-      </el-collapse-item>
-    </el-collapse>
+        </el-collapse-item>
+      </el-collapse>
+    </template>
   </div>
 </template>
  
@@ -175,15 +185,10 @@ export default {
     return {
       collapseIndex: 0,
       open: false,
+      handleArr: [],
     };
   },
   computed: {
-    /**
-     * 处理原始数据
-     */
-    handleArrData(){
-      
-    },
     // 米转换公里
     metreToKilometre() {
       return (metre) => {
@@ -233,8 +238,41 @@ export default {
       };
     },
   },
-  mounted() {},
+  watch: {
+    dataArr: {
+      handler(newValue, oldValue) {
+        function handleArrData() {
+          return newValue.map((item) => {
+            const segments = item.segments.map((f_item) => {
+              return {
+                ...f_item,
+                open: false,
+              };
+            });
+            return {
+              ...item,
+              ...segments,
+            };
+          });
+        }
+        this.handleArr = handleArrData();
+      },
+      immediate: true,
+      deep: true,
+    },
+  },
   methods: {
+    /**
+     * 展开站台显示
+     */
+    openPlatformStep(index, segments_index) {
+      console.log(index, segments_index);
+      this.$set(
+        this.handleArr[index].segments[segments_index],
+        "open",
+        !this.handleArr[index].segments[segments_index].open
+      );
+    },
     /**
      * 单条步骤点击
      */
