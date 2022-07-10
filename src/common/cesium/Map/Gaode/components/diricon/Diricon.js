@@ -184,7 +184,7 @@ export default class Diricon {
      * @param {*} value 根据当前api提供的中文汉字来筛选
      * @param {*} typeColor * 如果type参数为 driving=驾车  walking=步行  transfer=公交 riding=骑行 当前可设置灰色 只要布尔值为false 默认为蓝色true
      */
-    setIcon(type, value, typeColor) {
+    setIcon(type, value, typeColor = true) {
         let className = ""
         let typeColorName = typeColor ? "blue" : "grey"
         if (type == "driving") {

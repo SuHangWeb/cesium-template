@@ -21,7 +21,13 @@
                   ></i>
                   <div class="head-step-item">
                     <img
+                      v-if="step_item.transit_mode == 'BUS'"
                       src="@/common/cesium/Map/Gaode/components/diricon/image/busline.png"
+                      alt=""
+                    />
+                    <img
+                      v-if="step_item.transit_mode == 'SUBWAY'"
+                      src="@/common/cesium/Map/Gaode/components/diricon/image/subway.png"
                       alt=""
                     />
                     {{ step_item.transit.lines[0].name }}
