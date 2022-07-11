@@ -46,7 +46,7 @@ export default [
       },
       {
         label: "components.zip（组件包）",
-        url: "Vue/Maps/Gaode/PoiQuery/components.zip"
+        url: "http://re8r7gk9l.hb-bkt.clouddn.com/Vue/Maps/Gaode/PoiQuery/components.zip"
       },
       {
         label: "position.png",
@@ -529,11 +529,11 @@ export default [
       },
       {
         label: "layer",
-        url: "JavaScript/cesium/Tripartite/layer/layer.zip",
+        url: "http://re8r7gk9l.hb-bkt.clouddn.com/JavaScript/cesium/Tripartite/layer.zip",
       },
       {
         label: "layui",
-        url: "JavaScript/cesium/Tripartite/layui/layui.zip",
+        url: "http://re8r7gk9l.hb-bkt.clouddn.com/JavaScript/cesium/Tripartite/layui.zip",
       },
       {
         label: "Utils.js",
