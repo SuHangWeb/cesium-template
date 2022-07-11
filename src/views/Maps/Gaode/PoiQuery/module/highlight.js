@@ -580,8 +580,8 @@ export default [
         url: "JavaScript/cesium/iconfont/iconfont.css"
       },
       {
-        label: "diricon.zip",
-        url: "JavaScript/cesium/Map/Gaode/diricon.zip"
+        label: "diricon.7z",
+        url: "JavaScript/cesium/Map/Gaode/diricon.7z"
       },
     ],
     code: [
