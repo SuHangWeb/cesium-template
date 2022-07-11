@@ -137,7 +137,7 @@ export const downloadLocalFile = (file, fileName) => {
   const prefixUrl = process.env.NODE_ENV === 'production' ? '/cesium-template/' : '/';
   let a = document.createElement('a');
   // 路径中'/'为根目录，即index.html所在的目录
-  a.href = prefixUrl + file;
+  a.href = file.indexOf('http') != -1 ? file : prefixUrl + file;
   // 下载下来的文件名
   a.download = fileName;
   // 添加点击
@@ -150,6 +150,6 @@ export const downloadLocalFile = (file, fileName) => {
  * @param {Number} min 最小 
  * @param {Number} max 最大
  */
- export const getRandom = (min, max) => {
-	return Math.floor(Math.random() * (max - min + 1)) + min;
+export const getRandom = (min, max) => {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 }
