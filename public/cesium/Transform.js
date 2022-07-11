@@ -13,6 +13,13 @@
     getPosition | 位置拾取器 （经度、纬度、相机高度）
     terrainProviderHeight | 坐标位置获取地形高度
     getSeibelCurve | 流动曲线/赛贝尔曲线
+    getCatesian3FromPX | 屏幕坐标转笛卡尔 地形坐标 
+    meter2Lat | 距离（米）转换为纬度  一米对应的纬度为定值
+    meter2Lng | 距离（米）转换为经度  不同纬度下一米对应的经度不同
+    isDegreesOrCartesian | 判断该点是否是经纬度或者笛卡尔坐标
+    toDegrees | 转化成经纬度
+    toCartesian | 转化成笛卡尔坐标
+    toWindowCoordinates | 转屏幕坐标
  */
 class Transform {
     constructor(Cesium, viewer) {
@@ -71,7 +78,7 @@ class Transform {
         return Promise.resolve(promise)
 
         // return new Promise((resolve, reject) => {
-            
+
         // })
 
         // // Query the terrain height of two Cartographic positions
@@ -147,6 +154,121 @@ class Transform {
         const ray = this.viewer.camera.getPickRay(ScreenCoordinates);
         if (!ray) return null;
         return this.viewer.scene.globe.pick(ray, this.viewer.scene);
+    }
+
+    /**
+      * 距离（米）转换为纬度  一米对应的纬度为定值
+      * @param meter 距离多少米
+      * @returns {number}
+      */
+    meter2Lat(meter) {
+        if (!meter) {
+            throw new Error("Error in Parameter!");
+        }
+        let pi = Math.PI;
+        let lngInMeter = (6371 * 2 * pi) / 360;
+        return (meter / lngInMeter) / 1000;
+    }
+
+    /**
+     * 距离（米）转换为经度  不同纬度下一米对应的经度不同
+     * @param meter 距离
+     * @param lat 所在纬度
+     * @returns {number}
+     */
+    meter2Lng(meter, lat) {
+        if ((!meter) || (!lat)) {
+            throw new Error("Error in Parameter!");
+        }
+        let pi = Math.PI;
+        let latInMeter = (Math.cos(lat * pi / 180) * 6371 * 2 * pi) / 360;
+        return (meter / latInMeter) / 1000;
+    }
+
+
+    /**
+     * 判断该点是否是经纬度或者笛卡尔坐标
+     * @param point
+     * 当前依赖函数：
+     * toDegrees
+     * 
+     */
+    isDegreesOrCartesian(point) {
+        if (!point) {
+            throw new Error("Error in Parameter!");
+        }
+        if (('number' === typeof point.x) && ('number' === typeof point.y) && ('number' === typeof point.z)) {
+            return true
+        }
+        if (('number' === typeof point.lng) && ('number' === typeof point.lat)) {
+            return true
+        }
+        return false;
+    }
+
+    /**
+     * 转化成经纬度
+     * @param point
+     */
+    toDegrees(point) {
+        const Cesium = this.Cesium
+        if (this.isDegreesOrCartesian(point)) {
+            /**
+             * 笛卡尔坐标转地理坐标
+             * @param point
+             */
+            let toDegreesFromCartesian = (point) => {
+                let cartesian33 = new Cesium.Cartesian3(point.x, point.y, point.z);
+                let cartographic = Cesium.Cartographic.fromCartesian(cartesian33);
+                return {
+                    lng: parseFloat(Cesium.Math.toDegrees(cartographic.longitude).toFixed(8)),
+                    lat: parseFloat(Cesium.Math.toDegrees(cartographic.latitude).toFixed(8)),
+                    alt: parseFloat(cartographic.height.toFixed(8))
+                };
+
+            };
+            if (point.x) {
+                point = toDegreesFromCartesian(point);
+            }
+            return point;
+        }
+    }
+
+    /**
+     * 转化成笛卡尔坐标
+     * @param point
+     */
+    toCartesian(point) {
+        const Cesium = this.Cesium
+        if (this.isDegreesOrCartesian(point)) {
+            /**
+             * 地理坐标转笛卡尔坐标
+             * @param point
+             */
+            let toCartesianFromDegrees = (point) => {
+                return Cesium.Cartesian3.fromDegrees(point.lng, point.lat, point.alt || 0);
+            };
+            if (point.lng) {
+                point = toCartesianFromDegrees(point);
+            }
+            return point;
+        }
+    }
+
+    /**
+     * 转屏幕坐标
+     * @param point
+     */
+    toWindowCoordinates(point) {
+        const Cesium = this.Cesium
+        const viewer = this.viewer
+        if (viewer && point && point.x && point.y && point.z) {
+            return Cesium.SceneTransforms.wgs84ToWindowCoordinates(viewer.scene, point);
+        } else if (viewer && point.lng && point.lat && point.alt) {
+            return Cesium.SceneTransforms.wgs84ToWindowCoordinates(viewer.scene, toCartesianFromDegrees(point));
+        } else {
+            throw new Error("Error in Parameter!");
+        }
     }
 }
 

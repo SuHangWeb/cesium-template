@@ -10,6 +10,8 @@
     --- | ---
     getRandomColor | 获取随机十六进制颜色
     operationDom | 操作dom
+    crecteIframe | 创建 iframe
+    queryParams | 将对象转换为url参数形式
     debounce | 防抖函数
     throttle | 节流函数
     createScript | 原生创建脚本
@@ -67,6 +69,89 @@ class Utils {
         if (type === "has") {
             return document.getElementById(NodeId)
         }
+    }
+
+
+    /**
+     * 创建iframe
+     * @param {String} url 
+     * @param {Object} params 
+     * @returns 
+     */
+    crecteIframe(url, params) {
+        let ifr = document.createElement('iframe');
+        ifr.src = url;
+        ifr.setAttribute('frameBorder', 0);
+        if (params?.width) {
+            ifr.width = params.width
+        } else {
+            ifr.width = "100%"
+        }
+        if (params?.height) {
+            ifr.height = params.height
+        } else {
+            ifr.height = "100%"
+        }
+        return ifr
+    }
+
+
+    /**
+     * 将对象转换为url参数形式
+     * @param {Object} data,对象
+     * @param {Boolean} isPrefix,是否自动加上"?"
+     * @return {String} URL参数字符串
+     */
+    queryParams(data = {}, isPrefix = true, arrayFormat = 'brackets') {
+        let prefix = isPrefix ? '?' : ''
+        let _result = []
+        if (['indices', 'brackets', 'repeat', 'comma'].indexOf(arrayFormat) == -1) arrayFormat = 'brackets';
+        for (let key in data) {
+            let value = data[key]
+            // 去掉为空的参数
+            if (['', undefined, null].indexOf(value) >= 0) {
+                continue;
+            }
+            // 如果值为数组，另行处理
+            if (value.constructor === Array) {
+                // e.g. {ids: [1, 2, 3]}
+                switch (arrayFormat) {
+                    case 'indices':
+                        // 结果: ids[0]=1&ids[1]=2&ids[2]=3
+                        for (let i = 0; i < value.length; i++) {
+                            _result.push(key + '[' + i + ']=' + value[i])
+                        }
+                        break;
+                    case 'brackets':
+                        // 结果: ids[]=1&ids[]=2&ids[]=3
+                        value.forEach(_value => {
+                            _result.push(key + '[]=' + _value)
+                        })
+                        break;
+                    case 'repeat':
+                        // 结果: ids=1&ids=2&ids=3
+                        value.forEach(_value => {
+                            _result.push(key + '=' + _value)
+                        })
+                        break;
+                    case 'comma':
+                        // 结果: ids=1,2,3
+                        let commaStr = "";
+                        value.forEach(_value => {
+                            commaStr += (commaStr ? "," : "") + _value;
+                        })
+                        _result.push(key + '=' + commaStr)
+                        break;
+                    default:
+                        value.forEach(_value => {
+                            _result.push(key + '[]=' + _value)
+                        })
+                }
+            } else {
+                _result.push(key + '=' + value)
+            }
+        }
+        return _result.length ? prefix + _result.join('&') : ''
     }
 
 

@@ -1,0 +1,213 @@
+.gaode-diricon {
+  background-image: url("../image/diricon.png");
+  background-size: 671px 238px;
+
+  &.gaode-diricon-driving,
+  &.gaode-diricon-walking,
+  &.gaode-diricon-transfer,
+  &.gaode-diricon-riding {
+    width: 23px;
+    height: 23px;
+    border-radius: 50%;
+    background-color: #fff;
+    background-repeat: no-repeat;
+    text-indent: 0;
+    text-align: center;
+    font-size: 12px;
+    z-index: 10;
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+
+    &.gaode-diricon-grey {
+      border: 1px solid #fff;
+    }
+
+    &.gaode-diricon-0 {
+      background-position: -45px -23px;
+
+      &.gaode-diricon-grey {
+        background-position: -45px -63px;
+      }
+    }
+
+    &.gaode-diricon-1 {
+      background-position: -87px -23px;
+
+      &.gaode-diricon-grey {
+        background-position: -87px -63px;
+      }
+    }
+
+    &.gaode-diricon-2 {
+      background-position: -124px -23px;
+
+      &.gaode-diricon-grey {
+        background-position: -124px -63px;
+      }
+    }
+
+    &.gaode-diricon-3 {
+      background-position: -165px -23px;
+
+      &.gaode-diricon-grey {
+        background-position: -165px -63px;
+      }
+    }
+
+    &.gaode-diricon-4 {
+      background-position: -206px -23px;
+
+      &.gaode-diricon-grey {
+        background-position: -206px -63px;
+      }
+    }
+
+    &.gaode-diricon-5 {
+      background-position: -246px -23px;
+
+      &.gaode-diricon-grey {
+        background-position: -246px -63px;
+      }
+    }
+
+    &.gaode-diricon-6 {
+      background-position: -284px -23px;
+
+      &.gaode-diricon-grey {
+        background-position: -284px -63px;
+      }
+    }
+
+    &.gaode-diricon-7 {
+      background-position: -326px -23px;
+
+      &.gaode-diricon-grey {
+        background-position: -326px -63px;
+      }
+    }
+
+    &.gaode-diricon-9 {
+      background-position: -405px -23px;
+
+      &.gaode-diricon-grey {
+        background-position: -405px -63px;
+      }
+    }
+
+    &.gaode-diricon-10 {
+      background-position: -445px -23px;
+
+      &.gaode-diricon-grey {
+        background-position: -445px -63px;
+      }
+    }
+
+    &.gaode-diricon-12 {
+      background-position: -523px -23px;
+
+      &.gaode-diricon-grey {
+        background-position: -523px -63px;
+      }
+    }
+
+    &.gaode-diricon-13 {
+      background-position: -560px -23px;
+
+      &.gaode-diricon-grey {
+        background-position: -560px -63px;
+      }
+    }
+
+    &.gaode-diricon-14 {
+      background-position: -601px -23px;
+
+      &.gaode-diricon-grey {
+        background-position: -601px -63px;
+      }
+    }
+
+    &.gaode-diricon-25 {
+      background-position: -45px -185px;
+
+      &.gaode-diricon-grey {
+        background-position: -45px -145px;
+      }
+    }
+
+    &.gaode-diricon-26 {
+      background-position: -85px -185px;
+
+      &.gaode-diricon-grey {
+        background-position: -85px -145px;
+      }
+    }
+
+    &.gaode-diricon-27 {
+      background-position: -125px -185px;
+
+      &.gaode-diricon-grey {
+        background-position: -125px -145px;
+      }
+    }
+
+    &.gaode-diricon-28 {
+      background-position: -165px -185px;
+
+      &.gaode-diricon-grey {
+        background-position: -165px -145px;
+      }
+    }
+
+    &.gaode-diricon-29 {
+      background-position: -205px -185px;
+
+      &.gaode-diricon-grey {
+        background-position: -205px -145px;
+      }
+    }
+  }
+
+  &.gaode-diricon-text {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #fff;
+    background-repeat: no-repeat;
+    text-indent: 0;
+    text-align: center;
+    font-size: 12px;
+    z-index: 10;
+
+    &.gaode-diricon-15 {
+      background-position: -47px -104px;
+    }
+
+    &.gaode-diricon-16 {
+      background-position: -85px -104px;
+    }
+
+    &.gaode-diricon-17 {
+      background-position: -126px -104px;
+    }
+  }
+
+  &.gaode-diricon-vehicle {
+    width: 22px;
+    height: 22px;
+    border-radius: 12px;
+    border: 1px solid transparent;
+    overflow: hidden;
+
+    &.gaode-diricon-22 {
+      background-position: -326px -102px;
+    }
+
+    &.gaode-diricon-23 {
+      background-position: -366px -102px;
+    }
+
+    &.gaode-diricon-24 {
+      background-position: -406px -102px;
+    }
+  }
+}
