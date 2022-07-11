@@ -107,6 +107,7 @@
               class="pois-item"
               v-for="(item, index) in poisList"
               :key="item.id + index"
+              :class="{ active: poisClickId == item.id }"
               @click="poisClick(item)"
             >
               <div class="pois-item-image">
@@ -200,7 +201,48 @@
             </el-form-item>
           </el-form>
         </div>
-        <div id="panel" class="steps-view"></div>
+        <div id="panel" class="steps-view">
+          <template v-if="navigationType == 'driving'">
+            <path-planning-driving
+              v-if="drivingData.length != 0"
+              :data-arr="drivingData"
+              :start="startPositionResult.poi"
+              :end="endPositionResult.poi"
+              @stepsClick="stepsClick"
+              @change="setLine"
+            />
+          </template>
+          <template v-if="navigationType == 'riding'">
+            <path-planning-riding
+              v-if="ridingData.length != 0"
+              :data-arr="ridingData"
+              :start="startPositionResult.poi"
+              :end="endPositionResult.poi"
+              @stepsClick="stepsClick"
+              @change="setLine"
+            />
+          </template>
+          <template v-if="navigationType == 'walking'">
+            <path-planning-walking
+              v-if="walkingData.length != 0"
+              :data-arr="walkingData"
+              :start="startPositionResult.poi"
+              :end="endPositionResult.poi"
+              @stepsClick="stepsClick"
+              @change="setLine"
+            />
+          </template>
+          <template v-if="navigationType == 'transfer'">
+            <path-planning-transfer
+              v-if="transferData.length != 0"
+              :data-arr="transferData"
+              :start="startPositionResult.poi"
+              :end="endPositionResult.poi"
+              @stepsClick="stepsClick"
+              @change="setLine"
+            />
+          </template>
+        </div>
       </section>
       <!-- 路线规划与导航 End -->
     </div>
@@ -211,8 +253,17 @@
 // https://blog.csdn.net/u014556081/article/details/113185855 路线规划与导航
 import Utils from "@/common/cesium/Utils.js";
 import GaodeMap from "@/common/cesium/Map/Gaode";
-
+import pathPlanningDriving from "@/common/cesium/Map/Gaode/components/pathPlanning/driving.vue";
+import pathPlanningRiding from "@/common/cesium/Map/Gaode/components/pathPlanning/riding.vue";
+import pathPlanningWalking from "@/common/cesium/Map/Gaode/components/pathPlanning/walking.vue";
+import pathPlanningTransfer from "@/common/cesium/Map/Gaode/components/pathPlanning/transfer.vue";
 export default {
+  components: {
+    pathPlanningDriving,
+    pathPlanningRiding,
+    pathPlanningWalking,
+    pathPlanningTransfer,
+  },
   props: {
     show: {
       type: Boolean,
@@ -224,6 +275,12 @@ export default {
       type: Object,
       default: () => {
         return {};
+      },
+    },
+    poisId: {
+      type: String,
+      default: () => {
+        return "";
       },
     },
   },
@@ -253,6 +310,8 @@ export default {
       polymerization: false, //是否聚合
       keyword: "", //搜索关键词
 
+      poisClickId: "", //兴趣点高亮id
+
       pageIndex: 1, //页码
       pageSize: 20, //页数量
       total: 0, //总数
@@ -266,24 +325,33 @@ export default {
       navigationTypeArr: [
         {
           label: "驾车",
-          value: "1",
+          value: "driving",
         },
         {
           label: "公交",
-          value: "2",
+          value: "transfer",
         },
         {
           label: "骑行",
-          value: "3",
+          value: "riding",
         },
         {
           label: "步行",
-          value: "4",
+          value: "walking",
         },
       ],
       navigationType: "",
       //路线位置集合
       routeLocationArr: [],
+
+      //驾车路线
+      drivingData: [],
+      //骑行路线
+      ridingData: [],
+      //步行路线
+      walkingData: [],
+      //公交路线
+      transferData: [],
     };
   },
   watch: {
@@ -295,6 +363,14 @@ export default {
           //初始化表单筛选
           this.initAutoComplete();
         }
+      },
+      deep: true,
+      immediate: true,
+    },
+    //兴趣点高亮id
+    poisId: {
+      handler(newValue, oldValue) {
+        this.poisClickId = newValue;
       },
       deep: true,
       immediate: true,
@@ -335,10 +411,40 @@ export default {
   },
   methods: {
     /**
+     * 处理路线数据
+     * @param {Array} arr 数据
+     * @param {Number} index 索引
+     * @param {String} key 根据数据自定义key名称
+     */
+    handleRoutes(arr, index = 0, key) {
+      let routeLocationArr = [];
+      const steps = arr[index][key];
+      const len = steps.length;
+
+      for (let i = 0; i < len; i++) {
+        const item = steps[i];
+        if (item.path.length != 0) {
+          for (let j = 0; j < item.path.length; j++) {
+            routeLocationArr.push([item.path[j].lng, item.path[j].lat]);
+          }
+        } else {
+          routeLocationArr.push([
+            item.start_location.lng,
+            item.start_location.lat,
+          ]);
+        }
+      }
+      this.$emit("load", {
+        type: "navigation",
+        style: this.navigationType,
+        data: routeLocationArr,
+      });
+    },
+    /**
      * 类型触发 开始检索数据
      */
     navigationTypeChange(e) {
-      document.getElementById("panel").innerHTML = "";
+      // document.getElementById("panel").innerHTML = "";
       // this.viewer.entities.removeAll();
       // console.log(e);
       const start = [
@@ -350,120 +456,79 @@ export default {
         this.endPositionResult.poi.location.lat,
       ];
       //驾车
-      if (e == "1") {
+      if (e == "driving") {
         this._GaodeMap
           .Driving({
-            panel: "panel",
+            extensions: "all",
+            policy: 10,
             start,
             end,
           })
           .then((res) => {
-            // console.log(res.routes);
+            this.drivingData = res.routes;
             if (res.routes.length != 0) {
-              let routeLocationArr = [];
-              const steps = res.routes[0].steps;
-              const len = steps.length;
-              for (let i = 0; i < len; i++) {
-                const item = steps[i];
-                routeLocationArr.push([
-                  item.start_location.lng,
-                  item.start_location.lat,
-                ]);
-                if (len - 1 == i) {
-                  routeLocationArr.push([
-                    item.end_location.lng,
-                    item.end_location.lat,
-                  ]);
-                }
-              }
-              this.$emit("load", {
-                type: "navigation",
-                style: "driving",
-                data: routeLocationArr,
-              });
+              this.handleRoutes(res.routes, 0, "steps");
             }
           });
       }
       //公交车
-      if (e == "2") {
+      if (e == "transfer") {
         this._GaodeMap
           .Transfer({
-            panel: "panel",
+            // panel: "panel",
+            extensions: "all",
             start,
             end,
             city: "沈阳市",
           })
           .then((res) => {
-            // console.log(res);
+            console.log(res);
+            this.transferData = res.plans;
           });
       }
       //骑行
-      if (e == "3") {
+      if (e == "riding") {
         this._GaodeMap
           .Riding({
-            panel: "panel",
+            extensions: "all",
             start,
             end,
           })
           .then((res) => {
+            this.ridingData = res.routes;
             if (res.routes.length != 0) {
-              let routeLocationArr = [];
-              const rides = res.routes[0].rides;
-              const len = rides.length;
-              for (let i = 0; i < len; i++) {
-                const item = rides[i];
-                routeLocationArr.push([
-                  item.start_location.lng,
-                  item.start_location.lat,
-                ]);
-                if (len - 1 == i) {
-                  routeLocationArr.push([
-                    item.end_location.lng,
-                    item.end_location.lat,
-                  ]);
-                }
-              }
-              this.$emit("load", {
-                type: "navigation",
-                style: "riding",
-                data: routeLocationArr,
-              });
+              this.handleRoutes(res.routes, 0, "rides");
             }
           });
       }
       //步行
-      if (e == "4") {
+      if (e == "walking") {
         this._GaodeMap
           .Walking({
-            panel: "panel",
             start,
             end,
           })
           .then((res) => {
+            this.walkingData = res.routes;
             if (res.routes.length != 0) {
-              let routeLocationArr = [];
-              const steps = res.routes[0].steps;
-              const len = steps.length;
-              for (let i = 0; i < len; i++) {
-                const item = steps[i];
-                routeLocationArr.push([
-                  item.start_location.lng,
-                  item.start_location.lat,
-                ]);
-                if (len - 1 == i) {
-                  routeLocationArr.push([
-                    item.end_location.lng,
-                    item.end_location.lat,
-                  ]);
-                }
-              }
-              this.$emit("load", {
-                type: "navigation",
-                style: "walking",
-                data: routeLocationArr,
-              });
+              this.handleRoutes(res.routes, 0, "steps");
             }
           });
+      }
+    },
+    /**
+     * 设置线
+     * @param {*} i 数据的索引
+     */
+    setLine(i) {
+      if (this.navigationType == "driving") {
+        this.handleRoutes(this.drivingData, i, "steps");
+      }
+      if (this.navigationType == "riding") {
+        this.handleRoutes(this.ridingData, i, "rides");
+      }
+      if (this.navigationType == "walking") {
+        this.handleRoutes(this.walkingData, i, "steps");
       }
     },
     /**
@@ -473,6 +538,12 @@ export default {
       if (e.name == "2") {
         this.initAutoComplete();
       }
+    },
+    /**
+     * 导航单条位置点击
+     */
+    stepsClick(e) {
+      this.$emit("stepsClick", e);
     },
     /**
      * 初始化路线规划和导航的表单筛选
@@ -495,6 +566,7 @@ export default {
                 return;
               }
               this.startPositionResult = result;
+              this.startPosition = result.poi.name;
             });
           });
 
@@ -513,6 +585,7 @@ export default {
                 return;
               }
               this.endPositionResult = result;
+              this.endPosition = result.poi.name;
             });
           });
       }, 500);
@@ -522,6 +595,7 @@ export default {
      * @param {*} item
      */
     poisClick(item) {
+      this.poisClickId = item.id;
       this.$emit("poisClick", item);
     },
     /**
