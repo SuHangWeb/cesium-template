@@ -100,11 +100,11 @@ export default {
           //将随机产生的颜色赋予多边形
           //对南山和宝安进行特殊处理，让多个区块颜色保持一致
           if (entity.name == "宝安区") {
-            entity.polygon.material = Cesium.Color.ORANGE.withAlpha(0.5);
+            entity.polygon.material = Cesium.Color.ORANGE.withAlpha(0.8);
           } else if (entity.name == "南山区") {
-            entity.polygon.material = Cesium.Color.RED.withAlpha(0.5);
+            entity.polygon.material = Cesium.Color.RED.withAlpha(0.8);
           } else {
-            entity.polygon.material = Cesium.Color.fromRandom({ alpha: 0.5 });
+            entity.polygon.material = Cesium.Color.fromRandom({ alpha: 0.8 });
             // entity.polygon.material = this.getColorRamp();
           }
 
