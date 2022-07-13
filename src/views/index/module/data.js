@@ -50,6 +50,12 @@ export const doc = [
         title: "内链测试空白页-开发使用",
         link: "/test/blankPage",
         innerChain: true
+    },
+
+    {
+        title: "空白球体-开发使用",
+        link: "/test/testPage",
+        innerChain: true
     }
 ]
 /**
@@ -67,18 +73,23 @@ export const effect = [
         externalLinks: true
     },
     {
-        title: "EarthSDK示例集",
+        title: "西部世界(EarthSDK示例集)",
         link: "http://earthsdk.com/v/last/Apps/Examples/?menu=true&url=./cesium-primitive-createCube.html",
         externalLinks: true
     },
     {
-        title: "supermap",
+        title: "北京超图(supermap)",
         link: "http://support.supermap.com.cn:8090/webgl/examples/webgl/examples.html#layer",
         externalLinks: true
     },
     {
         title: "xt3d实例",
         link: "http://www.xtgis.cc/basiccategorylist",
+        externalLinks: true
+    },
+    {
+        title: "恒歌科技",
+        link: "http://www.freexgis.com/",
         externalLinks: true
     },
 ]

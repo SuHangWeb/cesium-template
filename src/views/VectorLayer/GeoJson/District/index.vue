@@ -8,6 +8,7 @@
 // https://blog.csdn.net/qq_32341603/article/details/117707277
 //https://www.giserdqy.com/gis/opengis/3d/cesium/junior/7446/ 渐变  http://qa.supermap.com/95360
 // https://www.freesion.com/article/4713678917/ 着色器
+//https://blog.csdn.net/weixin_39150852/article/details/124126031?utm_medium=distribute.pc_aggpage_search_result.none-task-blog-2~aggregatepage~first_rank_ecpm_v1~rank_v31_ecpm-4-124126031-null-null.pc_agg_new_rank&utm_term=cesium%20%E9%9D%A2%E6%B8%90%E5%8F%98%E5%A1%AB%E5%85%85&spm=1000.2123.3001.4430
 import Entity from "@/common/cesium/Entity.js";
 import { v4 as uuidv4 } from "uuid";
 export default {
@@ -78,8 +79,33 @@ export default {
      * 开始
      */
     start() {
-      console.log(this.getColorRamp())
       const Cesium = this.cesium;
+      const m = new Cesium.Material({
+        uniforms: {
+          color: new Cesium["Color"](0.0, 0.0, 0.0, 0.5),
+          diffusePower: 1.6,
+          alphaPower: 1.5,
+        },
+        translucent: false,
+        fabric: {
+          source: `uniform vec4 color;
+           uniform float diffusePower;
+           uniform float alphaPower;
+           czm_material czm_getMaterial(czm_materialInput materialInput)
+              {
+              czm_material material = czm_getDefaultMaterial(materialInput);
+              vec2 st = materialInput.st;
+              float alpha = distance(st,vec2(0.5, 0.5));
+              material.alpha = color.a  * alpha  * alphaPower;
+              material.diffuse = color.rgb * diffusePower;
+              return material;
+            }`,
+        },
+      });
+      const aper =  new Cesium.MaterialAppearance({
+        material : m,
+      });
+
       const JsonUrl =
         process.env.VUE_APP_PUBLIC_URL +
         "/Vue/VectorLayer/GeoJson/District/anhui.json";
@@ -105,7 +131,7 @@ export default {
             entity.polygon.material = Cesium.Color.RED.withAlpha(0.8);
           } else {
             entity.polygon.material = Cesium.Color.fromRandom({ alpha: 0.8 });
-            // entity.polygon.material = this.getColorRamp();
+            // entity.polygon.material = aper;
           }
 
           //添加标签

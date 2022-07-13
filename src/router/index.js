@@ -298,6 +298,11 @@ export const constantRoutes = [
         name: 'BlankPage',
         component: () => import('@/views/Test/BlankPage'),
         meta: { title: '测试页面', icon: 'el-icon-monitor' }
+      }, {
+        path: 'testPage',
+        name: 'TestPage',
+        component: () => import('@/views/Test/TestPage'),
+        meta: { title: '空白球体', icon: 'el-icon-monitor' }
       },
     ]
   },
