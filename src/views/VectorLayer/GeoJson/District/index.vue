@@ -81,13 +81,13 @@ export default {
     start() {
       const Cesium = this.cesium;
       const m = new Cesium.Material({
-        uniforms: {
-          color: new Cesium["Color"](0.0, 0.0, 0.0, 0.5),
-          diffusePower: 1.6,
-          alphaPower: 1.5,
-        },
         translucent: false,
         fabric: {
+          uniforms: {
+            color: new Cesium["Color"](0.0, 0.0, 0.0, 0.5),
+            diffusePower: 1.6,
+            alphaPower: 1.5,
+          },
           source: `uniform vec4 color;
            uniform float diffusePower;
            uniform float alphaPower;
@@ -102,8 +102,8 @@ export default {
             }`,
         },
       });
-      const aper =  new Cesium.MaterialAppearance({
-        material : m,
+      const aper = new Cesium.MaterialAppearance({
+        material: m,
       });
 
       const JsonUrl =
