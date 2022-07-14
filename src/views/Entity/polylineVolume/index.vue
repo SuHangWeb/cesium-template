@@ -6,6 +6,7 @@
  
 <script>
 import Entity from "@/common/cesium/Entity.js";
+import { v4 as uuidv4 } from "uuid";
 export default {
   data() {
     return {
@@ -71,35 +72,70 @@ export default {
       }
       return positions;
     },
+    computeStar(arms, rOuter, rInner) {
+      const Cesium = this.cesium;
+      const angle = Math.PI / arms;
+      const length = 2 * arms;
+      const positions = new Array(length);
+      for (let i = 0; i < length; i++) {
+        const r = i % 2 === 0 ? rOuter : rInner;
+        positions[i] = new Cesium.Cartesian2(
+          Math.cos(i * angle) * r,
+          Math.sin(i * angle) * r
+        );
+      }
+      return positions;
+    },
     /**
      * 开始
      */
     start() {
       const Cesium = this.cesium;
-      let EntityArr = []
+      let EntityArr = [];
 
-      //普通透明管道 Start
+      //透明管道 Start
       const _EntityData_1 = this._Entity.createPolylineVolume({
+        id: uuidv4(),
         positions: Cesium.Cartesian3.fromDegreesArrayHeights(this.positions1),
         shape: this.computeCircle(40),
         cornerType: Cesium.CornerType.ROUNDED, //拐角的样式
         material: Cesium.Color.RED.withAlpha(0.5),
         shadows: Cesium.ShadowMode.DISABLED,
       });
-      EntityArr.push(_EntityData_1)
-      //普通透明管道 End
+      EntityArr.push(_EntityData_1);
+      //透明管道 End
 
+      //方形管道 Start
       const _EntityData_2 = this._Entity.createPolylineVolume({
+        id: uuidv4(),
         positions: Cesium.Cartesian3.fromDegreesArrayHeights(this.positions2),
-        shape: this.computeCircle(40),
-        cornerType: Cesium.CornerType.ROUNDED, //拐角的样式
+        shape: [
+          new Cesium.Cartesian2(-35, -35),
+          new Cesium.Cartesian2(35, -35),
+          new Cesium.Cartesian2(35, 35),
+          new Cesium.Cartesian2(-35, 35),
+        ],
+        cornerType: Cesium.CornerType.BEVELED, //拐角的样式
         material: Cesium.Color.RED.withAlpha(0.5),
         shadows: Cesium.ShadowMode.DISABLED,
+        outline: true,
+        outlineColor: Cesium.Color.BLACK,
       });
-      EntityArr.push(_EntityData_2)
+      EntityArr.push(_EntityData_2);
+      //方形管道 End
 
+      //星形管道 Start
+      const _EntityData_3 = this._Entity.createPolylineVolume({
+        id: uuidv4(),
+        positions: Cesium.Cartesian3.fromDegreesArrayHeights(this.positions3),
+        shape: this.computeStar(10, 50, 35),
+        cornerType: Cesium.CornerType.MITERED,
+        material: Cesium.Color.YELLOW,
+        shadows: Cesium.ShadowMode.DISABLED,
+      });
+      EntityArr.push(_EntityData_3);
+      //星形管道 End
 
-      
       this.viewer.flyTo(EntityArr);
     },
   },
