@@ -178,6 +178,12 @@ export const constantRoutes = [
         component: () => import('@/views/Entity/dynamicPosition'),
         meta: { title: '动态位置', icon: 'el-icon-place', highlight: true }
       },
+      {
+        path: 'polylineVolume',
+        name: 'PolylineVolume',
+        component: () => import('@/views/Entity/polylineVolume'),
+        meta: { title: '管道', icon: 'el-icon-paperclip', highlight: true }
+      },
     ]
   },
 
