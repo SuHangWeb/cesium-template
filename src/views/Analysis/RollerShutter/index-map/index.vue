@@ -1,18 +1,14 @@
 <template>
-  <div class="container" ref="container">
-    <div id="cesiumContainer"></div>
-    <div class="slider-view">
-      <div class="slider-line" ref="line"></div>
-      <div class="slider" ref="slider">
-        <i class="el-icon-s-operation icon"></i>
-      </div>
-    </div>
-  </div>
+<!-- cesium容器 -->
+<div id="cesiumContainer" style="position:relative;">
+  <!-- 左右上下卷帘的分割条 -->
+  <div id="lrSlider" ref="lrSlider" class="shutter-slider" style="display:none"></div>
+  <div id="tbSlider" ref="tbSlider" class="shutter-slider" style="display:none"></div>
+</div>
 </template>
  
 <script>
-// https://blog.csdn.net/qq_41400354/article/details/124631590?spm=1001.2101.3001.6650.6&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-6-124631590-blog-123121883.pc_relevant_multi_platform_whitelistv1&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-6-124631590-blog-123121883.pc_relevant_multi_platform_whitelistv1&utm_relevant_index=10
-// 扩展：https://www.freesion.com/article/14861291934/
+// https://www.freesion.com/article/14861291934/
 export default {
   data() {
     return {
