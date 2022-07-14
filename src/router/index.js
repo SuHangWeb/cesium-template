@@ -286,6 +286,23 @@ export const constantRoutes = [
 
 
   {
+    path: '/analysis',
+    component: Layout,
+    redirect: '/Analysis/RollerShutter',
+    name: 'Analysis',
+    meta: { title: '分析', icon: 'el-icon-monitor', highlight: true },
+    children: [
+      {
+        path: 'rollerShutter',
+        name: 'RollerShutter',
+        component: () => import('@/views/Analysis/RollerShutter'),
+        meta: { title: '卷帘', icon: 'el-icon-c-scale-to-original', highlight: true }
+      },
+    ]
+  },
+
+
+  {
     path: '/test',
     component: Layout,
     redirect: '/Test/BlankPage',
