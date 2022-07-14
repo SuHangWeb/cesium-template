@@ -11,12 +11,15 @@
 //https://blog.csdn.net/weixin_39150852/article/details/124126031?utm_medium=distribute.pc_aggpage_search_result.none-task-blog-2~aggregatepage~first_rank_ecpm_v1~rank_v31_ecpm-4-124126031-null-null.pc_agg_new_rank&utm_term=cesium%20%E9%9D%A2%E6%B8%90%E5%8F%98%E5%A1%AB%E5%85%85&spm=1000.2123.3001.4430
 import Entity from "@/common/cesium/Entity.js";
 import { v4 as uuidv4 } from "uuid";
+import Material from "@/common/cesium/Materials/color.js";
+import MaterialColor from "./module/material/color";
 export default {
   name: "District",
   data() {
     return {
       viewer: null,
       _Entity: null,
+      _Material: null,
       entitiesArr: [],
     };
   },
@@ -47,65 +50,14 @@ export default {
       this.viewer.scene.fxaa = true;
       this.viewer.scene.postProcessStages.fxaa.enabled = true;
       this._Entity = new Entity(Cesium, this.viewer);
+      this._Material = new Material(Cesium, this.viewer);
       this.start();
-    },
-    /**
-     * 纹理图绘制
-     */
-    getColorRamp(elevationRamp) {
-      var ramp = document.createElement("canvas");
-      ramp.width = 400;
-      ramp.height = 400;
-      var ctx = ramp.getContext("2d");
-      // var values = elevationRamp;
-      // var grd = ctx.createLinearGradient(0, 0, 0, 100);
-      // grd.addColorStop(values[0], "#000000"); //black
-      // grd.addColorStop(values[1], "#2747E0"); //blue
-      // grd.addColorStop(values[2], "#D33B7D"); //pink
-      // grd.addColorStop(values[3], "#D33038"); //red
-      // grd.addColorStop(values[4], "#FF9742"); //orange
-      // grd.addColorStop(values[5], "#ffd700"); //yellow
-      // grd.addColorStop(values[6], "#ffffff"); //white
-
-      var grad = ctx.createRadialGradient(200, 200, 50, 200, 200, 200); //创建一个渐变色线性对象
-      grad.addColorStop(0, "yellow"); //定义渐变色颜色
-      grad.addColorStop(1, "green");
-
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, 400, 400);
-      return ramp;
     },
     /**
      * 开始
      */
     start() {
       const Cesium = this.cesium;
-      const m = new Cesium.Material({
-        translucent: false,
-        fabric: {
-          uniforms: {
-            color: new Cesium["Color"](0.0, 0.0, 0.0, 0.5),
-            diffusePower: 1.6,
-            alphaPower: 1.5,
-          },
-          source: `uniform vec4 color;
-           uniform float diffusePower;
-           uniform float alphaPower;
-           czm_material czm_getMaterial(czm_materialInput materialInput)
-              {
-              czm_material material = czm_getDefaultMaterial(materialInput);
-              vec2 st = materialInput.st;
-              float alpha = distance(st,vec2(0.5, 0.5));
-              material.alpha = color.a  * alpha  * alphaPower;
-              material.diffuse = color.rgb * diffusePower;
-              return material;
-            }`,
-        },
-      });
-      const aper = new Cesium.MaterialAppearance({
-        material: m,
-      });
-
       const JsonUrl =
         process.env.VUE_APP_PUBLIC_URL +
         "/Vue/VectorLayer/GeoJson/District/anhui.json";
@@ -117,11 +69,14 @@ export default {
         this.viewer.dataSources.add(dataSource);
         let entities = dataSource.entities.values;
         this.entitiesArr = entities;
+
         for (let i = 0; i < entities.length; i++) {
           let entity = entities[i];
           entity.polygon.height = 0;
-          entity.polygon.extrudedHeight = 10000;
+          entity.polygon.extrudedHeight = 5000;
           entity.polygon.outline = false;
+
+          this._Material.create(MaterialColor(Cesium));
 
           //将随机产生的颜色赋予多边形
           //对南山和宝安进行特殊处理，让多个区块颜色保持一致
@@ -130,8 +85,9 @@ export default {
           } else if (entity.name == "南山区") {
             entity.polygon.material = Cesium.Color.RED.withAlpha(0.8);
           } else {
-            entity.polygon.material = Cesium.Color.fromRandom({ alpha: 0.8 });
-            // entity.polygon.material = aper;
+            entity.polygon.material = new Cesium.Material_color(
+              Cesium.Color.fromRandom({ alpha: 0.8 })
+            );
           }
 
           //添加标签

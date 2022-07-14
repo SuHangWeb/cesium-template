@@ -92,6 +92,11 @@ export const effect = [
         link: "http://www.freexgis.com/",
         externalLinks: true
     },
+    {
+        title: "拓展示例和插件",
+        link: "https://gitee.com/yangyizhao/cesium-examples?_from=gitee_search",
+        externalLinks: true
+    }
 ]
 /**
  * 三方依赖
