@@ -130,7 +130,7 @@ export default {
         positions: Cesium.Cartesian3.fromDegreesArrayHeights(this.positions3),
         shape: this.computeStar(10, 50, 35),
         cornerType: Cesium.CornerType.MITERED,
-        material: Cesium.Color.YELLOW,
+        material: Cesium.Color.RED,
         shadows: Cesium.ShadowMode.DISABLED,
       });
       EntityArr.push(_EntityData_3);
