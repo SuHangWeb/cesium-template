@@ -49,13 +49,22 @@ export const doc = [
     {
         title: "内链测试空白页-开发使用",
         link: "/test/blankPage",
-        innerChain: true
+        innerChain: true,
+        private: true
     },
 
     {
         title: "空白球体-开发使用",
         link: "/test/testPage",
-        innerChain: true
+        innerChain: true,
+        private: true
+    },
+
+    {
+        title: "coding-工作平台",
+        link: "https://landstar.coding.net/user",
+        innerChain: true,
+        private: true
     }
 ]
 /**

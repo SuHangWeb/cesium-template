@@ -13,6 +13,7 @@ import Entity from "@/common/cesium/Entity.js";
 import { v4 as uuidv4 } from "uuid";
 import Material from "@/common/cesium/Materials/color.js";
 import MaterialColor from "./module/material/color";
+import code from "./module/highlight";
 export default {
   name: "District",
   data() {
@@ -22,6 +23,9 @@ export default {
       _Material: null,
       entitiesArr: [],
     };
+  },
+  created() {
+    this.$store.dispatch("highlight/set_code", code);
   },
   mounted() {
     this.init();

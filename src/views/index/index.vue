@@ -24,7 +24,7 @@
       </div>
       <div>
         <Button-linear-color
-          v-for="(item, index) in doc"
+          v-for="(item, index) in computed_private(doc)"
           :key="index"
           :title="item.title"
           :index="index"
@@ -39,7 +39,7 @@
       </div>
       <div>
         <Button-linear-color
-          v-for="(item, index) in effect"
+          v-for="(item, index) in computed_private(effect)"
           :key="index"
           :title="item.title"
           :index="index"
@@ -53,7 +53,7 @@
         <span>三方依赖（根据需求酌情使用）</span>
       </div>
       <div class="card-main">
-        <div v-for="(item, index) in tripartite" :key="index">
+        <div v-for="(item, index) in computed_private(tripartite)" :key="index">
           <el-tooltip
             class="item"
             effect="dark"
@@ -103,6 +103,19 @@ export default {
         keyboard: true,
       },
     };
+  },
+  computed: {
+    //计算是否是私有显示
+    computed_private() {
+      return (arr) => {
+        const show = process.env.NODE_ENV === "development";
+        if (!show) {
+          return arr.filter((item) => !(item?.private && item.private));
+        } else {
+          return arr;
+        }
+      };
+    },
   },
   methods: {
     inited(viewer) {

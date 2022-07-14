@@ -61,6 +61,7 @@ ImportJs(`${path}/Entity.js`);//实体创建
 ImportJs(`${path}/Primitives.js`);//图元
 ImportJs(`${path}/Transform.js`);//转换方法
 ImportJs(`${path}/Materials/index.js`);//材质
+ImportJs(`${path}/Materials/color.js`);//颜色材质
 ImportJs(`${path}/Canvas.js`);//原生canvas操作
 ImportJs(`${path}/Map/Gaode/index.js`);//高德api
 ImportJs(`${path}/Map/index.js`);//地图

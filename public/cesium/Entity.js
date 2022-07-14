@@ -31,6 +31,7 @@ const timeStamp = () => {
     createEllipsoid  | 椭圆体
     createCylinder | 圆柱体
     createPolylineVolume | 多线段柱体
+    createLabel | 创建标签
  */
 class Entity {
     constructor(Cesium, viewer) {

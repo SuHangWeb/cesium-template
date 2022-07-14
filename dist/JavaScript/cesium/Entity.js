@@ -31,6 +31,7 @@ const timeStamp = () => {
     createEllipsoid  | 椭圆体
     createCylinder | 圆柱体
     createPolylineVolume | 多线段柱体
+    createLabel | 创建标签
  */
 class Entity {
     constructor(Cesium, viewer) {
@@ -1250,6 +1251,150 @@ class Entity {
                 distanceDisplayCondition: params.distanceDisplayCondition || undefined,
             },
 
+        });
+        return entity;
+    }
+
+    
+    /**
+    * 创建标签
+    * @param {Object} params 配置参数
+    * 注：通用参数使用 params.common
+    * @returns {Entity} 实体标签
+    */
+     createLabel(params) {
+        const Cesium = this.Cesium
+        /**
+         * 仅使用部分参数 多余参数可迭代
+         * add 内部参数 中文文档
+         * http://cesium.xin/cesium/cn/Documentation1.72/Entity.html
+         */
+        const entity = this.viewer.entities.add({
+            //唯一ID
+            id: params.id || `Label-${timeStamp()}`,
+            //设置对象的名称。该名称适用于最终用户消费，并不需要唯一。
+            name: params.name || `Label-${timeStamp()}`,
+            //位置信息
+            position: params.position,
+            //通用参数
+            ...params.common,
+            label: {
+                //用于指定可见性。
+                show: params.show || true,
+                /**
+                 * 文本的属性。支持显式换行符 '\n'
+                 * 类型：String
+                 * 默认值：undefined
+                 */
+                text: params.text || undefined,
+                /**
+                 * 指定 CSS 字体的属性
+                 * 类型：String
+                 * 默认值：'30px sans-serif'
+                 */
+                font: params.font || '30px sans-serif',
+                /**
+                 * 标签样式填充
+                 * Cesium.LabelStyle.[值]
+                 * 值：
+                 * FILL/填写标签的文本，但不要勾勒轮廓。
+                 * OUTLINE/概述标签的文本，但不要填写。
+                 * FILL_AND_OUTLINE/填写并标记标签文本。
+                 */
+                style: params.style || undefined,
+                /**
+                 * 文本的缩放比例
+                 * 类型：Number
+                 */
+                scale: params.scale || 1.0,
+                /**
+                 * 指定标签背景的可见性
+                 * 类型：Boolean
+                 * 默认：false
+                 */
+                showBackground: params.showBackground || false,
+                /**
+                 * 指定背景的属性
+                 */
+                backgroundColor: params.backgroundColor || new Cesium.Color(0.165, 0.165, 0.165, 0.8),
+                /**
+                 * Cartesian2以像素为单位指定水平和垂直背景填充的属性。
+                 */
+                backgroundPadding: params.backgroundPadding || new Cesium.Cartesian2(7, 5),
+                /**
+                 * 指定像素偏移的Cartesian2属性。
+                 * 使用方法：new Cesium.Cartesian2(x,y)
+                 * 初始化：ZERO = (0.0,0.0)
+                 */
+                pixelOffset: params.pixelOffset || Cesium.Cartesian2.ZERO,
+                /**
+                 * 指定标签在眼睛坐标中的偏移量的属性。眼睛坐标是左手坐标系，x指向观看者的右侧，y指向上方并z指向屏幕
+                 * 眼睛偏移通常用于将多个标签或对象排列在同一位置，例如，将标签排列在其对应的 3D 模型上方。
+                 * 例如，标签位于地球的中心，但眼球偏移使其始终出现在地球顶部，无论观察者或地球的方向如何。
+                 * 使用方法：new Cesium.Cartesian3(x,y,z)
+                 * 初始化：ZERO = (0.0,0.0,0.0)
+                 */
+                eyeOffset: params.eyeOffset || Cesium.Cartesian3.ZERO,
+                /**
+                 * 横向/水平 相对于对象的原点的水平位置
+                 * 例如，将水平原点设置为 LEFT 或 RIGHT 将在屏幕的左侧或右侧显示位置
+                 * CENTER/原点在对象的水平中心
+                 * LEFT/原点在对象的左侧
+                 * RIGHT/原点在对象的右侧
+                 * 使用方法：Cesium.HorizontalOrigin.[值]
+                 */
+                horizontalOrigin: params.horizontalOrigin || Cesium.HorizontalOrigin.CENTER,
+                /**
+                 * 垂直原点，以确定该实体是否为到其锚定位置的上方，下方或中心
+                 * CENTER/原点位于 BASELINE 和 TOP 之间的垂直中心
+                 * BOTTOM/原点在对象的底部
+                 * BASELINE/如果对象包含文本，则原点位于文本的基线，否则原点位于对象的底部
+                 * TOP/原点在对象的顶部
+                 * 使用方法：Cesium.VerticalOrigin.[值]
+                 */
+                verticalOrigin: params.verticalOrigin || Cesium.VerticalOrigin.CENTER,
+                /**
+                 * 相对于高度的高度 默认值 ： Cesium.HeightReference.NONE
+                 * NONE/位置绝对
+                 * CLAMP_TO_GROUND/位置固定在地形上。
+                 * RELATIVE_TO_GROUND/位置高度是指地形上方的高度。
+                 */
+                heightReference: params.heightReference || Cesium.HeightReference.NONE,
+                //轮廓/描边的颜色
+                outlineColor: params.outlineColor || Cesium.Color.BLACK,
+                //轮廓/描边的尺寸 像素/px 为单位
+                outlineWidth: params.outlineWidth || 1.0,
+                /**
+                 * 该属性用于根据距离缩放点。如果未定义，则使用恒定大小。
+                 * new Cesium.NearFarScalar(0, 1, 5e10, 1)
+                 * NearFarScalar 四个参数分别为
+                 * 名称：near | 类型：{Number} |默认值：0.0 | （可选）摄像机范围的下限
+                 * 名称：nearValue | 类型：{Number} |默认值：0.0 | （可选）摄像机范围下限的值
+                 * 名称：far | 类型：{Number} |默认值：1.0 | （可选）摄像机范围的上限。
+                 * 名称：farValue | 类型：{Number} |默认值：0.0 | （可选）摄像机范围上限的值。
+                 */
+                scaleByDistance: params.scaleByDistance || undefined,
+                //作用于透明度 与scaleByDistance值相同 
+                translucencyByDistance: params.translucencyByDistance || undefined,
+                /**
+                 * 该属性根据距照相机的距离指定实体的像素偏移
+                 * 实体的像素偏移将在 NearFarScalar＃nearValue 和 NearFarScalar＃farValue ，
+                 * 而摄像头距离在上下限之内指定的 NearFarScalar＃near 和 NearFarScalar＃far
+                 * 在这些范围之外，实体的像素偏移保持钳位到最近的范围
+                 * 与scaleByDistance值相同 采用 NearFarScalar
+                 */
+                pixelOffsetScaleByDistance: params.pixelOffsetScaleByDistance || undefined,
+                /**
+                 * 指定将在距相机的距离显示
+                 * new Cesium.DistanceDisplayCondition(0, 4.8e10)
+                 * DistanceDisplayCondition 两个参数分别为
+                 * 名称：near | 类型：{Number} |默认值：0.0 | （可选）可见物体的间隔中的最小距离。
+                 * 名称：far | 类型：{Number} |默认值：Number.MAX_VALUE | （可选）在物体可见的间隔中最大的距离。
+                 */
+                distanceDisplayCondition: params.distanceDisplayCondition || undefined,
+                //获取或设置与相机的距离，在深度处禁用深度测试，例如，以防止剪切地形。设置为零时，将始终应用深度测试。设置为Number.POSITIVE_INFINITY时，永远不会应用深度测试。
+                disableDepthTestDistance: params.disableDepthTestDistance || undefined
+            }
         });
         return entity;
     }
