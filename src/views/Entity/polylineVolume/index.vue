@@ -7,6 +7,10 @@
 <script>
 import Entity from "@/common/cesium/Entity.js";
 import { v4 as uuidv4 } from "uuid";
+import Material from "@/common/cesium/Materials/index.js";
+import material_polylineVolume_flow from "./module/material/flow";
+// https://blog.csdn.net/qq_35105689/article/details/122583842 空心
+//http://www.pangbo15.cn/gis/560.html 流动
 export default {
   data() {
     return {
@@ -23,6 +27,19 @@ export default {
       positions3: [
         123.43169021038872, 41.81497857173556, 0, 123.42709904225134,
         41.8140555836194, 0, 123.42271311560773, 41.81464474650719, 0,
+      ],
+      positions4: [
+        123.42789261245287, 41.82051143038075, 0, 123.4164759118099,
+        41.820510612023114, 0,
+      ],
+      positions5: [
+        123.42944636700197, 41.81768062418225, 0, 123.44186924406316,
+        41.82119501081676, 0, 123.43798432175252, 41.82555436121153, 0,
+        123.42280372035711, 41.82700690170522, 0,
+      ],
+      positions6: [
+        123.43673883218169, 41.81511974663461, 0, 123.43980749191105,
+        41.814743307305456, 0,
       ],
     };
   },
@@ -56,6 +73,7 @@ export default {
       this.viewer.scene.fxaa = true;
       this.viewer.scene.postProcessStages.fxaa.enabled = true;
       this._Entity = new Entity(Cesium, this.viewer);
+      this._Material = new Material(Cesium, this.viewer);
       this.start();
     },
     computeCircle(radius) {
@@ -84,6 +102,105 @@ export default {
           Math.sin(i * angle) * r
         );
       }
+      return positions;
+    },
+    computePos(type, cut, positions) {
+      const Cesium = this.cesium;
+      let waterPositions = positions.concat();
+      let cartesianPositions;
+      if (type == "water") {
+        for (let i = 2; i < waterPositions.length; i += 3) {
+          waterPositions[i] += 0.4 - 0.25;
+        }
+        cartesianPositions = new Cesium.Cartesian3.fromDegreesArrayHeights(
+          waterPositions
+        );
+      } else if (type == "pipe") {
+        cartesianPositions = new Cesium.Cartesian3.fromDegreesArrayHeights(
+          positions
+        );
+      }
+      const start = cartesianPositions[0];
+      const second = cartesianPositions[1];
+      const end = cartesianPositions[cartesianPositions.length - 1];
+      const secondToLast = cartesianPositions[cartesianPositions.length - 2];
+      const startLength = Math.sqrt(
+        Math.pow(start.x - second.x, 2) +
+          Math.pow(start.y - second.y, 2) +
+          Math.pow(start.z - second.z, 2)
+      );
+      const endLength = Math.sqrt(
+        Math.pow(secondToLast.x - end.x, 2) +
+          Math.pow(secondToLast.y - end.y, 2) +
+          Math.pow(secondToLast.z - end.z, 2)
+      );
+      const startOffsetX = (0.7 / startLength) * (second.x - start.x);
+      const startOffsetY = (0.7 / startLength) * (second.y - start.y);
+      const startOffsetZ = (0.7 / startLength) * (second.z - start.z);
+      const endOffsetX = (0.7 / endLength) * (secondToLast.x - end.x);
+      const endOffsetY = (0.7 / endLength) * (secondToLast.y - end.y);
+      const endOffsetZ = (0.7 / endLength) * (secondToLast.z - end.z);
+
+      if (cut == "single") {
+        start.x += startOffsetX;
+        start.y += startOffsetY;
+        start.z += startOffsetZ;
+      }
+      if (cut == "both") {
+        start.x += startOffsetX;
+        start.y += startOffsetY;
+        start.z += startOffsetZ;
+        end.x += endOffsetX;
+        end.y += endOffsetY;
+        end.z += endOffsetZ;
+      }
+
+      return cartesianPositions;
+    },
+    computeCircle2(radius, status) {
+      const Cesium = this.cesium;
+      var positions = [];
+      let startRad, endRad;
+      // 水位截面角度
+      switch (status) {
+        case 1:
+          startRad = 225;
+          endRad = 315;
+          break;
+        case 2:
+          startRad = 180;
+          endRad = 360;
+          break;
+        case 3:
+          startRad = 135;
+          endRad = 405;
+          break;
+        case 4:
+          startRad = 0;
+          endRad = 360;
+          break;
+        default:
+          for (let i = 360; i >= 0; i--) {
+            let radians = Cesium.Math.toRadians(i);
+            positions.push(
+              new Cesium.Cartesian2(
+                insRadius * Math.cos(radians),
+                insRadius * Math.sin(radians)
+              )
+            );
+          }
+      }
+
+      for (let i = startRad; i <= endRad; i++) {
+        let radians = Cesium.Math.toRadians(i);
+        positions.push(
+          new Cesium.Cartesian2(
+            radius * Math.cos(radians),
+            radius * Math.sin(radians)
+          )
+        );
+      }
+
       return positions;
     },
     /**
@@ -135,6 +252,48 @@ export default {
       });
       EntityArr.push(_EntityData_3);
       //星形管道 End
+
+      //三角形 Start
+      const _EntityData_4 = this._Entity.createPolylineVolume({
+        id: uuidv4(),
+        positions: Cesium.Cartesian3.fromDegreesArrayHeights(this.positions4),
+        shape: [
+          new Cesium.Cartesian2(-50, -50),
+          new Cesium.Cartesian2(50, 50),
+          new Cesium.Cartesian2(50, -50),
+        ],
+        cornerType: Cesium.CornerType.MITERED,
+        material: Cesium.Color.RED.withAlpha(0.5),
+      });
+      EntityArr.push(_EntityData_4);
+      //三角形 End
+
+      //流动管道 Start
+      this._Material.create(material_polylineVolume_flow(Cesium));
+      let material = new Cesium.material_polylineVolume_flow();
+      const _EntityData_5 = this._Entity.createPolylineVolume({
+        id: uuidv4(),
+        positions: Cesium.Cartesian3.fromDegreesArrayHeights(this.positions5),
+        shape: this.computeCircle(40),
+        cornerType: Cesium.CornerType.ROUNDED, //拐角的样式
+        material,
+        shadows: Cesium.ShadowMode.DISABLED,
+      });
+      EntityArr.push(_EntityData_5);
+      //流动管道 End
+
+      //空心管道 Start
+      const _EntityData_6 = this._Entity.createPolylineVolume({
+        id: uuidv4(),
+        // positions: Cesium.Cartesian3.fromDegreesArrayHeights(this.positions4),
+        positions: this.computePos("pipe", "", this.positions6),
+        shape: this.computeCircle2(50, 4),
+        cornerType: Cesium.CornerType.MITERED,
+        material: Cesium.Color.RED.withAlpha(0.5),
+        shadows: Cesium.ShadowMode.DISABLED,
+      });
+      EntityArr.push(_EntityData_6);
+      //空心管道 End
 
       this.viewer.flyTo(EntityArr);
     },

@@ -1,7 +1,6 @@
 <template>
   <div class="container">
     <div id="cesiumContainer"></div>
-    <button class="button" id="colorClick">改变颜色</button>
   </div>
 </template>
  
@@ -11,7 +10,6 @@ export default {
   data() {
     return {
       viewer: null,
-      _clouds: null,
     };
   },
   mounted() {
@@ -37,78 +35,207 @@ export default {
       this.viewer.scene.globe.depthTestAgainstTerrain = false;
       this.start();
     },
-    getRandomNumberInRange(minValue, maxValue) {
-      const Cesium = this.cesium;
-      return minValue + Cesium.Math.nextRandomNumber() * (maxValue - minValue);
-    },
-    /**
-     * 开始
-     */
+    // https://blog.csdn.net/u010358183/article/details/122055553
     start() {
-      const _this = this;
       const Cesium = this.cesium;
-      const scene = this.viewer.scene;
-      scene.primitives.add(Cesium.createOsmBuildings());
+      const viewer = this.viewer;
 
-      let clouds = new Cesium.CloudCollection();
-      function createBackLayerClouds() {
-        clouds.add({
-          position: Cesium.Cartesian3.fromDegrees(-122.6908, 45.496, 300),
-          scale: new Cesium.Cartesian2(1500, 250),
-          maximumSize: new Cesium.Cartesian3(50, 15, 13),
-          color: Cesium.Color.RED,
-          slice: 0.3,
-        });
+      // 声明变量，以下代码可能会多次用到
+      let scene = viewer.scene;
+      let canvas = viewer.canvas; // 此处用viewer.canvas或viewer.scene.canvas都可以，是同一个canvas对象
+      let camera = viewer.camera;
+      let ellipsoid = viewer.scene.globe.ellipsoid;
+      // 声明相机漫游标记
+      let flags = null;
+      // 声明handler
+      let handler = null;
 
-        clouds.add({
-          position: Cesium.Cartesian3.fromDegrees(-122.72, 45.5, 335),
-          scale: new Cesium.Cartesian2(1500, 300),
-          maximumSize: new Cesium.Cartesian3(50, 12, 15),
-          slice: 0.36,
-        });
+      /**
+       * 进入键盘鼠标漫游模式
+       */
+      function enterKeyBoardMouseRoamingMode() {
+        console.log("进入漫游模式");
+        // 1.禁用默认相机操作模式
+        scene.screenSpaceCameraController.enableRotate = false;
+        scene.screenSpaceCameraController.enableTranslate = false;
+        scene.screenSpaceCameraController.enableZoom = false;
+        scene.screenSpaceCameraController.enableTilt = false;
+        scene.screenSpaceCameraController.enableLook = false;
 
-        clouds.add({
-          position: Cesium.Cartesian3.fromDegrees(-122.72, 45.51, 260),
-          scale: new Cesium.Cartesian2(2000, 300),
-          maximumSize: new Cesium.Cartesian3(50, 12, 15),
-          slice: 0.49,
-        });
+        // 2.初始化相机漫游的标记
+        flags = {
+          looking: false, // 是否正在用鼠标调整视角
+          startPosition: null, // 鼠标指针开始移动位置
+          endPosition: null, // 鼠标指针停止移动位置
+          moveForward: false, // 是否向前移动
+          moveBackward: false, // 是否向后移动
+          moveLeft: false, // 是否向左移动
+          moveRight: false, // 是否向右移动
+          moveUp: false, // 是否向上移动
+          moveDown: false, // 是否向下移动
+        }; // 相机漫游标记
+
+        // 3.添加鼠标监听事件
+        handler = new Cesium.ScreenSpaceEventHandler(canvas);
+        // 左键按下
+        handler.setInputAction((movement) => {
+          flags.looking = true;
+          flags.startPosition = Cesium.Cartesian3.clone(movement.position);
+          flags.endPosition = Cesium.Cartesian3.clone(movement.position);
+        }, Cesium.ScreenSpaceEventType.LEFT_DOWN);
+        // 鼠标移动
+        handler.setInputAction((movement) => {
+          flags.endPosition = movement.endPosition;
+        }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
+        // 左键弹起
+        handler.setInputAction(() => {
+          flags.looking = false;
+        }, Cesium.ScreenSpaceEventType.LEFT_UP);
+
+        // 4.添加键盘监听事件
+        // 键盘按下事件
+        document.addEventListener("keydown", keyDown, false);
+        // 键盘弹起事件
+        document.addEventListener("keyup", keyUp, false);
+
+        // 5.添加渲染事件
+        viewer.clock.onTick.addEventListener(renderEvent);
       }
 
-      createBackLayerClouds();
-      console.log(clouds.length);
-      document.getElementById("colorClick").onclick = function () {
-        // console.log(scene.primitives._primitives[1])
-        for (let i = 0; i < clouds.length; i++) {
-          const c = clouds.get(i);
-          console.log(c);
-          c.color = Cesium.Color.RED;
-          // clouds._clouds[i]._color = Cesium.Color.RED;
+      // DOM添加一个开启键盘鼠标漫游模式的按钮，使用绝对定位放在屏幕左上角，用于测试
+      let enterButton = document.createElement("button");
+      enterButton.innerText = "开启";
+      enterButton.style.position = "absolute";
+      enterButton.style.left = "20px";
+      enterButton.style.top = "20px";
+      enterButton.onclick = enterKeyBoardMouseRoamingMode;
+      document.body.appendChild(enterButton);
+
+      /**
+       * 退出键盘鼠标漫游模式
+       */
+      function exitKeyBoardMouseRoamingMode() {
+        console.log("退出漫游");
+        // 1.移除鼠标监听事件
+        if (handler) {
+          handler.destroy();
+          handler = null;
         }
-      };
-      scene.primitives.add(clouds);
-      //相机
-      this.viewer.camera.flyTo({
-        //setView是直接跳到 flyTo// 是镜头飞行到  网速不好或者电脑配置不高 还是不要fly了吧
-        destination: Cesium.Cartesian3.fromDegrees(-122.6908, 45.496, 300), //经纬度坐标转换为 笛卡尔坐标(世界坐标)
-        orientation: {
-          heading: Cesium.Math.toRadians(0.0), // east, default value is 0.0 (north) //东西南北朝向
-          pitch: Cesium.Math.toRadians(-90), // default value (looking down)  //俯视仰视视觉
-          roll: 0.0, // default value
-        },
-        duration: 3, //3秒到达战场
-      });
-    },
-    colorClick() {
-      const Cesium = this.cesium;
-      console.log(this._clouds._clouds);
-      for (let i = 0; i < this._clouds._clouds.length; i++) {
-        this._clouds._clouds[i]._color = this.getColor("red");
+
+        // 2.移除键盘监听事件
+        document.removeEventListener("keydown", keyDown, false);
+        document.removeEventListener("keyup", keyUp, false);
+
+        // 3.移除渲染事件
+        viewer.clock.onTick.removeEventListener(renderEvent);
+
+        // 4.启用默认相机操作模式
+        scene.screenSpaceCameraController.enableRotate = true;
+        scene.screenSpaceCameraController.enableTranslate = true;
+        scene.screenSpaceCameraController.enableZoom = true;
+        scene.screenSpaceCameraController.enableTilt = true;
+        scene.screenSpaceCameraController.enableLook = true;
       }
-    },
-    getColor(colorName) {
-      const Cesium = this.cesium;
-      return Cesium.Color[colorName.toUpperCase()];
+
+      // DOM添加一个关闭键盘鼠标漫游模式的按钮，使用绝对定位放在屏幕左上角，用于测试
+      let exitButton = document.createElement("button");
+      exitButton.innerText = "关闭";
+      exitButton.style.position = "absolute";
+      exitButton.style.left = "70px";
+      exitButton.style.top = "20px";
+      exitButton.onclick = exitKeyBoardMouseRoamingMode;
+      document.body.appendChild(exitButton);
+
+      /**
+       * 键盘按下
+       */
+      function keyDown(event) {
+        let flagName = getFlagFromKeyCode(event.keyCode);
+        if (typeof flagName !== "undefined") {
+          flags[flagName] = true;
+        }
+      }
+
+      /**
+       * 键盘弹起
+       */
+      function keyUp(event) {
+        let flagName = getFlagFromKeyCode(event.keyCode);
+        if (typeof flagName !== "undefined") {
+          flags[flagName] = false;
+        }
+      }
+
+      /**
+       * 渲染函数
+       */
+      function renderEvent() {
+        // 镜头转向
+        if (flags.looking) {
+          let width = viewer.canvas.clientWidth;
+          let height = viewer.canvas.clientHeight;
+          let lookFactor = 0.05; // 镜头转向系数，系数越大约灵敏，此处取0.05比较适中
+          let x = (flags.endPosition.x - flags.startPosition.x) / width;
+          let y = -(flags.endPosition.y - flags.startPosition.y) / height;
+          // 计算出x,y之后，有两种方式实现镜头，经过测试感觉方式 1更流畅
+          // 方式 1
+          camera.lookRight(x * lookFactor);
+          camera.lookUp(y * lookFactor);
+          // 方式 2
+          // camera.setView({
+          //   orientation: {
+          //     heading: camera.heading + x * lookFactor,
+          //     pitch: camera.pitch + y * lookFactor,
+          //     roll: 0.0,
+          //   },
+          // });
+        }
+        // 根据高度来决定镜头移动的速度
+        let cameraHeight = ellipsoid.cartesianToCartographic(
+          camera.position
+        ).height;
+        let moveRate = cameraHeight / 100.0;
+        if (flags.moveForward) {
+          camera.moveForward(moveRate);
+        }
+        if (flags.moveBackward) {
+          camera.moveBackward(moveRate);
+        }
+        if (flags.moveUp) {
+          camera.moveUp(moveRate);
+        }
+        if (flags.moveDown) {
+          camera.moveDown(moveRate);
+        }
+        if (flags.moveLeft) {
+          camera.moveLeft(moveRate);
+        }
+        if (flags.moveRight) {
+          camera.moveRight(moveRate);
+        }
+      }
+
+      /**
+       * 从键盘码获取flag标记
+       */
+      function getFlagFromKeyCode(keyCode) {
+        switch (keyCode) {
+          case "W".charCodeAt(0):
+            return "moveForward";
+          case "S".charCodeAt(0):
+            return "moveBackward";
+          case "Q".charCodeAt(0):
+            return "moveUp";
+          case "E".charCodeAt(0):
+            return "moveDown";
+          case "D".charCodeAt(0):
+            return "moveRight";
+          case "A".charCodeAt(0):
+            return "moveLeft";
+          default:
+            return undefined;
+        }
+      }
     },
   },
 };
@@ -122,11 +249,5 @@ export default {
     width: 100%;
     height: 100%;
   }
-}
-.button {
-  position: fixed;
-  bottom: 10px;
-  right: 10px;
-  z-index: 2;
 }
 </style>

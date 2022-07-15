@@ -23,7 +23,7 @@ export default (Cesium) => {
             color: new Cesium.Color(1.0, 1.0, 1.0, 1),
             image: Cesium.Material.DefaultImageId,
             time: 0,
-            constantSpeed: 300,
+            constantSpeed: 30,
             depthFailMaterial: true
         },
         source: get_source(),
