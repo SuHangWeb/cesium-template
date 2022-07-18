@@ -35,6 +35,9 @@ https://segmentfault.com/a/1190000040320599?sort=newest 流线
 ## github
 * https://github.com/YanzheZhang/Cesium.HPUZYZ.Demo 案例集
 * https://github.com/zouyaoji/vue-cesium-demo
+* https://github.com/ls870061011/cesium_training
+* https://github.com/zhangti0708/cesium-materialLine
+* https://github.com/zhangti0708/cesium-d3kit
 
 # 备用依赖
 Cesium

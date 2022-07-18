@@ -33,9 +33,9 @@ export default {
         41.820510612023114, 0,
       ],
       positions5: [
-        123.42944636700197, 41.81768062418225, 0, 123.44186924406316,
-        41.82119501081676, 0, 123.43798432175252, 41.82555436121153, 0,
-        123.42280372035711, 41.82700690170522, 0,
+        123.43070199312513,41.81703908368588,0,
+        123.4051747588459,41.81622044764279,0,
+        123.38493312851678,41.81643212219792,0
       ],
       positions6: [
         123.43673883218169, 41.81511974663461, 0, 123.43980749191105,
@@ -274,7 +274,7 @@ export default {
       const _EntityData_5 = this._Entity.createPolylineVolume({
         id: uuidv4(),
         positions: Cesium.Cartesian3.fromDegreesArrayHeights(this.positions5),
-        shape: this.computeCircle(40),
+        shape: this.computeCircle(20),
         cornerType: Cesium.CornerType.ROUNDED, //拐角的样式
         material,
         shadows: Cesium.ShadowMode.DISABLED,

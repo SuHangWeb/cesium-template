@@ -47,6 +47,12 @@ export const doc = [
     },
 
     {
+        title: "入门教程",
+        link: "https://syzdev.cn/cesium-docs/",
+        externalLinks: true
+    },
+
+    {
         title: "内链测试空白页-开发使用",
         link: "/test/blankPage",
         innerChain: true,
@@ -109,6 +115,11 @@ export const effect = [
     {
         title: "数字视觉",
         link: "http://dc.dvgis.cn/#/examples",
+        externalLinks: true
+    },
+    {
+        title: "vue-cesium",
+        link: "https://zouyaoji.top/vue-cesium/#/zh-CN",
         externalLinks: true
     }
 ]
