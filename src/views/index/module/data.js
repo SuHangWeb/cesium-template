@@ -121,6 +121,11 @@ export const effect = [
         title: "vue-cesium",
         link: "https://zouyaoji.top/vue-cesium/#/zh-CN",
         externalLinks: true
+    },
+    {
+        title: "cv3案例集",
+        link: "http://cv3.zhengqj.cc/",
+        externalLinks: true
     }
 ]
 /**
