@@ -105,6 +105,11 @@ export const effect = [
         title: "拓展示例和插件",
         link: "https://gitee.com/yangyizhao/cesium-examples?_from=gitee_search",
         externalLinks: true
+    },
+    {
+        title: "数字视觉",
+        link: "http://dc.dvgis.cn/#/examples",
+        externalLinks: true
     }
 ]
 /**

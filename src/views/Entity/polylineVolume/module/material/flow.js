@@ -19,40 +19,14 @@ export default (Cesium) => {
             'time': -1,
             'hasImage2': ![],
         },
-        source: `uniform vec4 color;
-        uniform vec4 bgColor;
-        uniform float speed;
-        uniform float startTime;
-        uniform float bidirectional;
-        
-        czm_material czm_getMaterial(czm_materialInput materialInput)
-        {
-            czm_material material = czm_getDefaultMaterial(materialInput);
-            vec2 st = materialInput.st;
-            float t = fract(startTime + czm_frameNumber * speed / 1000.0);
-        
-            t *= 1.03;
-            float alpha0 = smoothstep(t - 0.03, t, st.s) * step(st.s, t);
-            float mt = 1. - t;
-            float alpha1 = smoothstep(mt + 0.03, mt, st.s) * step(mt, st.s);
-        
-            float a0 = step(abs(bidirectional - 0.0) - 0.001, 0.);
-            float a1 = step(abs(bidirectional - 1.0) - 0.001, 0.);
-            float db = step(abs(bidirectional - 2.0) - 0.001, 0.);
-            float alpha = alpha0 * (a0 + db) + alpha1 * (a1 + db);
-            alpha = clamp(alpha, 0., 1.);
-        
-            material.diffuse = color.rgb * alpha + bgColor.rgb * (1. - alpha);
-            material.alpha = color.a * alpha + bgColor.a * (1. - alpha);
-        
-            // if (useImageAndRepeat.x != 0.) {
-            //     float repeat = useImageAndRepeat.y;
-            //     vec4 marsImageColor = texture2D(image, fract(vec2(fract((st.s-t)*repeat), st.t)));
-            //     material.diffuse = marsImageColor.rgb;
-            //     material.alpha = marsImageColor.a;
-            // }
-        
-            return material;
+        source: `czm_material czm_getMaterial(czm_materialInput materialInput)\n\
+        {\n\
+            czm_material material = czm_getDefaultMaterial(materialInput);\n\
+            vec2 st = materialInput.st;\n\
+            vec4 colorImage = texture2D(image, vec2(fract(st.s - time), st.t));\n\
+            material.alpha = colorImage.a;\n\
+            material.diffuse = colorImage.rgb;\n\
+            return material;\n\
         }`,
     }
 }

@@ -31,3 +31,15 @@ https://segmentfault.com/a/1190000040320599?sort=newest 流线
 * https://www.cnblogs.com/fuckgiser/p/5706842.html  Cesium教程系列汇总 
 * https://juejin.cn/column/7094886426357497869 掘金-各种图形绘制
 * http://www.pangbo15.cn/search/index/tag/id/34.html
+
+## github
+* https://github.com/YanzheZhang/Cesium.HPUZYZ.Demo 案例集
+* https://github.com/zouyaoji/vue-cesium-demo
+
+# 备用依赖
+Cesium
+turf
+shpjs
+proj4js
+text-encoding
+geojson-topojson
