@@ -49,6 +49,7 @@ ImportJs(`${path}/Tripartite/geojson/geojson.min.js`);
  */
 ImportJs(`${path}/Map/Baidu/module/BaiDuImageryProvider.js`);//百度地图依赖
 createStyle(`${path}/iconfont/iconfont.css`)//矢量图标
+ImportJs(`${path}/EntityUtils/PolylineVolume.js`);//多线段柱体形态
 /**
  * 依赖 End
  */
