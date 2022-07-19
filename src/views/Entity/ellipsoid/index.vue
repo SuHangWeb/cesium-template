@@ -1,11 +1,12 @@
 <template>
   <div class="container">
     <div id="cesiumContainer"></div>
-    <button class="start" @click="start">start</button>
+    <el-button type="primary" plain class="start" @click="start">绘制</el-button>
   </div>
 </template>
 
 <script>
+import code from "./module/highlight";
 export default {
   data() {
     return {
@@ -14,6 +15,9 @@ export default {
       centerPoint: null,//中心点
       ellipsoidGather: null,//采集的球对象
     };
+  },
+  created() {
+    this.$store.dispatch("highlight/set_code", code);
   },
   mounted() {
     this.init();
@@ -77,7 +81,7 @@ export default {
           position: cartesian,
           name: '轨迹球体',
           ellipsoid: {
-            maximumCone: Cesium.Math.PI_OVER_TWO, 
+            maximumCone: Cesium.Math.PI_OVER_TWO,
             radii: new Cesium.Cartesian3(0.1, 0.1, 0.1),
             material: Cesium.Color.GREENYELLOW.withAlpha(0.5)
           }

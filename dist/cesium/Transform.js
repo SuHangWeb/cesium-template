@@ -2,14 +2,14 @@
 /**
  * 转换操作
  * 使用方法如下 
-   const _Transform = new Transform(cenium上下文,场景viewer)
+   const _Transform = new Transform(Cesium上下文,场景viewer)
     _Transform.方法函数(根据当前方法所需参数进行传递)
     
     方法目录如下：
 
     方法名称 | 概要
     --- | ---
-    formCssColorString | 十六进制颜色 转换成 cesium所需要的颜色
+    fromCssColorString | 十六进制颜色 转换成 cesium所需要的颜色
     getPosition | 位置拾取器 （经度、纬度、相机高度）
     terrainProviderHeight | 坐标位置获取地形高度
     getSeibelCurve | 流动曲线/赛贝尔曲线

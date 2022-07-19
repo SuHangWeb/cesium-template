@@ -13,6 +13,7 @@
 <script>
 // https://blog.csdn.net/qq_41400354/article/details/124631590?spm=1001.2101.3001.6650.6&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-6-124631590-blog-123121883.pc_relevant_multi_platform_whitelistv1&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Edefault-6-124631590-blog-123121883.pc_relevant_multi_platform_whitelistv1&utm_relevant_index=10
 // 扩展：https://www.freesion.com/article/14861291934/
+import code from "./module/highlight";
 export default {
   data() {
     return {
@@ -20,6 +21,9 @@ export default {
       handler: null,
       moveActive: false,
     };
+  },
+  created() {
+    this.$store.dispatch("highlight/set_code", code);
   },
   mounted() {
     this.init();
@@ -77,7 +81,7 @@ export default {
           (slider.offsetLeft + relativeOffset) / container?.offsetWidth;
         slider.style.left = `${100.0 * splitPosition}%`;
         line.style.left = `${100.0 * splitPosition}%`;
-        
+
         this.viewer.scene.splitPosition = splitPosition; // 设置卷帘左右分区范围(0-1)之间
       };
 
@@ -104,14 +108,17 @@ export default {
   
 <style scoped lang="scss">
 $color: #409eff;
+
 .container {
   width: 100%;
   height: 100%;
   position: relative;
+
   #cesiumContainer {
     width: 100%;
     height: 100%;
   }
+
   .slider-view {
     .slider-line {
       position: absolute;
@@ -124,6 +131,7 @@ $color: #409eff;
       z-index: 2;
       pointer-events: none;
     }
+
     .slider {
       width: 40px;
       height: 40px;
@@ -139,6 +147,7 @@ $color: #409eff;
       color: #fff;
       z-index: 3;
       font-size: 24px;
+
       &:hover {
         cursor: ew-resize;
       }

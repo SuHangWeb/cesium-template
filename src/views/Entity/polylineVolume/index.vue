@@ -10,6 +10,7 @@ import { v4 as uuidv4 } from "uuid";
 import Material from "@/common/cesium/Materials/index.js";
 import PolylineVolume from "@/common/cesium/EntityUtils/PolylineVolume"
 import material_polylineVolume_flow from "./module/material/flow";
+import code from "./module/highlight";
 // https://blog.csdn.net/qq_35105689/article/details/122583842 空心
 //http://www.pangbo15.cn/gis/560.html 流动
 //Primitive 方式加载： https://blog.csdn.net/qq_35105689/article/details/122583842?utm_medium=distribute.pc_aggpage_search_result.none-task-blog-2~aggregatepage~first_rank_ecpm_v1~rank_v31_ecpm-3-122583842-null-null.pc_agg_new_rank&utm_term=cesium%20%E7%AE%A1%E7%BA%BF&spm=1000.2123.3001.4430
@@ -52,6 +53,9 @@ export default {
         123.44247395262316, 41.81323100140572, 0, 123.44166813844917, 41.817612126910596, 0, 123.44849194333796, 41.81749127684859, 0
       ],
     };
+  },
+  created() {
+    this.$store.dispatch("highlight/set_code", code);
   },
   mounted() {
     this.init();
