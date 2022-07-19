@@ -4,7 +4,7 @@
 export default (Cesium) => {
     return {
         cesiumName: "material_polylineVolume_flow",
-        image: process.env.VUE_APP_PUBLIC_URL + "/Vue/Entity/polylineVolume/flow-line2.png",
+        image: process.env.VUE_APP_PUBLIC_URL + "/Vue/Entity/polylineVolume/flow-line3.png",
         // image: process.env.VUE_APP_PUBLIC_URL + "/Vue/Entity/polylineVolume/line3.png",
         color: new Cesium.Color(1.0, 0.0, 0.0, 0.5),
         duration: 2000,

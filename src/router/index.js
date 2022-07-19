@@ -184,6 +184,12 @@ export const constantRoutes = [
         component: () => import('@/views/Entity/polylineVolume'),
         meta: { title: '管道', icon: 'el-icon-paperclip', highlight: true }
       },
+      {
+        path: 'ellipsoid',
+        name: 'Ellipsoid',
+        component: () => import('@/views/Entity/ellipsoid'),
+        meta: { title: '半球体', icon: 'el-icon-orange', highlight: true }
+      },
     ]
   },
 

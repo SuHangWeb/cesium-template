@@ -53,6 +53,18 @@ export const doc = [
     },
 
     {
+        title: "Cesium API使用指南",
+        link: "https://zhuanlan.zhihu.com/p/80904975",
+        externalLinks: true
+    },
+
+    {
+        title: "Cesium资料大全",
+        link: "https://zhuanlan.zhihu.com/p/34217817",
+        externalLinks: true
+    },
+
+    {
         title: "内链测试空白页-开发使用",
         link: "/test/blankPage",
         innerChain: true,
@@ -125,6 +137,11 @@ export const effect = [
     {
         title: "cv3案例集",
         link: "http://cv3.zhengqj.cc/",
+        externalLinks: true
+    },
+    {
+        title: "Cesium map实例",
+        link: "http://api.rivermap.cn/cesium/rivermap/map.html",
         externalLinks: true
     }
 ]

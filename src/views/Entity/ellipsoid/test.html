@@ -1,0 +1,260 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <script src="Build/CesiumUnminified/Cesium.js"></script>
+    <link rel="stylesheet" href="Build/Cesium/Widgets/widgets.css">
+    <script src="initMap.js"></script>
+    <script>
+      //在initMap.js进行初始化
+      var viewer=null;
+      var gatherPosition=[];//采集的点信息
+      var floatingPoint=null;//移动点
+      var drawHandler=null;//画事件
+      var layerId="ellipseLayer";
+	  var ellipseGather=null;
+
+	function load(){
+		//初始化地图
+		initMap();
+		//定位
+        var obj = {lng:118.0850887298584, lat: 24.439001083374023,eyeHeight:10000,pitch:-50,heading:0.0,time:1};
+        viewerFlyToLonLat(obj);
+	}
+
+      function gather(){
+		  var tyl=document.getElementById("tyl").value;
+		
+		if(tyl<1){
+			alert("椭圆率必须大于1");
+			return;
+		}
+
+        gatherPosition=[];
+        floatingPoint=null;
+        clearPlot();
+        drawHandler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
+        drawHandler.setInputAction(function (event) {
+          var position = event.position;
+          if (!Cesium.defined(position)) {
+            return;
+          }
+          var ray = viewer.camera.getPickRay(position);
+          if (!Cesium.defined(ray)) {
+            return;
+          }
+          var cartesian = viewer.scene.globe.pick(ray, viewer.scene);
+          if (!Cesium.defined(cartesian)) {
+            return;
+          }
+          //console.log("点击地图采集的点：",cartesian);
+          var num = gatherPosition.length;
+          if (num == 0) {
+			//默认生成半径为0.1米的圆。
+			ellipseGather=viewer.entities.add({
+			  position: cartesian,
+			  ellipse: {
+				semiMinorAxis: 0.1,//椭圆短轴（单位米）
+				semiMajorAxis: 0.1,//椭圆长轴（单位米）
+				material: Cesium.Color.GREENYELLOW.withAlpha(0.5),
+				outline:false,
+				outlineColor: Cesium.Color.WHITE,
+				outlineWidth: 3
+			  },
+			});
+
+            gatherPosition.push(cartesian);
+            floatingPoint = createPoint(cartesian, -1);
+            //showRegion2Map();
+          }
+          gatherPosition.push(cartesian);
+          var oid = gatherPosition.length - 2;
+          createPoint(cartesian, oid);
+          if (num > 1) {
+            gatherPosition.pop();
+            viewer.entities.remove(floatingPoint);
+            console.log("采集点gatherPosition：",gatherPosition);
+            //去掉事件
+            if(drawHandler){
+              drawHandler.destroy();
+              drawHandler=null;
+            }
+            //删除关键点
+            clearKeyPoint();
+			
+          }
+        }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+
+        drawHandler.setInputAction(function (event) {
+          var position = event.endPosition;
+          if (!Cesium.defined(position)) {
+            return;
+          }
+          var ray = viewer.camera.getPickRay(position);
+          if (!Cesium.defined(ray)) {
+            return;
+          }
+          var cartesian = viewer.scene.globe.pick(ray, viewer.scene);
+          if (!Cesium.defined(cartesian)) {
+            return;
+          }
+          if(floatingPoint==null){
+            return;
+          }
+          floatingPoint.position.setValue(cartesian);
+          gatherPosition.pop();
+          gatherPosition.push(cartesian);
+		  //显示椭圆
+		  showRegion2Map();
+          //console.log("gatherPosition",gatherPosition);
+        }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
+      }
+
+      //创建关键点
+      function createPoint(cartesian, oid) {
+        var point = viewer.entities.add({
+          position: cartesian,
+          billboard: {
+            image: "./images/gatherPoint.png",
+            eyeOffset: new Cesium.ConstantProperty(new Cesium.Cartesian3(0, 0, -500)),
+            heightReference: Cesium.HeightReference.CLAMP_TO_GROUND
+          }
+        });
+        point.oid = oid;
+        point.layerId = layerId;
+        point.flag = "keypoint";
+        return point;
+      };
+
+      function showRegion2Map() {
+
+		  if(gatherPosition.length<2){
+			  return;
+		  }
+		console.log("gatherPosition",gatherPosition);
+		console.log("圆心：",gatherPosition[0]);
+		console.log("移动点：",gatherPosition[1]);
+
+		//计算移动点与中心点的距离（单位米）
+        var centerTemp = viewer.scene.globe.ellipsoid.cartesianToCartographic(gatherPosition[0]);
+        var radiusTemp = viewer.scene.globe.ellipsoid.cartesianToCartographic(gatherPosition[1]);
+        var geodesic = new Cesium.EllipsoidGeodesic();
+        geodesic.setEndPoints(centerTemp, radiusTemp);
+        var radius = geodesic.surfaceDistance;
+		console.log("半径为：",radius);
+
+		//如果半径小于0,则不更新圆信息
+        if(radius<=0){
+          return;
+        }
+		 var tyl=document.getElementById("tyl").value;
+
+        ellipseGather.ellipse.semiMinorAxis=new Cesium.CallbackProperty(function (time,result){
+          return radius/tyl;
+        },false);
+        ellipseGather.ellipse.semiMajorAxis=new Cesium.CallbackProperty(function (time,result){
+          return radius;
+        },false);
+
+		var rotation=getHeading(gatherPosition[0],gatherPosition[1]);
+		//console.log("rotation",Cesium.Math.toDegrees(rotation));
+
+		ellipseGather.ellipse.rotation=new Cesium.CallbackProperty(function (time,result){
+          return Cesium.Math.toRadians(90-Cesium.Math.toDegrees(rotation))
+        },false);
+
+    
+        //var entity = viewer.entities.add(bData);
+        //entity.layerId = layerId;
+        //entity.valueFlag="value";
+      }
+
+	  // 根据两个坐标点,获取Heading(朝向)
+	function getHeading(pointA, pointB) {
+		//建立以点A为原点，X轴为east,Y轴为north,Z轴朝上的坐标系
+		const transform = Cesium.Transforms.eastNorthUpToFixedFrame(pointA);
+		//向量AB
+		const positionvector = Cesium.Cartesian3.subtract(pointB, pointA, new Cesium.Cartesian3());
+		//因transform是将A为原点的eastNorthUp坐标系中的点转换到世界坐标系的矩阵
+		//AB为世界坐标中的向量
+		//因此将AB向量转换为A原点坐标系中的向量，需乘以transform的逆矩阵。
+		const vector = Cesium.Matrix4.multiplyByPointAsVector(Cesium.Matrix4.inverse(transform, new Cesium.Matrix4()), positionvector, new Cesium.Cartesian3());
+		//归一化
+		const direction = Cesium.Cartesian3.normalize(vector, new Cesium.Cartesian3());
+		//heading
+		const heading = Math.atan2(direction.y, direction.x) - Cesium.Math.PI_OVER_TWO;
+		return Cesium.Math.TWO_PI - Cesium.Math.zeroToTwoPi(heading);
+	}
+      /**
+       * 判断两点是否一致
+       */
+      function isSimpleXYZ(p1, p2) {
+        if (p1.x == p2.x && p1.y == p2.y && p1.z == p2.z) {
+          return true;
+        }
+        return false;
+      }
+      /**
+       * 笛卡尔坐标转经纬度坐标
+       */
+      function getLonLat(cartesian) {
+        var cartographic =  viewer.scene.globe.ellipsoid.cartesianToCartographic(cartesian);
+        cartographic.height = viewer.scene.globe.getHeight(cartographic);
+        var pos = {
+          lon: cartographic.longitude,
+          lat: cartographic.latitude,
+          alt: cartographic.height
+        };
+        pos.lon = Cesium.Math.toDegrees(pos.lon);
+        pos.lat = Cesium.Math.toDegrees(pos.lat);
+        return pos;
+      }
+
+
+      /**
+       * 删除直线箭头
+       */
+      function clearPlot(){
+        var entityList = viewer.entities.values;
+        if (entityList == null || entityList.length < 1){
+          return;
+        }
+        for (var i = 0; i < entityList.length; i++) {
+          var entity = entityList[i];
+          if (entity.layerId == layerId) {
+            viewer.entities.remove(entity);
+            i--;
+          }
+        }
+      }
+
+      /**
+       * 删除关键点
+       */
+      function clearKeyPoint(){
+        var entityList = viewer.entities.values;
+        if (entityList == null || entityList.length < 1){
+          return;
+        }
+        for (var i = 0; i < entityList.length; i++) {
+          var entity = entityList[i];
+          if(entity.flag=="keypoint"){
+            viewer.entities.remove(entity);
+            i--;
+          }
+        }
+      }
+     
+        
+    </script>
+</head>
+<body onload="load()">
+<input type="button" value="椭圆采集" onclick="gather()"  style="position:absolute;left:50px;top:50px;background: blue;color:white;z-index: 9999;font-size: 24px"/>
+
+<div style="position:absolute;left:50px;top:100px;z-index:9999;font-size:22px;color:blue;font-weight:bold">
+		椭圆率（长轴/短轴）:<input type="text" id="tyl" style="width:50px" value="2">
+	</div>
+
+<div id="map" style='z-index:100;position: absolute;top: 0; bottom: 0;right: 0;left: 0;'></div>
+</body>
+</html>
+
