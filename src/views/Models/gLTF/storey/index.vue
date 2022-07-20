@@ -177,10 +177,40 @@ export default {
       this.viewer.flyTo(this.EntityArr);
     },
     /**
+     * @description 将笛卡尔坐标系转成经纬度高程
+     * @param {Object} cartesian 笛卡尔坐标系对象 {x, y, z}
+     * @returns 返回经纬度高程对象
+     */
+    cartesian3TolngLatAlt(cartesian) {
+      const Cesium = this.cesium;
+      if (!cartesian || Object.keys(cartesian).length !== 3) {
+        throw new Error('请传入合法的cartesian对象 {x, y, z}')
+      }
+      const cartesian3 = new Cesium.Cartesian3(cartesian.x, cartesian.y, cartesian.z);
+      const cartographic = Cesium.Cartographic.fromCartesian(cartesian3);
+      const lat = Cesium.Math.toDegrees(cartographic.latitude);
+      const lng = Cesium.Math.toDegrees(cartographic.longitude);
+      const height = Math.round(cartographic.height)
+      return [lng, lat, height]
+    },
+    /**
      * 整体控制
      */
     wholeChange(e) {
-      console.log(e)
+      const Cesium = this.cesium;
+      for (let i = 0; i < this.EntityArr.length; i++) {
+        const item = this.EntityArr[i]
+        if (e === 1) {
+          // console.log(this.cartesian3TolngLatAlt(item.position._value))
+          const position = this.cartesian3TolngLatAlt(item.position._value)
+          // item.position._value
+          item.position = new Cesium.CallbackProperty(() => {
+            return Cesium.Cartesian3.fromDegrees(
+              position[0], position[1], position[2] * 2
+            )
+          }, false);
+        }
+      }
     },
     /**
      * 显示指定
