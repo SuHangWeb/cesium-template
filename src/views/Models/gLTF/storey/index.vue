@@ -201,14 +201,32 @@ export default {
       for (let i = 0; i < this.EntityArr.length; i++) {
         const item = this.EntityArr[i]
         if (e === 1) {
-          // console.log(this.cartesian3TolngLatAlt(item.position._value))
           const position = this.cartesian3TolngLatAlt(item.position._value)
-          // item.position._value
-          item.position = new Cesium.CallbackProperty(() => {
-            return Cesium.Cartesian3.fromDegrees(
-              position[0], position[1], position[2] * 2
-            )
-          }, false);
+          item._position._value = Cesium.Cartesian3.fromDegrees(
+            position[0], position[1], position[2] * 2
+          )
+          // item._position = new Cesium.CallbackProperty((time) => {
+          //   if (position[2] >= position[2] * 2) {
+          //     return Cesium.Cartesian3.fromDegrees(
+          //       position[0], position[1], position[2]
+          //     )
+          //   } else {
+          //     return Cesium.Cartesian3.fromDegrees(
+          //       position[0], position[1], position[2] * 2
+          //     )
+          //   }
+          // }, false);
+        }
+        if (e === 2 || e === 3) {
+          const position = this.cartesian3TolngLatAlt(item.position._value)
+          item.position._value = Cesium.Cartesian3.fromDegrees(
+            position[0], position[1], 3 * i
+          )
+          // item.position._value = new Cesium.CallbackProperty((time) => {
+          //   return Cesium.Cartesian3.fromDegrees(
+          //     position[0], position[1], 3 * i
+          //   )
+          // }, false);
         }
       }
     },
@@ -216,7 +234,18 @@ export default {
      * 显示指定
      */
     appointChange(e) {
-      console.log(e)
+      for (let i = 0; i < this.EntityArr.length; i++) {
+        const item = this.EntityArr[i]
+        if (e === 0) {
+          item.show = true
+        } else {
+          if (i < e) {
+            item.show = true
+          } else {
+            item.show = false
+          }
+        }
+      }
     }
   },
 };
