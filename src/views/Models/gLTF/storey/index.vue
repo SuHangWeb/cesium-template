@@ -69,7 +69,7 @@ export default {
             position: Cesium.Cartesian3.fromDegrees(
               123.42949456471793, 41.81741540043599, _height
             ),
-            uri: "/Vue/Models/gLTF/storey/floor.glb",
+            uri: process.env.VUE_APP_PUBLIC_URL + "/Vue/Models/gLTF/storey/floor.glb",
             heightReference: Cesium.HeightReference.RELATIVE_TO_GROUND,
           })
           EntityModelArr.push(EntityModel)
@@ -81,7 +81,7 @@ export default {
           position: Cesium.Cartesian3.fromDegrees(
             123.42949456471793, 41.81741540043599, len * height
           ),
-          uri: "/Vue/Models/gLTF/storey/top.glb",
+          uri: process.env.VUE_APP_PUBLIC_URL + "/Vue/Models/gLTF/storey/top.glb",
           heightReference: Cesium.HeightReference.RELATIVE_TO_GROUND,
         })
         // 加载楼顶 end
