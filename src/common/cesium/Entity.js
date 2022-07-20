@@ -431,9 +431,9 @@ class Entity {
                 uri: params.uri || "",
                 //指定统一的线性比例
                 scale: params.scale || 1.0,
-                //指定模型的最小最小像素大小，而不考虑缩放。
+                //指定模型的最小像素大小，而不考虑缩放。
                 minimumPixelSize: params.minimumPixelSize || 0.0,
-                //指定最大比例模型的大小
+                //指定最大比例模型的大小 Number
                 maximumScale: params.maximumScale || undefined,
                 //确定在加载模型后纹理是否可以继续流入
                 incrementallyLoadTextures: params.incrementallyLoadTextures || true,

@@ -298,6 +298,31 @@ export const constantRoutes = [
 
 
   {
+    path: '/models',
+    component: Layout,
+    redirect: '/Models/gLTF',
+    name: 'Models',
+    meta: { title: '模型', icon: 'el-icon-cpu', highlight: true },
+    children: [
+      {
+        path: 'gLTF',
+        name: 'gLTF',
+        component: () => import('@/views/Models/gLTF/storey'),
+        meta: { title: 'gLTF', icon: 'el-icon-cpu', highlight: true },
+        children: [
+          {
+            path: 'district',
+            component: () => import('@/views/Models/gLTF/storey'),
+            name: 'District',
+            meta: { title: '楼栋分层控制', icon: 'el-icon-school', highlight: true }
+          },
+        ]
+      },
+    ]
+  },
+
+
+  {
     path: '/analysis',
     component: Layout,
     redirect: '/Analysis/RollerShutter',
