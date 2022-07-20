@@ -1,7 +1,28 @@
 <template>
   <div class="container">
     <div id="cesiumContainer"></div>
-    <div class></div>
+    <el-card class="operation-panel">
+      <div slot="header" class="operation-header clearfix">
+        <span>楼层分解</span>
+      </div>
+      <div class="operation-content">
+        <el-form ref="form" :model="form" label-width="80px" size="mini">
+          <el-form-item label="整体控制">
+            <el-radio-group v-model="form.whole" @change="wholeChange">
+              <el-radio-button :label="item.value" v-for="(item, index) in wholeArr" :key="index">{{ item.label }}
+              </el-radio-button>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item label="显示指定">
+            <el-radio-group v-model="form.appoint" @change="appointChange">
+              <el-radio class="appoint-radio" border :label="item.value" v-for="(item, index) in appointArr"
+                :key="index">{{ item.label }}
+              </el-radio>
+            </el-radio-group>
+          </el-form-item>
+        </el-form>
+      </div>
+    </el-card>
   </div>
 </template>
  
@@ -16,6 +37,67 @@ export default {
     return {
       viewer: null,
       _Entity: null,
+      wholeArr: [
+        {
+          value: 1,
+          label: "展开"
+        },
+        {
+          value: 2,
+          label: "合并"
+        },
+        {
+          value: 3,
+          label: "还原"
+        }
+      ],
+      appointArr: [
+        {
+          value: 1,
+          label: "一楼"
+        },
+        {
+          value: 2,
+          label: "二楼"
+        },
+        {
+          value: 3,
+          label: "三楼"
+        },
+        {
+          value: 4,
+          label: "四楼"
+        },
+        {
+          value: 5,
+          label: "五楼"
+        },
+        {
+          value: 6,
+          label: "六楼"
+        },
+        {
+          value: 7,
+          label: "七楼"
+        },
+        {
+          value: 8,
+          label: "八楼"
+        },
+        {
+          value: 9,
+          label: "九楼"
+        },
+        {
+          value: 0,
+          label: "顶楼"
+        },
+      ],
+      form: {
+        whole: "",
+        appoint: ""
+      },
+      EntityArr: []
     };
   },
   mounted() {
@@ -57,7 +139,9 @@ export default {
     start() {
       const Cesium = this.cesium;
       const _this = this
-
+      /**
+       * 初始化模型
+       */
       function floorInit(len, height) {
         let EntityModelArr = []
         let _height = 0
@@ -88,8 +172,22 @@ export default {
         return [...EntityModelArr, EntityModelTop]
       }
 
-      this.viewer.flyTo(floorInit(9, 3));
+      this.EntityArr = floorInit(9, 3)
+
+      this.viewer.flyTo(this.EntityArr);
     },
+    /**
+     * 整体控制
+     */
+    wholeChange(e) {
+      console.log(e)
+    },
+    /**
+     * 显示指定
+     */
+    appointChange(e) {
+      console.log(e)
+    }
   },
 };
 </script>
@@ -102,6 +200,18 @@ export default {
   #cesiumContainer {
     width: 100%;
     height: 100%;
+  }
+
+  .operation-panel {
+    width: 360px;
+    position: fixed;
+    top: 60px;
+    right: 10px;
+    z-index: 9;
+
+    .appoint-radio {
+      margin: 0 5px 5px 0;
+    }
   }
 }
 </style>
