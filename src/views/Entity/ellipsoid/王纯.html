@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title> sesium Demo </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script src="../../src/Build/Cesium/Cesium.js"></script>
+    <script src="../../src/js/gcoord.js"></script>
+    <link href="../../src/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            overflow: hidden;
+        }
+
+        #cesiumContainer {
+            width: 100vw;
+            height: 100vh;
+        }
+
+        /* 下面是自己的 */
+
+        /*
+        半圆球体start
+        */
+        .ellipsoid {
+            position: absolute;
+            right: 10px;
+            top: 100px;
+            color: #eee;
+        }
+
+        .title-b {
+            font-size: 16px;
+            color: #eee;
+            line-height: 35px;
+            text-align: center;
+            border: 1px solid #dcdfe6;
+            border-radius: 4px;
+        }
+
+        .ellipsoid-background {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 6px;
+            /* 边框圆角 */
+            width: 240px;
+            line-height: 25px;
+        }
+
+        .textMap-popup-close-button:hover {
+            opacity: 0.8
+        }
+
+        .form-item-button {
+            display: flex;
+            /*弹性布局，用来为盒状模型提供最大的灵活性*/
+            align-items: center;
+            /*指定容器内横轴方向的对齐方式*/
+            justify-content: space-between;
+            /*项目位于各行之间留有空白的容器内*/
+            border-radius: 4px;
+            border: 1px solid #dcdfe6;
+            padding: 0 15px;
+            margin-top: 3px;
+            line-height: 20px;
+        }
+
+        .form-item-b {
+            display: flex;
+            /*弹性布局，用来为盒状模型提供最大的灵活性*/
+            align-items: center;
+            /*指定容器内横轴方向的对齐方式*/
+            justify-content: space-between;
+            /*项目位于各行之间留有空白的容器内*/
+            border-radius: 4px;
+            border: 1px solid #dcdfe6;
+            padding: 0 15px;
+            margin-top: 3px;
+            line-height: 22px;
+        }
+
+        .form-item-button .form-item-b-one {
+            margin-left: 40px;
+            background: rgb(52, 87, 139);
+            color: #eee;
+        }
+
+        .form-item-button .form-item-b-two {
+            margin-right: 40px;
+            background: rgb(52, 87, 139);
+            color: #eee;
+        }
+
+        .form-item-value-b .range-b {
+            margin-right: 20px;
+            width: auto;
+            /*appearance: auto;改变控件的外观*/
+            /*cursor: pointer; /*鼠标的箭头变成小手*/
+            margin: 2px;
+        }
+
+        .form-item-value-b .number-b {
+            float: right;
+            width: 90px;
+            color: #eee;
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.2);
+            border: 1px solid #6e8bce;
+        }
+
+        .form-item-b .form-item-value-b .form-item-color-b {
+            width: 30px;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .form-item-b .form-item-value-b .form-item-line {
+            width: 50px;
+            text-align: center;
+        }
+
+        .form-item-b .form-item-label-b {
+            font-size: 14px;
+            color: #eee;
+        }
+
+        .form-item-b .form-item-value-b {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            margin-left: 20px;
+            width: 50px;
+        }
+
+        /*
+        半圆球体end
+        */
+    </style>
+</head>
+
+<body id="box">
+    <div id="cesiumContainer"></div>
+    <!-- 下面是自己的html -->
+    <div class="ellipsoid">
+        <div class="ellipsoid-background">
+            <div class="title-b"><span>编辑栏</span></div>
+            <div class="form-item-b">
+                <div class="form-item-label-b"><span>颜&emsp;&emsp;色</span></div>
+                <div class="form-item-value-b">
+                    <input type="color" id="ellipsoid-color" value="#409EFF" class="form-item-color-b" />
+                </div>
+            </div>
+            <div class="form-item-b">
+                <div class="form-item-label-b"><span>轮 廓 线</span></div>
+                <div class="form-item-value-b">
+                    <select id="ww-line" class="form-item-line">
+                        <option value="有">有</option>
+                        <option value="无">无</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-item-b">
+                <div class="form-item-label-b"><span>透&emsp;&emsp;明</span></div>
+                <div class="form-item-value-b"><input class="number-b" type="number" min="0.0" max="1.0" value="0.5"
+                        step="0.1"></input></div>
+            </div>
+            <div class="form-item-button">
+                <button class="form-item-b-one" type="button" onclick="EllipsoidMapDrawStart()">绘制球体</button>
+                <button class="form-item-b-two" type="button" onclick="EllipsoidMapDrawEdit()">编辑球体</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        // 初始化 start
+        function initCesium() {
+            const CesiumViewer = new Cesium.Viewer('cesiumContainer', {
+                //加载地图
+                imageryProvider: new Cesium.UrlTemplateImageryProvider({
+                    url: "http://map.geoq.cn/ArcGIS/rest/services/ChinaOnlineStreetPurplishBlue/MapServer/tile/{z}/{y}/{x}",
+                }),
+                //加载地形
+                // terrainProvider: new Cesium.CesiumTerrainProvider({
+                //     url: "http://data.marsgis.cn/terrain",
+                // }),
+                //    infoBox:false,
+                //    shouldAnimate: true,
+                //    geocoder: false,
+                //    homeButton: false,
+                //    sceneModePicker: false,
+                //    baseLayerPicker: false,
+                //    //baseLayerPicker:false,
+                //    //animation:false,
+                //    //creditContainer:"credit"
+                //    timeline: true,
+                //    vrButton: false
+                infoBox: false,
+                selectionIndicator: false,
+                navigation: false,
+                animation: false,
+                timeline: false,
+                baseLayerPicker: false,
+                geocoder: false,
+                homeButton: false,
+                sceneModePicker: false,
+                navigationHelpButton: false,
+                shouldAnimate: false,
+            })
+            //是否启动深度监听
+            CesiumViewer.scene.globe.depthTestAgainstTerrain = false;
+            return CesiumViewer
+        }
+        var viewer = initCesium()
+        // 初始化 end
+        ///////////////////////////以下可以自行发挥
+        // viewer
+        // Cesium
+        /*
+        半圆球体功能start
+        */
+        var ellipsoidMapvariable = {
+            viewer: null,
+            handler: null,//创建监听的handler 
+            centerPoint: null,//中心点
+            ellipsoidGather: null,//采集的球对象
+            canvasDom: null,//鼠标变加号 
+            gon: null,//当前编辑事件，用户保存实体的对象 
+            isEditting: false,  //判断是否处于编辑状态 
+            pointsId: [], //编辑点集合  
+            currentPoint: null,//当前编辑点
+            twoPoint:null//边点
+        }
+
+        function getTime (){
+            return new Date().getTime()
+        }
+
+        Ellipsoid()
+
+        //添加操作面板
+        function Ellipsoid() {
+            ellipsoidMapvariable.canvasDom = document.getElementById('cesiumContainer')
+
+            ellipsoidMapvariable.handler = new Cesium.ScreenSpaceEventHandler(
+                viewer.scene.canvas   //用于为其创建场景的HTML canvas元素
+            );
+
+            //相机
+            viewer.camera.setView({
+                //setView是直接跳到 flyTo// 是镜头飞行到  网速不好或者电脑配置不高 还是不要fly了吧
+                destination: Cesium.Cartesian3.fromDegrees(
+                    123.43382736814452,
+                    41.811201240193164,
+                    3000
+                ), //经纬度坐标转换为 笛卡尔坐标(世界坐标)
+                orientation: {
+                    heading: Cesium.Math.toRadians(0.0), // east, default value is 0.0 (north) //东西南北朝向
+                    pitch: Cesium.Math.toRadians(-90), // default value (looking down)  //俯视仰视视觉
+                    roll: 0.0, // default value
+                },
+                duration: 3, //3秒到达战场
+            });
+        }
+
+
+        //开始绘制椭球
+        function EllipsoidMapDrawStart() {
+            ellipsoidMapvariable.ellipsoidGather = null;
+            //鼠标变成加号
+            // document.getElementById('cesiumContainer').style.cursor = "crosshair"
+            ellipsoidMapvariable.canvasDom.style.cursor = "crosshair";
+            //进制地图移动
+            viewer.scene.screenSpaceCameraController.enableRotate = false;//如果为true，则允许用户旋转世界以平移用户的位置。该标志仅适用于2D和3D
+            viewer.scene.screenSpaceCameraController.enableZoom = false;//如果为true，则允许用户放大和缩小。如果为false，则将相机锁定到距椭球的当前距离。
+            ellipsoidMapvariable.handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
+            //鼠标点击事件 Start
+            ellipsoidMapvariable.handler.setInputAction((event) => {
+                //获取加载地形后对应的经纬度和高程：地标坐标
+                var ray = viewer.camera.getPickRay(event.position);
+                var cartesian = viewer.scene.globe.pick(ray, viewer.scene);
+                // console.log("cartesian:", cartesian);
+                if (!Cesium.defined(cartesian)) {
+                    return;
+                }
+                //初始点
+                ellipsoidMapvariable.centerPoint = viewer.entities.add({
+                    name: "centerPoint",
+                    position: cartesian,
+                    point: {
+                        color: Cesium.Color.CHARTREUSE.withAlpha(1),
+                        pixelSize: 10,
+                        heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
+                        outlineColor: Cesium.Color.WHITE,
+                        outlineWidth: 1
+                    }
+                });
+                //绘制椭球
+                ellipsoidMapvariable.ellipsoidGather = viewer.entities.add({
+                    position: cartesian,
+                    ellipsoid: {
+                        radii: new Cesium.Cartesian3(0.1, 0.1, 0.1),    //指定椭球的半径
+                        maximumCone: Cesium.Math.PI_OVER_TWO,     //椭球的最大圆锥角
+                        material: Cesium.Color.BLUE.withAlpha(0.5),  //材质   
+                        outline: true,   //轮廓线
+                    }
+                });
+                //ScreenSpaceEventType此枚举类型用于对鼠标事件进行分类:向下，向上，单击，双击，按住按钮时移动。
+                //LEFT_DOWN表示鼠标左键按下事件。
+            }, Cesium.ScreenSpaceEventType.LEFT_DOWN);
+            //鼠标点击事件 End
+
+            // 对鼠标移动事件的监听 Start
+            ellipsoidMapvariable.handler.setInputAction((event) => {
+                //判断已经存在初始位置
+                if (ellipsoidMapvariable.centerPoint == null || ellipsoidMapvariable.ellipsoidGather == null) {
+                    return;
+                }
+                //获取加载地形后对应的经纬度和高程：地标坐标
+                var ray = viewer.camera.getPickRay(event.endPosition);
+                var radiusCartesian = viewer.scene.globe.pick(ray, viewer.scene);
+                if (!radiusCartesian) {
+                    return;
+                }
+                var centerCartesian = ellipsoidMapvariable.centerPoint.position.getValue(Cesium.JulianDate.now());
+                //计算移动点与中心点的距离（单位米）
+                var centerTemp = viewer.scene.globe.ellipsoid.cartesianToCartographic(centerCartesian);
+                var radiusTemp = viewer.scene.globe.ellipsoid.cartesianToCartographic(radiusCartesian);
+                var geodesic = new Cesium.EllipsoidGeodesic();
+                geodesic.setEndPoints(centerTemp, radiusTemp);
+                var radius = geodesic.surfaceDistance;
+                //console.log("radius",radius);
+                //如果半径小于0,则不更新圆信息
+                if (radius <= 0) {
+                    return;
+                }
+                ellipsoidMapvariable.ellipsoidGather.ellipsoid.radii = new Cesium.CallbackProperty(function (time, result) {
+                    return new Cesium.Cartesian3(radius, radius, radius);
+                }, false);
+            }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
+            // 对鼠标移动事件的监听 End
+
+            // 对鼠标抬起事件的监听(结束点采集) Start
+            ellipsoidMapvariable.handler.setInputAction((event) => {
+                //鼠标变成默认
+                ellipsoidMapvariable.canvasDom.style.cursor = "default";
+                //恢复试图缩放功能
+                viewer.scene.screenSpaceCameraController.enableRotate = true;
+                viewer.scene.screenSpaceCameraController.enableZoom = true;
+                //移除地图鼠标点击事件
+                ellipsoidMapvariable.handler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOWN);
+                //移除地图鼠标移动事件
+                ellipsoidMapvariable.handler.removeInputAction(Cesium.ScreenSpaceEventType.MOUSE_MOVE);
+                //移除地图鼠标抬起事件
+                ellipsoidMapvariable.handler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_UP);
+                var ellipsoid = viewer.scene.globe.ellipsoid;
+                var cartographic = ellipsoid.cartesianToCartographic(ellipsoidMapvariable.centerPoint.position.getValue(Cesium.JulianDate.now()));
+                var lat = Cesium.Math.toDegrees(cartographic.latitude);
+                var lng = Cesium.Math.toDegrees(cartographic.longitude);
+                var height = cartographic.height;
+                console.log("圆中心点：经度", lng + ",纬度：" + lat + ",高度：" + height);
+                console.log("圆半径：", ellipsoidMapvariable.ellipsoidGather.ellipsoid.radii.getValue().x + "米");
+                ///如果圆半径小于0.5米则删除，防止出现默认为0.1米的被采集。该种情况则是用户取消圆采集
+                if (ellipsoidMapvariable.ellipsoidGather.ellipsoid.radii.getValue().x < 0.5) {
+                    viewer.entities.remove(ellipsoidMapvariable.ellipsoidGather);
+                    ellipsoidMapvariable.ellipsoidGather = null;
+                }
+                //清除圆中心点和半径点
+                viewer.entities.remove(ellipsoidMapvariable.centerPoint);
+                ellipsoidMapvariable.centerPoint = null;
+            }, Cesium.ScreenSpaceEventType.LEFT_UP);
+            // 对鼠标抬起事件的监听(结束点采集) End
+        }
+
+        //编辑椭球
+        function EllipsoidMapDrawEdit() {
+            ellipsoidMapvariable.handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
+            //是否进入编辑
+            var isEditting = false;
+            //鼠标变成小手
+            ellipsoidMapvariable.canvasDom.style.cursor = "pointer";
+            //去掉双击事件
+            viewer.cesiumWidget.screenSpaceEventHandler.removeInputAction(
+                Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK
+            );
+            /**
+             * @description 将笛卡尔坐标系转成经纬度高程
+             * @param {Object} cartesian 笛卡尔坐标系对象 {x, y, z}
+             * @returns 返回经纬度高程对象
+             */
+            function cartesian3TolngLatAlt(cartesian) {
+                if (!cartesian || Object.keys(cartesian).length !== 3) {
+                    throw new Error('请传入合法的cartesian对象 {x, y, z}')
+                }
+                const cartesian3 = new Cesium.Cartesian3(cartesian.x, cartesian.y, cartesian.z);
+                const cartographic = Cesium.Cartographic.fromCartesian(cartesian3);
+                const lat = Cesium.Math.toDegrees(cartographic.latitude);
+                const lng = Cesium.Math.toDegrees(cartographic.longitude);
+                return [lng, lat, cartographic.height]
+            }
+
+            //鼠标点击事件 Start
+            ellipsoidMapvariable.handler.setInputAction((event) => {
+                //console.log(event)
+                //获取屏幕坐标
+                const windowPosition = event.position;
+                const pickedObject = viewer.scene.pick(windowPosition);
+                console.log(ellipsoidMapvariable.ellipsoidGather)
+                // ellipsoidMapvariable.ellipsoidGather = null
+                //console.log(pickedObject);
+                if (Cesium.defined(pickedObject)) {
+                    const entity = pickedObject.id;
+                    // console.log(ellipsoidMapvariable.ellipsoidGather)
+                    console.log(entity)     
+                    if(!ellipsoidMapvariable.ellipsoidGather){
+                        ellipsoidMapvariable.ellipsoidGather = entity
+                    }
+                    // console.log(ellipsoidMapvariable.ellipsoidGather)
+                    //如果实体为椭球同时没有处于编辑状态，那么保存椭球的实体
+                    //console.log(isEditting)
+                    if (!isEditting) {
+                        ellipsoidMapvariable.gon = entity;
+                        const pick = viewer.scene.pick(event.position);
+                        if (pick) {
+                            //当前点击的球实体
+                            const $Entity = pick.id
+                            //球体的位置 笛卡尔3
+                            const EntityCartesian3 = $Entity.position.getValue()
+                            //球体的半径(米)
+                            const EntityRadii = $Entity._ellipsoid.radii.getValue().x
+                            var cartographic = Cesium.Cartographic.fromCartesian(EntityCartesian3);
+                            var lat = Cesium.Math.toDegrees(cartographic.latitude);
+                            var lng = Cesium.Math.toDegrees(cartographic.longitude);
+                            //生成中心编辑点
+                            ellipsoidMapvariable.centerPoint = viewer.entities.add({
+                                name: "ellipsoid_point",
+                                position: Cesium.Cartesian3.fromDegrees(lng, lat, EntityRadii),
+                                //position: Cesium.Cartesian3.fromDegrees(ellipsoidMapvariable.handler.lng,ellipsoidMapvariable.handler.lat,ellipsoidMapvariable.handler.height),  
+                                point: {
+                                    color: Cesium.Color.RED,
+                                    pixelSize: 10,
+                                    outlineColor: Cesium.Color.BLACK,
+                                    outlineWidth: 1
+                                }
+                            });
+                            ellipsoidMapvariable.centerPoint.flag = "centerPoint";
+                            ellipsoidMapvariable.pointsId.push(ellipsoidMapvariable.centerPoint.id);
+                            // console.log(cartesian3TolngLatAlt(EntityCartesian3))
+                            //生成边界点
+                            //console.log("半径/米", EntityRadii)
+                            const position2 = {
+                                x: EntityCartesian3.x,
+                                y: EntityCartesian3.y,
+                                z: EntityCartesian3.z
+                            }
+                            // console.log(position2)
+                            position2.x = position2.x - EntityRadii - (EntityRadii / 9)
+                            // console.log(position2)
+                            const position_two = cartesian3TolngLatAlt(position2)
+                            ellipsoidMapvariable.twoPoint = viewer.entities.add({
+                                id: getTime(),
+                                name: "ellipsoid_point",
+                                position: Cesium.Cartesian3.fromDegrees(position_two[0], position_two[1], 0),
+                                point: {
+                                    color: Cesium.Color.GREEN,
+                                    pixelSize: 10,
+                                    outlineColor: Cesium.Color.BLACK,
+                                    outlineWidth: 1,
+                                }
+                            });
+                            ellipsoidMapvariable.twoPoint.flag = "twoPoint";
+                            ellipsoidMapvariable.pointsId.push(ellipsoidMapvariable.twoPoint.id);
+                            //设置编辑状态为true
+                            isEditting = true;
+                            //禁止地球旋转和缩放，地球的旋转会对鼠标移动监听有影响，所以需要禁止
+                            viewer.scene.screenSpaceCameraController.enableRotate = false;
+                            viewer.scene.screenSpaceCameraController.enableZoom = false;
+                        }
+                    } else if (entity.name === "ellipsoid_point") {
+                        //如果实体为编辑点，那么设置当前编辑点为该点
+                        ellipsoidMapvariable.currentPoint = entity;
+                    }
+                }
+            }, Cesium.ScreenSpaceEventType.LEFT_DOWN);
+            //鼠标点击事件 End
+
+            //对鼠标移动事件的监听 Start
+            ellipsoidMapvariable.handler.setInputAction((event) => {
+                if (isEditting && ellipsoidMapvariable.currentPoint) {
+                    //获取加载地形后对应的经纬度和高程：地标坐标
+                    //  const ray = viewer.camera.getPickRay(event.endPosition);
+                    //  const cartesian = viewer.scene.globe.pick(ray, viewer.scene);
+                    //获取屏幕坐标，移动监听与点击有所不同，所以有起始位置和终点位置
+                    console.log(event);
+                    const windowPosition = event.endPosition;
+                    console.log(windowPosition);
+                    //将屏幕坐标转化为笛卡尔坐标
+                    const ellipsoid = viewer.scene.globe.ellipsoid;
+                    const cartesian = viewer.camera.pickEllipsoid(windowPosition, ellipsoid);
+                    console.log(cartesian)
+                    //如果点击到地球外，那么返回
+                    if (!cartesian) {
+                        return;
+                    }
+                    //更新编辑点的位置
+                    const pick = viewer.scene.pick(event.endPosition);
+                    if (pick) {
+                        //当前点击的球实体
+                        const $Entity = pick.id
+                        //球体的位置 笛卡尔3
+                        const EntityCartesian3 = $Entity.position.getValue();
+                        //球体的半径(米)
+                        if(!$Entity._ellipsoid){
+                            return
+                        }
+                        const EntityRadii = $Entity._ellipsoid.radii.getValue().x
+                        var cartographic = Cesium.Cartographic.fromCartesian(EntityCartesian3);
+                        var lat = Cesium.Math.toDegrees(cartographic.latitude);
+                        var lng = Cesium.Math.toDegrees(cartographic.longitude);
+                        ellipsoidMapvariable.centerPoint.position = Cesium.Cartesian3.fromDegrees(lng, lat, EntityRadii)
+                        const position2 = {
+                            x: EntityCartesian3.x,
+                            y: EntityCartesian3.y,
+                            z: EntityCartesian3.z
+                        }
+                        // console.log(position2)
+                        position2.x = position2.x - EntityRadii - (EntityRadii / 9)
+                        // console.log(position2)
+                        const position_two = cartesian3TolngLatAlt(position2)
+                        // console.log(ellipsoidMapvariable.twoPoint)
+                        ellipsoidMapvariable.twoPoint.position = Cesium.Cartesian3.fromDegrees(position_two[0], position_two[1], 0)
+
+                        // ellipsoidMapvariable.currentPoint.position = cartesian - EntityRadii - (EntityRadii / 9);
+                        //创建面标每个点位置信息的数组，并循环赋值
+                        let points = [];
+                        for (let id of ellipsoidMapvariable.pointsId) {
+                            points.push(viewer.entities.getById(id).position._value);
+                        }
+                        //更新面标的位置数组
+                        // gon.polygon.hierarchy = new Cesium.CallbackProperty(() => {
+                        //     return points;
+                        // },false);
+                        //更新椭球的位置
+                        console.log(ellipsoidMapvariable.ellipsoidGather)
+                        // console.log(cartesian)
+                        ellipsoidMapvariable.ellipsoidGather.position = cartesian;
+                    }
+                }
+            }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
+            //对鼠标移动事件的监听 End
+
+            //对鼠标抬起事件的监听 Start
+            ellipsoidMapvariable.handler.setInputAction((event) => {
+                //移除当前编辑点
+                ellipsoidMapvariable.currentPoint = undefined;
+            }, Cesium.ScreenSpaceEventType.LEFT_UP);
+            //对鼠标抬起事件的监听 End
+
+            //鼠标右键点击 Start
+            ellipsoidMapvariable.handler.setInputAction((event) => {
+                viewer.scene.screenSpaceCameraController.enableRotate = true;
+                viewer.scene.screenSpaceCameraController.enableZoom = true;
+                //移除监听器
+                if (ellipsoidMapvariable.handler != null && !ellipsoidMapvariable.handler.isDestroyed()) {
+                    ellipsoidMapvariable.handler.destroy();
+                }
+                //移除编辑点，清空编辑点数组
+                for (let id of ellipsoidMapvariable.pointsId) {
+                    viewer.entities.removeById(id);
+                }
+                ellipsoidMapvariable.pointsId = [];
+                ellipsoidMapvariable.centerPoint = null;
+                ellipsoidMapvariable.twoPoint = null;
+                ellipsoidMapvariable.gon = null;
+                //鼠标变成默认
+                ellipsoidMapvariable.canvasDom.style.cursor = "default";
+                isEditting = false
+            }, Cesium.ScreenSpaceEventType.RIGHT_CLICK);
+            //鼠标右键点击 End
+        }
+        /*
+        半圆球体功能end
+        */
+    </script>
+</body>
+
+</html>
+
+
+
+
+
+<!-- //转换 这里
+// <div class="form-view">
+    // <div class="form-item">
+        // <div class="form-label">姓名：</div>
+        // <div class="form-value">
+            // <input type="text">
+            // </div>
+        // </div>
+    // </div>
+
+//正式
+// let name = "李四"
+
+// var _div = document.createElement("div")
+// _div.id= "asd12"
+// _div.className = 'form-view'
+// let _html = `<div class="form-item">
+    // <div class="form-label">姓名：${name}</div>
+    // <div class="form-value">
+        // <input type="text">
+        // </div>
+    // </div>`
+
+// _div.innerHTML = _html
+
+// console.log(_div)
+// document.getElementById('box').appendChild(_div) -->

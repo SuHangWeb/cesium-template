@@ -201,34 +201,22 @@ export default {
       const Cesium = this.cesium;
       const _this = this
 
-      function updates(i) {
-        console.log("update")
-        // _this.EntityArr[i].position = Cesium.Cartesian3.fromDegrees(
-        //   position[0], position[1], position[2] + 0.1
-        // )
-      }
-
       for (let i = 0; i < this.EntityArr.length; i++) {
         const item = this.EntityArr[i]
         if (e === 1) {
           const position = this.cartesian3TolngLatAlt(item.position._value)
-          // item._position._value = Cesium.Cartesian3.fromDegrees(
-          //   position[0], position[1], position[2] * 2
-          // )
+          item._position._value = Cesium.Cartesian3.fromDegrees(
+            position[0], position[1], position[2] * 2
+          )
 
-          setInterval(() => {
-            updates(i)
-          }, 100);
-
-
-          item.position = new Cesium.CallbackProperty((time, result) => {
-            // console.log(time)
-            // const _height = position[2] + 0.1
-            // console.log(_height)
-            return Cesium.Cartesian3.fromDegrees(
-              position[0], position[1], position[2]
-            );
-          }, false)
+          // item.position = new Cesium.CallbackProperty((time, result) => {
+          //   // console.log(time)
+          //   // const _height = position[2] + 0.1
+          //   // console.log(_height)
+          //   return Cesium.Cartesian3.fromDegrees(
+          //     position[0], position[1], position[2]*2
+          //   );
+          // }, false)
 
 
 
