@@ -30,6 +30,7 @@
 // 参考：http://mars3d.cn/editor-vue.html?id=graphic/entity/model-moveTo 
 // ~~: https://blog.csdn.net/qq_27816785/article/details/122768709
 //源码：https://blog.csdn.net/wokao253615105/article/details/124908042?spm=1001.2101.3001.6661.1&utm_medium=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-1-124908042-blog-122768709.pc_relevant_multi_platform_whitelistv1&depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-1-124908042-blog-122768709.pc_relevant_multi_platform_whitelistv1&utm_relevant_index=1
+//https://blog.csdn.net/ltsg_/article/details/113092461  向量
 import Entity from "@/common/cesium/Entity.js";
 import { v4 as uuidv4 } from "uuid";
 export default {
@@ -198,13 +199,39 @@ export default {
      */
     wholeChange(e) {
       const Cesium = this.cesium;
+      const _this = this
+
+      function updates(i) {
+        console.log("update")
+        // _this.EntityArr[i].position = Cesium.Cartesian3.fromDegrees(
+        //   position[0], position[1], position[2] + 0.1
+        // )
+      }
+
       for (let i = 0; i < this.EntityArr.length; i++) {
         const item = this.EntityArr[i]
         if (e === 1) {
           const position = this.cartesian3TolngLatAlt(item.position._value)
-          item._position._value = Cesium.Cartesian3.fromDegrees(
-            position[0], position[1], position[2] * 2
-          )
+          // item._position._value = Cesium.Cartesian3.fromDegrees(
+          //   position[0], position[1], position[2] * 2
+          // )
+
+          setInterval(() => {
+            updates(i)
+          }, 100);
+
+
+          item.position = new Cesium.CallbackProperty((time, result) => {
+            // console.log(time)
+            // const _height = position[2] + 0.1
+            // console.log(_height)
+            return Cesium.Cartesian3.fromDegrees(
+              position[0], position[1], position[2]
+            );
+          }, false)
+
+
+
           // item._position = new Cesium.CallbackProperty((time) => {
           //   if (position[2] >= position[2] * 2) {
           //     return Cesium.Cartesian3.fromDegrees(
