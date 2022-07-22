@@ -219,6 +219,8 @@ export default {
               }
             }
 
+            viewer.scene.screenSpaceCameraController.enableRotate = false;
+            viewer.scene.screenSpaceCameraController.enableZoom = false;
 
             //球体位置信息获取/半径/高度/笛卡尔
             const { lng, lat, height, _cartesian3 } = this.getRadius(edit_Entity)
@@ -316,6 +318,16 @@ export default {
         Point_type = ""
       }, Cesium.ScreenSpaceEventType.LEFT_UP);
       //对鼠标抬起事件的监听 End
+      //鼠标右键点击 Start
+      this.handler.setInputAction((event) => {
+        viewer.scene.screenSpaceCameraController.enableRotate = true;
+        viewer.scene.screenSpaceCameraController.enableZoom = true;
+        left_click = false
+        Point_type = ""
+        viewer.entities.remove(edit_centerPoint);
+        viewer.entities.remove(edit_boundaryPoint);
+      }, Cesium.ScreenSpaceEventType.RIGHT_CLICK);
+      //鼠标右键点击 End
     },
     /**
      * 清空
