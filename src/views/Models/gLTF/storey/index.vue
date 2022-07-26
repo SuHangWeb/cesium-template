@@ -239,7 +239,7 @@ export default {
      */
     wholeChange(e) {
       const Cesium = this.cesium;
-      const _this = this
+      this.form.appoint = ""
       for (let i = 0; i < this.EntityArr.length; i++) {
         const item = this.EntityArr[i]
         let position
@@ -250,12 +250,15 @@ export default {
         }
 
         if (e === 1) {
+          item.show = true
           item.position = this.getCallbackProperty(position, 'open', 3 * i * 2)
         }
         if (e === 2) {
+          item.show = true
           item.position = this.getCallbackProperty(position, 'merge', 3 * i)
         }
         if (e === 3) {
+          item.show = true
           item.position = this.getCallbackProperty(position, 'recovery', 3 * i)
         }
       }
@@ -264,8 +267,16 @@ export default {
      * 显示指定
      */
     appointChange(e) {
+      this.form.whole = ""
       for (let i = 0; i < this.EntityArr.length; i++) {
         const item = this.EntityArr[i]
+        let position
+        if (item.position?._value) {
+          position = this.cartesian3TolngLatAlt(item.position._value)
+        } else {
+          position = this.cartesian3TolngLatAlt(item.position.getValue())
+        }
+        item.position = this.getCallbackProperty(position, 'merge', 3 * i)
         if (e === 0) {
           item.show = true
         } else {
