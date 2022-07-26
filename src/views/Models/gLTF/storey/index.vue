@@ -37,7 +37,9 @@ export default {
   data() {
     return {
       viewer: null,
+      handler: null,
       _Entity: null,
+      cesiumContainerDom: null,
       wholeArr: [
         {
           value: 1,
@@ -132,6 +134,8 @@ export default {
       this.viewer.scene.fxaa = true;
       this.viewer.scene.postProcessStages.fxaa.enabled = true;
       this._Entity = new Entity(Cesium, this.viewer);
+      this.handler = new Cesium.ScreenSpaceEventHandler(this.viewer.scene.canvas);
+      this.cesiumContainerDom = document.getElementById('cesiumContainer')
       this.start();
     },
     /**
@@ -176,6 +180,44 @@ export default {
       this.EntityArr = floorInit(9, 3)
 
       this.viewer.flyTo(this.EntityArr);
+
+
+
+      this.handler.setInputAction((event) => {
+        const pick = this.viewer.scene.pick(event.endPosition);
+        // const dpick = this.viewer.scene.drillPick(movement.position, 1000, 1000)
+        // console.log("cesium点击", movement, pick, dpick);
+        if (!Cesium.defined(pick)) {
+          this.cesiumContainerDom.style.cursor = "default";
+        } else {
+          this.cesiumContainerDom.style.cursor = "pointer";
+          const _Entity = pick.id
+          for (let i = 0; i < this.EntityArr.length; i++) {
+            const item = this.EntityArr[i]
+            
+            item.model.color = undefined
+            item.model.colorBlendMode = undefined
+            item.model.colorBlendAmount = undefined
+            item.model.silhouetteColor = undefined
+            item.model.silhouetteSize = undefined
+
+            if (item._id == _Entity._id) {
+              _Entity.model.color = Cesium.Color.RED.withAlpha(0.5)
+              _Entity.model.colorBlendMode = Cesium.ColorBlendMode.MIX
+              _Entity.model.colorBlendAmount = 0.5
+              _Entity.model.silhouetteColor = "Red"
+              _Entity.model.silhouetteSize = 2.0
+            }
+          }
+        }
+
+        // const ray = this.viewer.camera.getPickRay(event.endPosition);
+        // const cartesian = this.viewer.scene.globe.pick(
+        //   ray,
+        //   this.viewer.scene
+        // );
+        // console.log(cartesian)
+      }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
     },
     /**
      * @description 将笛卡尔坐标系转成经纬度高程
