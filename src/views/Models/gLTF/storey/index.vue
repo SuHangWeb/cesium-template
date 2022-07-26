@@ -202,22 +202,26 @@ export default {
       const _this = this
 
       function getCallbackProperty(position) {
-        let factor = 0;
+        let factor = position[2];
         return new Cesium.CallbackProperty(function (time) {
-          if (factor < position[2] * 2) {
-            factor = position[2] + (position[2] / 10);
-            // 动态更新位置
-            return Cesium.Cartesian3.fromDegrees(
-              position[0], position[1], factor
-            )
+          if (factor > position[2] + position[2]) {
+            // factor = position[2] + (position[2] / 10);
+            factor = position[2] + position[2]
+          }else {
+            factor++
           }
+          // console.log(factor)
+          // 动态更新位置
+          return Cesium.Cartesian3.fromDegrees(
+            position[0], position[1], factor
+          )
         }, false);
       }
 
       for (let i = 0; i < this.EntityArr.length; i++) {
         const item = this.EntityArr[i]
         if (e === 1) {
-          console.log(item.position._value)
+          // console.log(item.position._value)
           const position = this.cartesian3TolngLatAlt(item.position._value)
           // item._position._value = Cesium.Cartesian3.fromDegrees(
           //   position[0], position[1], position[2]
