@@ -194,74 +194,69 @@ export default {
       const height = Math.round(cartographic.height)
       return [lng, lat, height]
     },
-    /**
-     * 整体控制
-     */
-    wholeChange(e) {
-      const Cesium = this.cesium;
-      const _this = this
 
-      function getCallbackProperty(position) {
+    /**
+     * 延迟操作
+     */
+    getCallbackProperty(position, type, height) {
+      const Cesium = this.cesium;
+      if (type == "open") {
         let factor = position[2];
         return new Cesium.CallbackProperty(function (time) {
-          if (factor > position[2] + position[2]) {
-            // factor = position[2] + (position[2] / 10);
-            factor = position[2] + position[2]
-          }else {
+          if (factor >= height) {
+            factor = height
+          } else {
             factor++
           }
-          // console.log(factor)
           // 动态更新位置
           return Cesium.Cartesian3.fromDegrees(
             position[0], position[1], factor
           )
         }, false);
       }
-
+      if (type == "merge") {
+        let factor = position[2];
+        return new Cesium.CallbackProperty(function (time) {
+          if (factor <= height) {
+            factor = height
+          } else {
+            factor--
+          }
+          // 动态更新位置
+          return Cesium.Cartesian3.fromDegrees(
+            position[0], position[1], factor
+          )
+        }, false);
+      }
+      if (type == "recovery") {
+        return Cesium.Cartesian3.fromDegrees(
+          position[0], position[1], height
+        )
+      }
+    },
+    /**
+     * 整体控制
+     */
+    wholeChange(e) {
+      const Cesium = this.cesium;
+      const _this = this
       for (let i = 0; i < this.EntityArr.length; i++) {
         const item = this.EntityArr[i]
-        if (e === 1) {
-          // console.log(item.position._value)
-          const position = this.cartesian3TolngLatAlt(item.position._value)
-          // item._position._value = Cesium.Cartesian3.fromDegrees(
-          //   position[0], position[1], position[2]
-          // )
-          item.position = getCallbackProperty(position)
-
-
-          // item.position = new Cesium.CallbackProperty((time, result) => {
-          //   // console.log(time)
-          //   // const _height = position[2] + 0.1
-          //   // console.log(_height)
-          //   return Cesium.Cartesian3.fromDegrees(
-          //     position[0], position[1], position[2]*2
-          //   );
-          // }, false)
-
-
-
-          // item._position = new Cesium.CallbackProperty((time) => {
-          //   if (position[2] >= position[2] * 2) {
-          //     return Cesium.Cartesian3.fromDegrees(
-          //       position[0], position[1], position[2]
-          //     )
-          //   } else {
-          //     return Cesium.Cartesian3.fromDegrees(
-          //       position[0], position[1], position[2] * 2
-          //     )
-          //   }
-          // }, false);
+        let position
+        if (item.position?._value) {
+          position = this.cartesian3TolngLatAlt(item.position._value)
+        } else {
+          position = this.cartesian3TolngLatAlt(item.position.getValue())
         }
-        if (e === 2 || e === 3) {
-          const position = this.cartesian3TolngLatAlt(item.position._value)
-          item.position._value = Cesium.Cartesian3.fromDegrees(
-            position[0], position[1], 3 * i
-          )
-          // item.position._value = new Cesium.CallbackProperty((time) => {
-          //   return Cesium.Cartesian3.fromDegrees(
-          //     position[0], position[1], 3 * i
-          //   )
-          // }, false);
+
+        if (e === 1) {
+          item.position = this.getCallbackProperty(position, 'open', 3 * i * 2)
+        }
+        if (e === 2) {
+          item.position = this.getCallbackProperty(position, 'merge', 3 * i)
+        }
+        if (e === 3) {
+          item.position = this.getCallbackProperty(position, 'recovery', 3 * i)
         }
       }
     },
