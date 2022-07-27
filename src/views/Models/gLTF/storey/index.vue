@@ -35,6 +35,7 @@ import Entity from "@/common/cesium/Entity.js";
 import Transform from "@/common/cesium/Transform.js";
 import BigNumber from "bignumber.js";
 import { v4 as uuidv4 } from "uuid";
+import code from "./module/highlight";
 export default {
   data() {
     return {
@@ -111,6 +112,9 @@ export default {
       offsetLng: "",
       offsetMeter: ""
     };
+  },
+  created() {
+    this.$store.dispatch("highlight/set_code", code);
   },
   mounted() {
     this.init();
