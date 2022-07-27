@@ -166,6 +166,12 @@ export const tripartite = [
         describe: "创建一个随机uuid",
         link: "https://www.npmjs.com/package/uuid",
         externalLinks: true
+    },
+    {
+        title: "bignumber",
+        describe: "精度计算",
+        link: "https://www.npmjs.com/package/bignumber.js",
+        externalLinks: true
     }
 ]
 
