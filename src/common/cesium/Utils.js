@@ -98,7 +98,7 @@ class Utils {
      * @param {Boolean} isPrefix,是否自动加上"?"
      * @return {String} URL参数字符串
      */
-     queryParams(data = {}, isPrefix = true, arrayFormat = 'brackets') {
+    queryParams(data = {}, isPrefix = true, arrayFormat = 'brackets') {
         let prefix = isPrefix ? '?' : ''
         let _result = []
         if (['indices', 'brackets', 'repeat', 'comma'].indexOf(arrayFormat) == -1) arrayFormat = 'brackets';
@@ -702,6 +702,7 @@ class Utils {
             point3fArray[2].x * (point3fArray[0].y * point3fArray[1].z - point3fArray[1].y * point3fArray[0].z);
         return { A: A, B: B, C: C, D: D };
     }
+
 
 }
 

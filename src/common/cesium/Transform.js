@@ -20,6 +20,8 @@
     toDegrees | 转化成经纬度
     toCartesian | 转化成笛卡尔坐标
     toWindowCoordinates | 转屏幕坐标
+    meter2Lng | 距离（米）转换为经度  一米对应的经度与所在有关纬度
+    meter2Lat | 距离（米）转换为纬度  一米对应的纬度为定值
  */
 class Transform {
     constructor(Cesium, viewer) {
@@ -269,6 +271,28 @@ class Transform {
         } else {
             throw new Error("Error in Parameter!");
         }
+    }
+
+    /**
+     * 距离（米）转换为经度  一米对应的经度与所在有关纬度
+     * @param meter 距离
+     * @param lat 所在纬度
+     * @returns {number}
+     */
+    meter2Lng(meter, lat) {
+        let pi = Math.PI;
+        let latInMeter = (Math.cos((lat * pi) / 180) * 6371 * 2 * pi) / 360;
+        return meter / latInMeter / 1000;
+    }
+    /**
+     * 距离（米）转换为纬度  一米对应的纬度为定值
+     * @param meter 距离多少米
+     * @returns {number}
+     */
+    meter2Lat(meter) {
+        let pi = Math.PI;
+        let lngInMeter = (6371 * 2 * pi) / 360;
+        return meter / lngInMeter / 1000;
     }
 }
 

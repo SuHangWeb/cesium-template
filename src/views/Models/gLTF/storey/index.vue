@@ -32,6 +32,8 @@
 //源码：https://blog.csdn.net/wokao253615105/article/details/124908042?spm=1001.2101.3001.6661.1&utm_medium=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-1-124908042-blog-122768709.pc_relevant_multi_platform_whitelistv1&depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-1-124908042-blog-122768709.pc_relevant_multi_platform_whitelistv1&utm_relevant_index=1
 //https://blog.csdn.net/ltsg_/article/details/113092461  向量
 import Entity from "@/common/cesium/Entity.js";
+import Transform from "@/common/cesium/Transform.js";
+import BigNumber from "bignumber.js";
 import { v4 as uuidv4 } from "uuid";
 export default {
   data() {
@@ -39,6 +41,7 @@ export default {
       viewer: null,
       handler: null,
       _Entity: null,
+      _Transform: null,
       cesiumContainerDom: null,
       wholeArr: [
         {
@@ -100,7 +103,13 @@ export default {
         whole: "",
         appoint: ""
       },
-      EntityArr: []
+      EntityArr: [],
+      defaultPosition: {
+        lat: 41.81741540043599,
+        lng: 123.42949456471793,
+      },
+      offsetLng: "",
+      offsetMeter: ""
     };
   },
   mounted() {
@@ -134,8 +143,10 @@ export default {
       this.viewer.scene.fxaa = true;
       this.viewer.scene.postProcessStages.fxaa.enabled = true;
       this._Entity = new Entity(Cesium, this.viewer);
+      this._Transform = new Transform(Cesium, this.viewer);
       this.handler = new Cesium.ScreenSpaceEventHandler(this.viewer.scene.canvas);
       this.cesiumContainerDom = document.getElementById('cesiumContainer')
+      this.viewer.scene.terrainProvider = new Cesium.EllipsoidTerrainProvider({});//移除地形
       this.start();
     },
     /**
@@ -156,7 +167,7 @@ export default {
           const EntityModel = _this._Entity.createModel({
             id: uuidv4(),
             position: Cesium.Cartesian3.fromDegrees(
-              123.42949456471793, 41.81741540043599, _height
+              _this.defaultPosition.lng, _this.defaultPosition.lat, _height
             ),
             uri: process.env.VUE_APP_PUBLIC_URL + "/Vue/Models/gLTF/storey/floor.glb",
             heightReference: Cesium.HeightReference.RELATIVE_TO_GROUND,
@@ -168,7 +179,7 @@ export default {
         const EntityModelTop = _this._Entity.createModel({
           id: uuidv4(),
           position: Cesium.Cartesian3.fromDegrees(
-            123.42949456471793, 41.81741540043599, len * height
+            _this.defaultPosition.lng, _this.defaultPosition.lat, len * height
           ),
           uri: process.env.VUE_APP_PUBLIC_URL + "/Vue/Models/gLTF/storey/top.glb",
           heightReference: Cesium.HeightReference.RELATIVE_TO_GROUND,
@@ -182,31 +193,48 @@ export default {
       this.viewer.flyTo(this.EntityArr);
 
 
+      // 计算移位的位置
+      this.offsetMeter = Math.abs(Number(this._Transform.meter2Lng(15, this.defaultPosition.lng)))
+      this.offsetLng = Number(new BigNumber(this.defaultPosition.lng).plus(this.offsetMeter))
 
+      /**
+       * 鼠标接触模型 产生高亮
+       */
+      function modelHover($entity, type) {
+        if (type) {
+          $entity.model.color = Cesium.Color.RED.withAlpha(0.5)
+          $entity.model.colorBlendMode = Cesium.ColorBlendMode.MIX
+          $entity.model.colorBlendAmount = 0.5
+          $entity.model.silhouetteColor = "Red"
+          $entity.model.silhouetteSize = 2.0
+        } else {
+          $entity.model.color = undefined
+          $entity.model.colorBlendMode = undefined
+          $entity.model.colorBlendAmount = undefined
+          $entity.model.silhouetteColor = undefined
+          $entity.model.silhouetteSize = undefined
+        }
+      }
+
+      // 鼠标移动 start
       this.handler.setInputAction((event) => {
         const pick = this.viewer.scene.pick(event.endPosition);
         // const dpick = this.viewer.scene.drillPick(movement.position, 1000, 1000)
         // console.log("cesium点击", movement, pick, dpick);
         if (!Cesium.defined(pick)) {
           this.cesiumContainerDom.style.cursor = "default";
+          for (let i = 0; i < this.EntityArr.length; i++) {
+            const item = this.EntityArr[i]
+            modelHover(item, false)
+          }
         } else {
           this.cesiumContainerDom.style.cursor = "pointer";
           const _Entity = pick.id
           for (let i = 0; i < this.EntityArr.length; i++) {
             const item = this.EntityArr[i]
-            
-            item.model.color = undefined
-            item.model.colorBlendMode = undefined
-            item.model.colorBlendAmount = undefined
-            item.model.silhouetteColor = undefined
-            item.model.silhouetteSize = undefined
-
+            modelHover(item, false)
             if (item._id == _Entity._id) {
-              _Entity.model.color = Cesium.Color.RED.withAlpha(0.5)
-              _Entity.model.colorBlendMode = Cesium.ColorBlendMode.MIX
-              _Entity.model.colorBlendAmount = 0.5
-              _Entity.model.silhouetteColor = "Red"
-              _Entity.model.silhouetteSize = 2.0
+              modelHover(_Entity, true)
             }
           }
         }
@@ -218,6 +246,32 @@ export default {
         // );
         // console.log(cartesian)
       }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
+      // 鼠标移动 end
+      //鼠标左键点击 Start
+      this.handler.setInputAction((event) => {
+        const pick = this.viewer.scene.pick(event.position);
+        if (pick) {
+          const $entity = pick.id
+          // $entity.model.heightReference = Cesium.HeightReference.NONE
+          // $entity.position = this.getCallbackProperty(position, 'offset')
+          for (let i = 0; i < this.EntityArr.length; i++) {
+            const _Entity_ = this.EntityArr[i]
+            let position
+            if (_Entity_.position?._value) {
+              position = this.cartesian3TolngLatAlt(_Entity_.position._value)
+            } else {
+              position = this.cartesian3TolngLatAlt(_Entity_.position.getValue())
+            }
+
+            if (_Entity_._id == $entity._id) {
+              _Entity_.position = this.getCallbackProperty(position, 'offset')
+            } else {
+              _Entity_.position = this.getCallbackProperty(position, 'noOffset')
+            }
+          }
+        }
+      }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+      //鼠标左键点击 End
     },
     /**
      * @description 将笛卡尔坐标系转成经纬度高程
@@ -242,6 +296,7 @@ export default {
      */
     getCallbackProperty(position, type, height) {
       const Cesium = this.cesium;
+      const _this = this
       if (type == "open") {
         let factor = position[2];
         return new Cesium.CallbackProperty(function (time) {
@@ -272,8 +327,36 @@ export default {
       }
       if (type == "recovery") {
         return Cesium.Cartesian3.fromDegrees(
-          position[0], position[1], height
+          this.defaultPosition.lng, position[1], height
         )
+      }
+      if (type == "offset") {
+        let originalLng = position[0]
+        return new Cesium.CallbackProperty((time) => {
+          if (originalLng >= this.offsetLng) {
+            originalLng = this.offsetLng
+          } else {
+            originalLng += this.offsetMeter / 30
+          }
+          // 动态更新位置
+          return Cesium.Cartesian3.fromDegrees(
+            originalLng, position[1], position[2]
+          )
+        }, false);
+      }
+      if (type == "noOffset") {
+        let originalLng = position[0]
+        return new Cesium.CallbackProperty((time) => {
+          if (originalLng <= this.defaultPosition.lng) {
+            originalLng = this.defaultPosition.lng
+          } else {
+            originalLng -= this.offsetMeter / 30
+          }
+          // 动态更新位置
+          return Cesium.Cartesian3.fromDegrees(
+            originalLng, position[1], position[2]
+          )
+        }, false);
       }
     },
     /**
