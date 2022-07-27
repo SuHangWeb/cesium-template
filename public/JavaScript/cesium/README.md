@@ -4,6 +4,7 @@
 
 ```
 ┌─Tripartite                        三方依赖库
+│  ├─bignumber                      精度计算
 │  ├─geojson                        json转geojson
 │  ├─gcoord                         坐标系转换
 │  ├─layui                          ui

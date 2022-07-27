@@ -29,6 +29,7 @@ const path = "../landstar/js/LS-cesium-common";
  * 三方js库 Start
  */
 ImportJs(`${path}/Tripartite/uuid-js/uuid.min.js`);//uuid
+ImportJs(`${path}/Tripartite/bignumber/bignumber.js`);//bignumber
 ImportJs(`${path}/Tripartite/layer/layer.js`);//layer
 
 //layui start
