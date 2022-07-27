@@ -264,7 +264,12 @@ export default {
             }
 
             if (_Entity_._id == $entity._id) {
-              _Entity_.position = this.getCallbackProperty(position, 'offset')
+              if (position[0] == this.defaultPosition.lng) {
+                _Entity_.position = this.getCallbackProperty(position, 'offset')
+              } else {
+                _Entity_.position = this.getCallbackProperty(position, 'noOffset')
+              }
+
             } else {
               _Entity_.position = this.getCallbackProperty(position, 'noOffset')
             }
@@ -299,7 +304,7 @@ export default {
       const _this = this
       if (type == "open") {
         let factor = position[2];
-        return new Cesium.CallbackProperty(function (time) {
+        return new Cesium.CallbackProperty((time) => {
           if (factor >= height) {
             factor = height
           } else {
@@ -313,7 +318,7 @@ export default {
       }
       if (type == "merge") {
         let factor = position[2];
-        return new Cesium.CallbackProperty(function (time) {
+        return new Cesium.CallbackProperty((time) => {
           if (factor <= height) {
             factor = height
           } else {
