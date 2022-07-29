@@ -318,6 +318,20 @@ export const constantRoutes = [
           },
         ]
       },
+      {
+        path: '3DTiles',
+        name: '3DTiles',
+        component: () => import('@/views/Models/3DTiles/monomerEditing'),
+        meta: { title: '3DTiles', icon: 'el-icon-cpu', highlight: true },
+        children: [
+          {
+            path: 'monomerEditing',
+            component: () => import('@/views/Models/3DTiles/monomerEditing'),
+            name: 'MonomerEditing',
+            meta: { title: '矢量单体化编辑', icon: 'el-icon-school', highlight: true }
+          },
+        ]
+      },
     ]
   },
 
