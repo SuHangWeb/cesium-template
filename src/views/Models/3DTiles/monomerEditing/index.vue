@@ -20,29 +20,22 @@ export default {
       Cesium.Ion.defaultAccessToken = process.env.VUE_APP_TOKEN;
       const tiandituTk = process.env.VUE_APP_TIANDITU_KEY
       this.viewer = new Cesium.Viewer("cesiumContainer", {
-        // imageryProvider: new Cesium.ArcGisMapServerImageryProvider({
-        //   url: "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer",
-        // }),
-        // terrainProvider: new Cesium.CesiumTerrainProvider({
-        //   //加载火星在线地形
-        //   url: "http://data.marsgis.cn/terrain",
-        // }),
-        imageryProvider: new Cesium.WebMapTileServiceImageryProvider({
-          //影像底图
-          url: "http://t{s}.tianditu.com/img_w/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=img&tileMatrixSet=w&TileMatrix={TileMatrix}&TileRow={TileRow}&TileCol={TileCol}&style=default&format=tiles&tk=" + tiandituTk,
-          subdomains: subdomains,
-          layer: "tdtImgLayer",
-          style: "default",
-          format: "image/jpeg",
-          tileMatrixSetID: "GoogleMapsCompatible",//使用谷歌的瓦片切片方式
-          show: true
+        imageryProvider: new Cesium.ArcGisMapServerImageryProvider({
+          url: "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer",
         }),
+        terrainProvider: new Cesium.CesiumTerrainProvider({
+          //加载火星在线地形
+          url: "http://data.marsgis.cn/terrain",
+        }),
+        // imageryProvider: new Cesium.UrlTemplateImageryProvider({
+        //   url: "https://t7.tianditu.gov.cn/img_w/wmts?service=WMTS&version=1.0.0&request=GetTile&tilematrix={z}&layer=img&style=default&tilerow={y}&tilecol={x}&tilematrixset=w&format=tiles&tk=" + tiandituTk,
+        // }),
         shouldAnimate: true,
         infoBox: false,
         selectionIndicator: false,
       });
       // 添加地形数据
-      this.viewer.terrainProvider = Cesium.createWorldTerrain();
+      // this.viewer.terrainProvider = Cesium.createWorldTerrain();
       //设置贴地效果
       this.viewer.scene.globe.depthTestAgainstTerrain = true;
       this.start();
