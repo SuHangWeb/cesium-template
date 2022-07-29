@@ -18,20 +18,33 @@ export default {
     init() {
       const Cesium = this.cesium;
       Cesium.Ion.defaultAccessToken = process.env.VUE_APP_TOKEN;
+      const tiandituTk = process.env.VUE_APP_TIANDITU_KEY
       this.viewer = new Cesium.Viewer("cesiumContainer", {
-        imageryProvider: new Cesium.ArcGisMapServerImageryProvider({
-          url: "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer",
-        }),
-        terrainProvider: new Cesium.CesiumTerrainProvider({
-          //加载火星在线地形
-          url: "http://data.marsgis.cn/terrain",
+        // imageryProvider: new Cesium.ArcGisMapServerImageryProvider({
+        //   url: "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer",
+        // }),
+        // terrainProvider: new Cesium.CesiumTerrainProvider({
+        //   //加载火星在线地形
+        //   url: "http://data.marsgis.cn/terrain",
+        // }),
+        imageryProvider: new Cesium.WebMapTileServiceImageryProvider({
+          //影像底图
+          url: "http://t{s}.tianditu.com/img_w/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=img&tileMatrixSet=w&TileMatrix={TileMatrix}&TileRow={TileRow}&TileCol={TileCol}&style=default&format=tiles&tk=" + tiandituTk,
+          subdomains: subdomains,
+          layer: "tdtImgLayer",
+          style: "default",
+          format: "image/jpeg",
+          tileMatrixSetID: "GoogleMapsCompatible",//使用谷歌的瓦片切片方式
+          show: true
         }),
         shouldAnimate: true,
         infoBox: false,
         selectionIndicator: false,
       });
+      // 添加地形数据
+      this.viewer.terrainProvider = Cesium.createWorldTerrain();
       //设置贴地效果
-      this.viewer.scene.globe.depthTestAgainstTerrain = false;
+      this.viewer.scene.globe.depthTestAgainstTerrain = true;
       this.start();
     },
     /**
@@ -39,6 +52,24 @@ export default {
      */
     start() {
       const Cesium = this.cesium;
+      var tileset = this.viewer.scene.primitives.add(new Cesium.Cesium3DTileset({
+        url: process.env.VUE_APP_PUBLIC_URL + "/Vue/Models/3DTiles/monomerEditing/tileset.json", //数据地址
+        maximumScreenSpaceError: 2,  //最大的屏幕空间误差
+        maximumNumberOfLoadedTiles: 1000, //最大加载瓦片个数
+        // modelMatrix: m,//形状矩阵
+      }));
+      this.viewer.flyTo(tileset);
+
+      // const _url = process.env.VUE_APP_PUBLIC_URL + "/Vue/Models/3DTiles/monomerEditing/dth-xuexiao-fd.json"
+      // Cesium.GeoJsonDataSource.load(_url, {
+      //   stroke: Cesium.Color.WHITE,
+      //   fill: Cesium.Color.BLUE.withAlpha(0.3), //注意：颜色必须大写，即不能为blue
+      //   strokeWidth: 5,
+      // }).then(res => {
+      //   console.log("res", res);
+      //   this.viewer.dataSources.add(res);
+      // });
+
     },
   },
 };
