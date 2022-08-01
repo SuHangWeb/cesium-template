@@ -46,7 +46,8 @@ export default {
     start() {
       const Cesium = this.cesium;
       var tileset = this.viewer.scene.primitives.add(new Cesium.Cesium3DTileset({
-        url: process.env.VUE_APP_PUBLIC_URL + "/Vue/Models/3DTiles/monomerEditing/tileset.json", //数据地址
+        // url: process.env.VUE_APP_PUBLIC_URL + "/Vue/Models/3DTiles/monomerEditing/tileset.json", //数据地址
+        url: '//data.mars3d.cn/3dtiles/qx-xuexiao/tileset.json',
         maximumScreenSpaceError: 2,  //最大的屏幕空间误差
         maximumNumberOfLoadedTiles: 1000, //最大加载瓦片个数
         // modelMatrix: m,//形状矩阵

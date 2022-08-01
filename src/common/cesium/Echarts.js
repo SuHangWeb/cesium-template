@@ -206,7 +206,7 @@ class Echarts3D {
                 const maxInfoIndex = getBarInfo(id)
                 //通过索引找到原始数据 并处理 根据color参数传递值
                 const dataObj = {
-                    name: params.data[maxInfoIndex].name,
+                    name: params.data[maxInfoIndex].name || "",
                     data: params.data[maxInfoIndex].data.map((item, index) => {
                         return {
                             ...item,
