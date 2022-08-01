@@ -4,7 +4,7 @@
 export const doc = [
     {
         title: "Cesium中文网",
-        link: "http://cesium.xin/cesium/cn/Documentation1.72/index.html",
+        link: "http://cesium.xin/cesium/cn/Documentation1.95/index.html",
         externalLinks: true
     },
     {

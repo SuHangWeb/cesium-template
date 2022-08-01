@@ -1,0 +1,1325 @@
+{
+    "asset": {
+        "version": "0.0",
+        "gltfUpAxis": "Y"
+    },
+    "geometricError": 966.8819149487460436,
+    "root": {
+        "boundingVolume": {
+            "sphere": [
+                -2652770.087683318182826,
+                3769094.3382009924389422,
+                4394381.6115930620580912,
+                966.881914948746271
+            ]
+        },
+        "refine": "REPLACE",
+        "geometricError": 966.8819149487460436,
+        "SMMasterHeader": {
+            "IsTerrain": false,
+            "IsTextured": true
+        },
+        "SMHeader": {
+            "arePoints3d": true,
+            "id": 1,
+            "resolution": 966.8819149487460436
+        },
+        "children": [
+            {
+                "boundingVolume": {
+                    "sphere": [
+                        -2652813.7571151200681925,
+                        3769011.0324928602203727,
+                        4394335.0605218196287751,
+                        125.197887281597005
+                    ]
+                },
+                "geometricError": 125.197887281597005,
+                "SMHeader": {
+                    "arePoints3d": true,
+                    "id": 3258,
+                    "resolution": 4
+                },
+                "children": [
+                    {
+                        "boundingVolume": {
+                            "sphere": [
+                                -2652813.7571151200681925,
+                                3769011.0324928602203727,
+                                4394335.0605218196287751,
+                                125.197887281597005
+                            ]
+                        },
+                        "geometricError": 4,
+                        "SMHeader": {
+                            "arePoints3d": true,
+                            "id": 2978,
+                            "resolution": 4
+                        },
+                        "content": {
+                            "url": "Data/Tile_17/Tile_17.json"
+                        }
+                    }
+                ]
+            },
+            {
+                "boundingVolume": {
+                    "sphere": [
+                        -2652774.1644961801357567,
+                        3768957.5080298399552703,
+                        4394408.8590187104418874,
+                        123.6574453739760031
+                    ]
+                },
+                "geometricError": 123.6574453739760031,
+                "SMHeader": {
+                    "arePoints3d": true,
+                    "id": 3364,
+                    "resolution": 4
+                },
+                "children": [
+                    {
+                        "boundingVolume": {
+                            "sphere": [
+                                -2652774.1644961801357567,
+                                3768957.5080298399552703,
+                                4394408.8590187104418874,
+                                123.6574453739760031
+                            ]
+                        },
+                        "geometricError": 4,
+                        "SMHeader": {
+                            "arePoints3d": true,
+                            "id": 3084,
+                            "resolution": 4
+                        },
+                        "content": {
+                            "url": "Data/Tile_11/Tile_11.json"
+                        }
+                    }
+                ]
+            },
+            {
+                "boundingVolume": {
+                    "sphere": [
+                        -2652649.555568850133568,
+                        3769004.5453504198230803,
+                        4394442.7133782897144556,
+                        132.4557133896080074
+                    ]
+                },
+                "geometricError": 132.4557133896080074,
+                "SMHeader": {
+                    "arePoints3d": true,
+                    "id": 3610,
+                    "resolution": 4
+                },
+                "children": [
+                    {
+                        "boundingVolume": {
+                            "sphere": [
+                                -2652649.555568850133568,
+                                3769004.5453504198230803,
+                                4394442.7133782897144556,
+                                132.4557133896080074
+                            ]
+                        },
+                        "geometricError": 4,
+                        "SMHeader": {
+                            "arePoints3d": true,
+                            "id": 3295,
+                            "resolution": 4
+                        },
+                        "content": {
+                            "url": "Data/Tile_23/Tile_23.json"
+                        }
+                    }
+                ]
+            },
+            {
+                "boundingVolume": {
+                    "sphere": [
+                        -2652595.8519766898825765,
+                        3769042.5512802097946405,
+                        4394439.6518955500796437,
+                        117.7659632670330012
+                    ]
+                },
+                "geometricError": 117.7659632670330012,
+                "SMHeader": {
+                    "arePoints3d": true,
+                    "id": 2456,
+                    "resolution": 4
+                },
+                "children": [
+                    {
+                        "boundingVolume": {
+                            "sphere": [
+                                -2652595.8519766898825765,
+                                3769042.5512802097946405,
+                                4394439.6518955500796437,
+                                117.7659632670330012
+                            ]
+                        },
+                        "geometricError": 4,
+                        "SMHeader": {
+                            "arePoints3d": true,
+                            "id": 2141,
+                            "resolution": 4
+                        },
+                        "content": {
+                            "url": "Data/Tile_24/Tile_24.json"
+                        }
+                    }
+                ]
+            },
+            {
+                "boundingVolume": {
+                    "sphere": [
+                        -2652715.2832403401844203,
+                        3769165.7924226298928261,
+                        4394269.8166005602106452,
+                        124.278573833547
+                    ]
+                },
+                "geometricError": 124.278573833547,
+                "SMHeader": {
+                    "arePoints3d": true,
+                    "id": 3857,
+                    "resolution": 4
+                },
+                "children": [
+                    {
+                        "boundingVolume": {
+                            "sphere": [
+                                -2652715.2832403401844203,
+                                3769165.7924226298928261,
+                                4394269.8166005602106452,
+                                124.278573833547
+                            ]
+                        },
+                        "geometricError": 4,
+                        "SMHeader": {
+                            "arePoints3d": true,
+                            "id": 3577,
+                            "resolution": 4
+                        },
+                        "content": {
+                            "url": "Data/Tile_30/Tile_30.json"
+                        }
+                    }
+                ]
+            },
+            {
+                "boundingVolume": {
+                    "sphere": [
+                        -2652849.9310990697704256,
+                        3769067.9313081800937653,
+                        4394272.4363011298701167,
+                        122.5152224062889985
+                    ]
+                },
+                "geometricError": 122.5152224062889985,
+                "SMHeader": {
+                    "arePoints3d": true,
+                    "id": 4033,
+                    "resolution": 4
+                },
+                "children": [
+                    {
+                        "boundingVolume": {
+                            "sphere": [
+                                -2652849.9310990697704256,
+                                3769067.9313081800937653,
+                                4394272.4363011298701167,
+                                122.5152224062889985
+                            ]
+                        },
+                        "geometricError": 4,
+                        "SMHeader": {
+                            "arePoints3d": true,
+                            "id": 3753,
+                            "resolution": 4
+                        },
+                        "content": {
+                            "url": "Data/Tile_18/Tile_18.json"
+                        }
+                    }
+                ]
+            },
+            {
+                "boundingVolume": {
+                    "sphere": [
+                        -2652732.4418322998099029,
+                        3768914.3813877599313855,
+                        4394477.6346415299922228,
+                        125.825996918222998
+                    ]
+                },
+                "geometricError": 125.825996918222998,
+                "SMHeader": {
+                    "arePoints3d": true,
+                    "id": 3789,
+                    "resolution": 4
+                },
+                "children": [
+                    {
+                        "boundingVolume": {
+                            "sphere": [
+                                -2652732.4418322998099029,
+                                3768914.3813877599313855,
+                                4394477.6346415299922228,
+                                125.825996918222998
+                            ]
+                        },
+                        "geometricError": 4,
+                        "SMHeader": {
+                            "arePoints3d": true,
+                            "id": 3509,
+                            "resolution": 4
+                        },
+                        "content": {
+                            "url": "Data/Tile_10/Tile_10.json"
+                        }
+                    }
+                ]
+            },
+            {
+                "boundingVolume": {
+                    "sphere": [
+                        -2652500.3375357598997653,
+                        3769115.342840860132128,
+                        4394438.7795614004135132,
+                        176.5827839641129913
+                    ]
+                },
+                "geometricError": 176.5827839641129913,
+                "SMHeader": {
+                    "arePoints3d": true,
+                    "id": 7990,
+                    "resolution": 4
+                },
+                "children": [
+                    {
+                        "boundingVolume": {
+                            "sphere": [
+                                -2652500.3375357598997653,
+                                3769115.342840860132128,
+                                4394438.7795614004135132,
+                                176.5827839641129913
+                            ]
+                        },
+                        "geometricError": 4,
+                        "SMHeader": {
+                            "arePoints3d": true,
+                            "id": 7185,
+                            "resolution": 4
+                        },
+                        "content": {
+                            "url": "Data/Tile_25/Tile_25.json"
+                        }
+                    }
+                ]
+            },
+            {
+                "boundingVolume": {
+                    "sphere": [
+                        -2652540.5973914097994566,
+                        3769204.973843100015074,
+                        4394332.5115401800721884,
+                        124.1286793841180014
+                    ]
+                },
+                "geometricError": 124.1286793841180014,
+                "SMHeader": {
+                    "arePoints3d": true,
+                    "id": 3196,
+                    "resolution": 4
+                },
+                "children": [
+                    {
+                        "boundingVolume": {
+                            "sphere": [
+                                -2652540.5973914097994566,
+                                3769204.973843100015074,
+                                4394332.5115401800721884,
+                                124.1286793841180014
+                            ]
+                        },
+                        "geometricError": 4,
+                        "SMHeader": {
+                            "arePoints3d": true,
+                            "id": 2916,
+                            "resolution": 4
+                        },
+                        "content": {
+                            "url": "Data/Tile_31/Tile_31.json"
+                        }
+                    }
+                ]
+            },
+            {
+                "boundingVolume": {
+                    "sphere": [
+                        -2652907.6973226899281144,
+                        3768863.8541370001621544,
+                        4394411.1774087399244308,
+                        125.0603125401309939
+                    ]
+                },
+                "geometricError": 125.0603125401309939,
+                "SMHeader": {
+                    "arePoints3d": true,
+                    "id": 3862,
+                    "resolution": 4
+                },
+                "children": [
+                    {
+                        "boundingVolume": {
+                            "sphere": [
+                                -2652907.6973226899281144,
+                                3768863.8541370001621544,
+                                4394411.1774087399244308,
+                                125.0603125401309939
+                            ]
+                        },
+                        "geometricError": 4,
+                        "SMHeader": {
+                            "arePoints3d": true,
+                            "id": 3582,
+                            "resolution": 4
+                        },
+                        "content": {
+                            "url": "Data/Tile_9/Tile_9.json"
+                        }
+                    }
+                ]
+            },
+            {
+                "boundingVolume": {
+                    "sphere": [
+                        -2652673.8801519898697734,
+                        3769111.8743957700207829,
+                        4394333.8038562797009945,
+                        124.8132663444859958
+                    ]
+                },
+                "geometricError": 124.8132663444859958,
+                "SMHeader": {
+                    "arePoints3d": true,
+                    "id": 3432,
+                    "resolution": 4
+                },
+                "children": [
+                    {
+                        "boundingVolume": {
+                            "sphere": [
+                                -2652673.8801519898697734,
+                                3769111.8743957700207829,
+                                4394333.8038562797009945,
+                                124.8132663444859958
+                            ]
+                        },
+                        "geometricError": 4,
+                        "SMHeader": {
+                            "arePoints3d": true,
+                            "id": 3152,
+                            "resolution": 4
+                        },
+                        "content": {
+                            "url": "Data/Tile_29/Tile_29.json"
+                        }
+                    }
+                ]
+            },
+            {
+                "boundingVolume": {
+                    "sphere": [
+                        -2652965.0865661599673331,
+                        3768942.8782638502307236,
+                        4394309.8830665303394198,
+                        169.4472226876899867
+                    ]
+                },
+                "geometricError": 169.4472226876899867,
+                "SMHeader": {
+                    "arePoints3d": true,
+                    "id": 7853,
+                    "resolution": 4
+                },
+                "children": [
+                    {
+                        "boundingVolume": {
+                            "sphere": [
+                                -2652965.0865661599673331,
+                                3768942.8782638502307236,
+                                4394309.8830665303394198,
+                                169.4472226876899867
+                            ]
+                        },
+                        "geometricError": 4,
+                        "SMHeader": {
+                            "arePoints3d": true,
+                            "id": 7398,
+                            "resolution": 4
+                        },
+                        "content": {
+                            "url": "Data/Tile_16/Tile_16.json"
+                        }
+                    }
+                ]
+            },
+            {
+                "boundingVolume": {
+                    "sphere": [
+                        -2652579.4705081498250365,
+                        3769261.3960191099904478,
+                        4394268.0825703395530581,
+                        123.1501717658290005
+                    ]
+                },
+                "geometricError": 123.1501717658290005,
+                "SMHeader": {
+                    "arePoints3d": true,
+                    "id": 3444,
+                    "resolution": 4
+                },
+                "children": [
+                    {
+                        "boundingVolume": {
+                            "sphere": [
+                                -2652579.4705081498250365,
+                                3769261.3960191099904478,
+                                4394268.0825703395530581,
+                                123.1501717658290005
+                            ]
+                        },
+                        "geometricError": 4,
+                        "SMHeader": {
+                            "arePoints3d": true,
+                            "id": 3164,
+                            "resolution": 4
+                        },
+                        "content": {
+                            "url": "Data/Tile_32/Tile_32.json"
+                        }
+                    }
+                ]
+            },
+            {
+                "boundingVolume": {
+                    "sphere": [
+                        -2652871.7750535998493433,
+                        3768811.6675989897921681,
+                        4394479.4803855298087001,
+                        124.3483089735450022
+                    ]
+                },
+                "geometricError": 124.3483089735450022,
+                "SMHeader": {
+                    "arePoints3d": true,
+                    "id": 3760,
+                    "resolution": 4
+                },
+                "children": [
+                    {
+                        "boundingVolume": {
+                            "sphere": [
+                                -2652871.7750535998493433,
+                                3768811.6675989897921681,
+                                4394479.4803855298087001,
+                                124.3483089735450022
+                            ]
+                        },
+                        "geometricError": 4,
+                        "SMHeader": {
+                            "arePoints3d": true,
+                            "id": 3480,
+                            "resolution": 4
+                        },
+                        "content": {
+                            "url": "Data/Tile_8/Tile_8.json"
+                        }
+                    }
+                ]
+            },
+            {
+                "boundingVolume": {
+                    "sphere": [
+                        -2652573.4580541797913611,
+                        3768955.454313550144434,
+                        4394527.4348299000412226,
+                        103.2151351582780023
+                    ]
+                },
+                "geometricError": 103.2151351582780023,
+                "SMHeader": {
+                    "arePoints3d": true,
+                    "id": 3131,
+                    "resolution": 4
+                },
+                "children": [
+                    {
+                        "boundingVolume": {
+                            "sphere": [
+                                -2652573.4580541797913611,
+                                3768955.454313550144434,
+                                4394527.4348299000412226,
+                                103.2151351582780023
+                            ]
+                        },
+                        "geometricError": 4,
+                        "SMHeader": {
+                            "arePoints3d": true,
+                            "id": 2816,
+                            "resolution": 4
+                        },
+                        "content": {
+                            "url": "Data/Tile_21/Tile_21.json"
+                        }
+                    }
+                ]
+            },
+            {
+                "boundingVolume": {
+                    "sphere": [
+                        -2652763.2748424499295652,
+                        3769226.7486680201254785,
+                        4394166.9225855795666575,
+                        154.4835507224269975
+                    ]
+                },
+                "geometricError": 154.4835507224269975,
+                "SMHeader": {
+                    "arePoints3d": true,
+                    "id": 6807,
+                    "resolution": 4
+                },
+                "children": [
+                    {
+                        "boundingVolume": {
+                            "sphere": [
+                                -2652763.2748424499295652,
+                                3769226.7486680201254785,
+                                4394166.9225855795666575,
+                                154.4835507224269975
+                            ]
+                        },
+                        "geometricError": 4,
+                        "SMHeader": {
+                            "arePoints3d": true,
+                            "id": 6352,
+                            "resolution": 4
+                        },
+                        "content": {
+                            "url": "Data/Tile_33/Tile_33.json"
+                        }
+                    }
+                ]
+            },
+            {
+                "boundingVolume": {
+                    "sphere": [
+                        -2652701.3654988100752234,
+                        3768846.3578772097826004,
+                        4394547.6474753804504871,
+                        128.8258021575169892
+                    ]
+                },
+                "geometricError": 128.8258021575169892,
+                "SMHeader": {
+                    "arePoints3d": true,
+                    "id": 5129,
+                    "resolution": 4
+                },
+                "children": [
+                    {
+                        "boundingVolume": {
+                            "sphere": [
+                                -2652701.3654988100752234,
+                                3768846.3578772097826004,
+                                4394547.6474753804504871,
+                                128.8258021575169892
+                            ]
+                        },
+                        "geometricError": 4,
+                        "SMHeader": {
+                            "arePoints3d": true,
+                            "id": 4674,
+                            "resolution": 4
+                        },
+                        "content": {
+                            "url": "Data/Tile_7/Tile_7.json"
+                        }
+                    }
+                ]
+            },
+            {
+                "boundingVolume": {
+                    "sphere": [
+                        -2652485.0193029697984457,
+                        3769035.4245725101791322,
+                        4394507.9135634796693921,
+                        34.6088393407409001
+                    ]
+                },
+                "geometricError": 34.6088393407409001,
+                "SMHeader": {
+                    "arePoints3d": true,
+                    "id": 1700,
+                    "resolution": 4
+                },
+                "children": [
+                    {
+                        "boundingVolume": {
+                            "sphere": [
+                                -2652485.0193029697984457,
+                                3769035.4245725101791322,
+                                4394507.9135634796693921,
+                                34.6088393407409001
+                            ]
+                        },
+                        "geometricError": 4,
+                        "SMHeader": {
+                            "arePoints3d": true,
+                            "id": 1385,
+                            "resolution": 4
+                        },
+                        "content": {
+                            "url": "Data/Tile_22/Tile_22.json"
+                        }
+                    }
+                ]
+            },
+            {
+                "boundingVolume": {
+                    "sphere": [
+                        -2652622.1287596798501909,
+                        3769286.1033876999281347,
+                        4394180.663417830131948,
+                        122.5745293114700019
+                    ]
+                },
+                "geometricError": 122.5745293114700019,
+                "SMHeader": {
+                    "arePoints3d": true,
+                    "id": 3836,
+                    "resolution": 4
+                },
+                "children": [
+                    {
+                        "boundingVolume": {
+                            "sphere": [
+                                -2652622.1287596798501909,
+                                3769286.1033876999281347,
+                                4394180.663417830131948,
+                                122.5745293114700019
+                            ]
+                        },
+                        "geometricError": 4,
+                        "SMHeader": {
+                            "arePoints3d": true,
+                            "id": 3381,
+                            "resolution": 4
+                        },
+                        "content": {
+                            "url": "Data/Tile_34/Tile_34.json"
+                        }
+                    }
+                ]
+            },
+            {
+                "boundingVolume": {
+                    "sphere": [
+                        -2653010.7666409998200834,
+                        3769020.1509976801462471,
+                        4394200.8760014995932579,
+                        113.5484711074659998
+                    ]
+                },
+                "geometricError": 113.5484711074659998,
+                "SMHeader": {
+                    "arePoints3d": true,
+                    "id": 3802,
+                    "resolution": 4
+                },
+                "children": [
+                    {
+                        "boundingVolume": {
+                            "sphere": [
+                                -2653010.7666409998200834,
+                                3769020.1509976801462471,
+                                4394200.8760014995932579,
+                                113.5484711074659998
+                            ]
+                        },
+                        "geometricError": 4,
+                        "SMHeader": {
+                            "arePoints3d": true,
+                            "id": 3347,
+                            "resolution": 4
+                        },
+                        "content": {
+                            "url": "Data/Tile_19/Tile_19.json"
+                        }
+                    }
+                ]
+            },
+            {
+                "boundingVolume": {
+                    "sphere": [
+                        -2652829.0839866199530661,
+                        3768735.7334927301853895,
+                        4394575.3060547299683094,
+                        157.5292324975470137
+                    ]
+                },
+                "geometricError": 157.5292324975470137,
+                "SMHeader": {
+                    "arePoints3d": true,
+                    "id": 6883,
+                    "resolution": 4
+                },
+                "children": [
+                    {
+                        "boundingVolume": {
+                            "sphere": [
+                                -2652829.0839866199530661,
+                                3768735.7334927301853895,
+                                4394575.3060547299683094,
+                                157.5292324975470137
+                            ]
+                        },
+                        "geometricError": 4,
+                        "SMHeader": {
+                            "arePoints3d": true,
+                            "id": 6428,
+                            "resolution": 4
+                        },
+                        "content": {
+                            "url": "Data/Tile_6/Tile_6.json"
+                        }
+                    }
+                ]
+            },
+            {
+                "boundingVolume": {
+                    "sphere": [
+                        -2652391.1149818599224091,
+                        3769206.4067059401422739,
+                        4394419.9488126095384359,
+                        106.6071258013270011
+                    ]
+                },
+                "geometricError": 106.6071258013270011,
+                "SMHeader": {
+                    "arePoints3d": true,
+                    "id": 2894,
+                    "resolution": 4
+                },
+                "children": [
+                    {
+                        "boundingVolume": {
+                            "sphere": [
+                                -2652391.1149818599224091,
+                                3769206.4067059401422739,
+                                4394419.9488126095384359,
+                                106.6071258013270011
+                            ]
+                        },
+                        "geometricError": 4,
+                        "SMHeader": {
+                            "arePoints3d": true,
+                            "id": 2579,
+                            "resolution": 4
+                        },
+                        "content": {
+                            "url": "Data/Tile_27/Tile_27.json"
+                        }
+                    }
+                ]
+            },
+            {
+                "boundingVolume": {
+                    "sphere": [
+                        -2653047.7102014599367976,
+                        3768765.0478145200759172,
+                        4394410.4289438603445888,
+                        126.1780271355249994
+                    ]
+                },
+                "geometricError": 126.1780271355249994,
+                "SMHeader": {
+                    "arePoints3d": true,
+                    "id": 3805,
+                    "resolution": 4
+                },
+                "children": [
+                    {
+                        "boundingVolume": {
+                            "sphere": [
+                                -2653047.7102014599367976,
+                                3768765.0478145200759172,
+                                4394410.4289438603445888,
+                                126.1780271355249994
+                            ]
+                        },
+                        "geometricError": 4,
+                        "SMHeader": {
+                            "arePoints3d": true,
+                            "id": 3525,
+                            "resolution": 4
+                        },
+                        "content": {
+                            "url": "Data/Tile_5/Tile_5.json"
+                        }
+                    }
+                ]
+            },
+            {
+                "boundingVolume": {
+                    "sphere": [
+                        -2653109.2429805998690426,
+                        3768854.1362291597761214,
+                        4394289.2791751297190785,
+                        107.4208542174989987
+                    ]
+                },
+                "geometricError": 107.4208542174989987,
+                "SMHeader": {
+                    "arePoints3d": true,
+                    "id": 1671,
+                    "resolution": 4
+                },
+                "children": [
+                    {
+                        "boundingVolume": {
+                            "sphere": [
+                                -2653109.2429805998690426,
+                                3768854.1362291597761214,
+                                4394289.2791751297190785,
+                                107.4208542174989987
+                            ]
+                        },
+                        "geometricError": 4,
+                        "SMHeader": {
+                            "arePoints3d": true,
+                            "id": 1461,
+                            "resolution": 4
+                        },
+                        "content": {
+                            "url": "Data/Tile_14/Tile_14.json"
+                        }
+                    }
+                ]
+            },
+            {
+                "boundingVolume": {
+                    "sphere": [
+                        -2652483.0216305898502469,
+                        3769313.9062581001780927,
+                        4394256.2617478799074888,
+                        71.5505699654753045
+                    ]
+                },
+                "geometricError": 71.5505699654753045,
+                "SMHeader": {
+                    "arePoints3d": true,
+                    "id": 2127,
+                    "resolution": 4
+                },
+                "children": [
+                    {
+                        "boundingVolume": {
+                            "sphere": [
+                                -2652483.0216305898502469,
+                                3769313.9062581001780927,
+                                4394256.2617478799074888,
+                                71.5505699654753045
+                            ]
+                        },
+                        "geometricError": 4,
+                        "SMHeader": {
+                            "arePoints3d": true,
+                            "id": 1882,
+                            "resolution": 4
+                        },
+                        "content": {
+                            "url": "Data/Tile_36/Tile_36.json"
+                        }
+                    }
+                ]
+            },
+            {
+                "boundingVolume": {
+                    "sphere": [
+                        -2653005.1907989801838994,
+                        3768713.1113360300660133,
+                        4394480.0704237902536988,
+                        123.0097497671579987
+                    ]
+                },
+                "geometricError": 123.0097497671579987,
+                "SMHeader": {
+                    "arePoints3d": true,
+                    "id": 3668,
+                    "resolution": 4
+                },
+                "children": [
+                    {
+                        "boundingVolume": {
+                            "sphere": [
+                                -2653005.1907989801838994,
+                                3768713.1113360300660133,
+                                4394480.0704237902536988,
+                                123.0097497671579987
+                            ]
+                        },
+                        "geometricError": 4,
+                        "SMHeader": {
+                            "arePoints3d": true,
+                            "id": 3388,
+                            "resolution": 4
+                        },
+                        "content": {
+                            "url": "Data/Tile_4/Tile_4.json"
+                        }
+                    }
+                ]
+            },
+            {
+                "boundingVolume": {
+                    "sphere": [
+                        -2652886.7547608301974833,
+                        3769134.3469689101912081,
+                        4394181.573174649849534,
+                        141.6217335736689904
+                    ]
+                },
+                "geometricError": 141.6217335736689904,
+                "SMHeader": {
+                    "arePoints3d": true,
+                    "id": 5548,
+                    "resolution": 4
+                },
+                "children": [
+                    {
+                        "boundingVolume": {
+                            "sphere": [
+                                -2652886.7547608301974833,
+                                3769134.3469689101912081,
+                                4394181.573174649849534,
+                                141.6217335736689904
+                            ]
+                        },
+                        "geometricError": 4,
+                        "SMHeader": {
+                            "arePoints3d": true,
+                            "id": 5093,
+                            "resolution": 4
+                        },
+                        "content": {
+                            "url": "Data/Tile_20/Tile_20.json"
+                        }
+                    }
+                ]
+            },
+            {
+                "boundingVolume": {
+                    "sphere": [
+                        -2653125.2588140098378062,
+                        3768894.0841640899889171,
+                        4394242.1056233001872897,
+                        108.2553800468979972
+                    ]
+                },
+                "geometricError": 108.2553800468979972,
+                "SMHeader": {
+                    "arePoints3d": true,
+                    "id": 3214,
+                    "resolution": 4
+                },
+                "children": [
+                    {
+                        "boundingVolume": {
+                            "sphere": [
+                                -2653125.2588140098378062,
+                                3768894.0841640899889171,
+                                4394242.1056233001872897,
+                                108.2553800468979972
+                            ]
+                        },
+                        "geometricError": 4,
+                        "SMHeader": {
+                            "arePoints3d": true,
+                            "id": 2899,
+                            "resolution": 4
+                        },
+                        "content": {
+                            "url": "Data/Tile_15/Tile_15.json"
+                        }
+                    }
+                ]
+            },
+            {
+                "boundingVolume": {
+                    "sphere": [
+                        -2652361.5735997101292014,
+                        3769302.6815745001658797,
+                        4394329.3841268001124263,
+                        155.1258377505170074
+                    ]
+                },
+                "geometricError": 155.1258377505170074,
+                "SMHeader": {
+                    "arePoints3d": true,
+                    "id": 4686,
+                    "resolution": 8
+                },
+                "children": [
+                    {
+                        "boundingVolume": {
+                            "sphere": [
+                                -2652361.5735997101292014,
+                                3769302.6815745001658797,
+                                4394329.3841268001124263,
+                                155.1258377505170074
+                            ]
+                        },
+                        "geometricError": 8,
+                        "SMHeader": {
+                            "arePoints3d": true,
+                            "id": 4476,
+                            "resolution": 8
+                        },
+                        "content": {
+                            "url": "Data/Tile_35/Tile_35.json"
+                        }
+                    }
+                ]
+            },
+            {
+                "boundingVolume": {
+                    "sphere": [
+                        -2652948.8760313801467419,
+                        3768670.3810251001268625,
+                        4394575.8588479598984122,
+                        145.3914034175159884
+                    ]
+                },
+                "geometricError": 145.3914034175159884,
+                "SMHeader": {
+                    "arePoints3d": true,
+                    "id": 5737,
+                    "resolution": 4
+                },
+                "children": [
+                    {
+                        "boundingVolume": {
+                            "sphere": [
+                                -2652948.8760313801467419,
+                                3768670.3810251001268625,
+                                4394575.8588479598984122,
+                                145.3914034175159884
+                            ]
+                        },
+                        "geometricError": 4,
+                        "SMHeader": {
+                            "arePoints3d": true,
+                            "id": 5282,
+                            "resolution": 4
+                        },
+                        "content": {
+                            "url": "Data/Tile_2/Tile_2.json"
+                        }
+                    }
+                ]
+            },
+            {
+                "boundingVolume": {
+                    "sphere": [
+                        -2652271.0245716301724315,
+                        3769294.595114329829812,
+                        4394408.8805761495605111,
+                        157.4666309874450008
+                    ]
+                },
+                "geometricError": 157.4666309874450008,
+                "SMHeader": {
+                    "arePoints3d": true,
+                    "id": 6263,
+                    "resolution": 4
+                },
+                "children": [
+                    {
+                        "boundingVolume": {
+                            "sphere": [
+                                -2652271.0245716301724315,
+                                3769294.595114329829812,
+                                4394408.8805761495605111,
+                                157.4666309874450008
+                            ]
+                        },
+                        "geometricError": 4,
+                        "SMHeader": {
+                            "arePoints3d": true,
+                            "id": 5598,
+                            "resolution": 4
+                        },
+                        "content": {
+                            "url": "Data/Tile_28/Tile_28.json"
+                        }
+                    }
+                ]
+            },
+            {
+                "boundingVolume": {
+                    "sphere": [
+                        -2652415.4458113801665604,
+                        3769339.3244062499143183,
+                        4394273.9115320695564151,
+                        50.346761710690501
+                    ]
+                },
+                "geometricError": 50.346761710690501,
+                "SMHeader": {
+                    "arePoints3d": true,
+                    "id": 3394,
+                    "resolution": 4
+                },
+                "children": [
+                    {
+                        "boundingVolume": {
+                            "sphere": [
+                                -2652415.4458113801665604,
+                                3769339.3244062499143183,
+                                4394273.9115320695564151,
+                                50.346761710690501
+                            ]
+                        },
+                        "geometricError": 4,
+                        "SMHeader": {
+                            "arePoints3d": true,
+                            "id": 3009,
+                            "resolution": 4
+                        },
+                        "content": {
+                            "url": "Data/Tile_37/Tile_37.json"
+                        }
+                    }
+                ]
+            },
+            {
+                "boundingVolume": {
+                    "sphere": [
+                        -2653136.3830213202163577,
+                        3768695.8958619101904333,
+                        4394438.1131453802809119,
+                        120.203019577008007
+                    ]
+                },
+                "geometricError": 120.203019577008007,
+                "SMHeader": {
+                    "arePoints3d": true,
+                    "id": 3780,
+                    "resolution": 4
+                },
+                "children": [
+                    {
+                        "boundingVolume": {
+                            "sphere": [
+                                -2653136.3830213202163577,
+                                3768695.8958619101904333,
+                                4394438.1131453802809119,
+                                120.203019577008007
+                            ]
+                        },
+                        "geometricError": 4,
+                        "SMHeader": {
+                            "arePoints3d": true,
+                            "id": 3325,
+                            "resolution": 4
+                        },
+                        "content": {
+                            "url": "Data/Tile_3/Tile_3.json"
+                        }
+                    }
+                ]
+            },
+            {
+                "boundingVolume": {
+                    "sphere": [
+                        -2653236.8382292101159692,
+                        3768767.4254815201275051,
+                        4394284.1345548098906875,
+                        105.0402677881159974
+                    ]
+                },
+                "geometricError": 105.0402677881159974,
+                "SMHeader": {
+                    "arePoints3d": true,
+                    "id": 3536,
+                    "resolution": 8
+                },
+                "children": [
+                    {
+                        "boundingVolume": {
+                            "sphere": [
+                                -2653236.8382292101159692,
+                                3768767.4254815201275051,
+                                4394284.1345548098906875,
+                                105.0402677881159974
+                            ]
+                        },
+                        "geometricError": 8,
+                        "SMHeader": {
+                            "arePoints3d": true,
+                            "id": 3326,
+                            "resolution": 8
+                        },
+                        "content": {
+                            "url": "Data/Tile_13/Tile_13.json"
+                        }
+                    }
+                ]
+            },
+            {
+                "boundingVolume": {
+                    "sphere": [
+                        -2653142.2054913598112762,
+                        3768783.3588757300749421,
+                        4394347.5174136403948069,
+                        184.5022052925629907
+                    ]
+                },
+                "geometricError": 184.5022052925629907,
+                "SMHeader": {
+                    "arePoints3d": true,
+                    "id": 6155,
+                    "resolution": 8
+                },
+                "children": [
+                    {
+                        "boundingVolume": {
+                            "sphere": [
+                                -2653142.2054913598112762,
+                                3768783.3588757300749421,
+                                4394347.5174136403948069,
+                                184.5022052925629907
+                            ]
+                        },
+                        "geometricError": 8,
+                        "SMHeader": {
+                            "arePoints3d": true,
+                            "id": 5945,
+                            "resolution": 8
+                        },
+                        "content": {
+                            "url": "Data/Tile_12/Tile_12.json"
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+}
