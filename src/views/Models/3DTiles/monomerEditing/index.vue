@@ -37,7 +37,7 @@ export default {
       // 添加地形数据
       // this.viewer.terrainProvider = Cesium.createWorldTerrain();
       //设置贴地效果
-      this.viewer.scene.globe.depthTestAgainstTerrain = true;
+      this.viewer.scene.globe.depthTestAgainstTerrain = false;
       this.start();
     },
     /**
@@ -54,11 +54,52 @@ export default {
       }));
       this.viewer.flyTo(tileset);
 
-      // const _url = process.env.VUE_APP_PUBLIC_URL + "/Vue/Models/3DTiles/monomerEditing/dth-xuexiao-fd.json"
+      const _url = process.env.VUE_APP_PUBLIC_URL + "/Vue/Models/3DTiles/monomerEditing/dth-xuexiao-fd.json"
+      Cesium.Math.setRandomNumberSeed(0); //设置随机数种子
+      const promise = Cesium.GeoJsonDataSource.load(_url, {
+        // stroke: Cesium.Color.WHITE,
+        // fill: Cesium.Color.BLUE.withAlpha(0.3), //注意：颜色必须大写，即不能为blue
+        // strokeWidth: 5,
+        clampToGround: true
+      });
+      promise.then((dataSource) => {
+        this.viewer.dataSources.add(dataSource);
+        let entities = dataSource.entities.values;
+        let colorHash = {};
+        for (let i = 0; i < entities.length; i++) {
+          let entity = entities[i];
+          console.log(entity)
+          // console.log(entity)
+          // let name = entity.name; //geojson里面必须得有一个name属性，entity.name对应
+          // let color = colorHash[name]; //可以使两个同名要素使用同一种颜色。。。
+          // if (!color) {
+          //   color = Cesium.Color.fromRandom({
+          //     alpha: 1.0
+          //   });
+          //   colorHash[name] = color;
+          // }
+          // entity.polygon.material = color; //设置要素颜色
+          // entity.polygon.outline = false;
+          // entity.polygon.height = 10000; //要素距离地面的高度
+          // entity.polygon.heightReference = Cesium.HeightReference.CLAMP_TO_GROUND
+          // entity.polygon.extrudedHeightReference = Cesium.HeightReference.RELATIVE_TO_GROUND
+          // entity.polygon.height = 400.0
+          // entity.polygon.extrudedHeight = 0.0;
+          entity.polygon.heightReference = Cesium.HeightReference.RELATIVE_TO_GROUND;  // 贴地
+          entity.polygon.height = 0;  // 距地高度0米
+          entity.polygon.extrudedHeightReference = Cesium.HeightReference.RELATIVE_TO_GROUND; //拉伸
+          // entity.polygon.extrudedHeight = entity.properties[exHeightFieldName]; // 拉伸高度
+          entity.polygon.extrudedHeight = 100.0; // 拉伸高度
+          entity.polygon.outline = true;
+          entity.polygon.outlineColor = Cesium.Color.BLACK;
+          entity.polygon.classificationType = Cesium.ClassificationType.TERRAIN
+        }
+      });
       // Cesium.GeoJsonDataSource.load(_url, {
       //   stroke: Cesium.Color.WHITE,
       //   fill: Cesium.Color.BLUE.withAlpha(0.3), //注意：颜色必须大写，即不能为blue
       //   strokeWidth: 5,
+      //   clampToGround: true
       // }).then(res => {
       //   console.log("res", res);
       //   this.viewer.dataSources.add(res);
