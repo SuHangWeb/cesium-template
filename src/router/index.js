@@ -352,6 +352,22 @@ export const constantRoutes = [
     ]
   },
 
+  {
+    path: '/tools',
+    component: Layout,
+    redirect: '/tools/measure',
+    name: 'Tools',
+    meta: { title: '工具', icon: 'el-icon-thumb', highlight: true },
+    children: [
+      {
+        path: 'measure',
+        name: 'Measure',
+        component: () => import('@/views/Tools/measure'),
+        meta: { title: '测量', icon: 'el-icon-mouse', highlight: true }
+      },
+    ]
+  },
+
 
   {
     path: '/test',
