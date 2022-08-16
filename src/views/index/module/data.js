@@ -175,3 +175,14 @@ export const tripartite = [
     }
 ]
 
+/**
+ * 工具类
+ */
+ export const tools = [
+    {
+        title: "地理geoJson下载",
+        describe: "地理geoJson数据下载",
+        link: "http://datav.aliyun.com/portal/school/atlas/area_selector#&lat=31.769817845138945&lng=104.29901249999999&zoom=4",
+        externalLinks: true
+    }
+]
