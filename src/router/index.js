@@ -326,9 +326,15 @@ export const constantRoutes = [
         children: [
           {
             path: 'monomerEditing',
-            component: () => import('@/views/Models/3DTiles/monomerEditing'),
+            component: () => import('@/views/Models/3DTiles/monomerEditing/index.vue'),
             name: 'MonomerEditing',
             meta: { title: '矢量单体化编辑', icon: 'el-icon-school', highlight: true }
+          },
+          {
+            path: 'urbanBuildings',
+            component: () => import('@/views/Models/3DTiles/UrbanBuildings/index.vue'),
+            name: 'UrbanBuildings',
+            meta: { title: '城市建筑', icon: 'el-icon-office-building', highlight: true }
           },
         ]
       },

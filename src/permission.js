@@ -64,3 +64,11 @@ router.afterEach(() => {
   // finish progress bar
   NProgress.done()
 })
+
+//解决三级菜单keep-alive缓存失效
+router.beforeResolve((to, from, next) => {
+  if (to.matched && to.matched.length > 2) {
+    to.matched.splice(1, to.matched.length - 2)
+  }
+  next();
+})
