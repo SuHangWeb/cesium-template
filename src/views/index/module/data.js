@@ -83,6 +83,12 @@ export const doc = [
         link: "https://landstar.coding.net/user",
         innerChain: true,
         private: true
+    },
+    {
+        title: "下载",
+        link: "https://zhuanlan.zhihu.com/p/523570955",
+        innerChain: true,
+        private: true
     }
 ]
 /**

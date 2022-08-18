@@ -46,7 +46,7 @@ export default {
       //   maximumNumberOfLoadedTiles: 1000,  //最大加载瓦片个数
       // });
       let tileSet =new Cesium.Cesium3DTileset({
-          url: Cesium.IonResource.fromAssetId(96188),
+          url: Cesium.IonResource.fromAssetId(75343),
         })
       const tileset3DTile = this.viewer.scene.primitives.add(tileSet);
       // tileset3DTile.readyPromise.then(

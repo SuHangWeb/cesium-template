@@ -128,6 +128,22 @@ export const constantRoutes = [
   },
 
   {
+    path: '/city',
+    component: Layout,
+    redirect: '/City/wisdom',
+    name: 'City',
+    meta: { title: '城市', icon: 'el-icon-office-building', highlight: true },
+    children: [
+      {
+        path: 'wisdom',
+        name: 'wisdom',
+        component: () => import('@/views/City/wisdom'),
+        meta: { title: '智慧城市', icon: 'el-icon-office-building', highlight: true },
+      },
+    ]
+  },
+
+  {
     path: '/entity',
     component: Layout,
     redirect: '/entity/drawPoint',
