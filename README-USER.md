@@ -51,3 +51,6 @@ shpjs
 proj4js
 text-encoding
 geojson-topojson
+
+## 问题
+https://blog.csdn.net/caozl1132/article/details/125404486 3dtiles模型不加载 并且报错
