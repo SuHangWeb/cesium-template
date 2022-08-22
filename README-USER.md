@@ -32,6 +32,9 @@ https://segmentfault.com/a/1190000040320599?sort=newest 流线
 * https://juejin.cn/column/7094886426357497869 掘金-各种图形绘制
 * http://www.pangbo15.cn/search/index/tag/id/34.html
 * http://lbs.tianditu.gov.cn/docs/#/sanwei/ 地图
+* https://blog.csdn.net/weixin_39150852/article/details/124726172?spm=1001.2101.3001.6650.6&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-6-124726172-blog-109738854.pc_relevant_default&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-6-124726172-blog-109738854.pc_relevant_default&utm_relevant_index=6  cesium加载S3M白膜，通过分层设色实现渐变效果，设置点光源
+
+* https://blog.csdn.net/weixin_40902527/article/details/110224380  建筑光效
 
 ## github
 * https://github.com/YanzheZhang/Cesium.HPUZYZ.Demo 案例集
@@ -39,6 +42,8 @@ https://segmentfault.com/a/1190000040320599?sort=newest 流线
 * https://github.com/ls870061011/cesium_training
 * https://github.com/zhangti0708/cesium-materialLine
 * https://github.com/zhangti0708/cesium-d3kit
+
+
 * 
 
 ## getee

@@ -51,8 +51,12 @@ export default {
                 stc_a13 = abs(stc_a13 - 0.5) * 2.0;
                 float stc_diff = step(0.005, abs(stc_h - stc_a13));
                 gl_FragColor.rgb += gl_FragColor.rgb * (1.0 - stc_diff);`;
+
+
+                
       let tilesets = viewer.scene.primitives.add(new Cesium.Cesium3DTileset({
-        url: 'https://lab.earthsdk.com/model/702aa950d03c11e99f7ddd77cbe22fea/tileset.json' //切片url
+        // url: 'https://lab.earthsdk.com/model/702aa950d03c11e99f7ddd77cbe22fea/tileset.json' //切片url
+        url: "http://192.168.0.45/shanghai/tileset.json" //本地化 数据加载  需要自定部署本地数据
       }))
       tilesets.readyPromise.then(function (tileset) {
         tileset.style = new Cesium.Cesium3DTileStyle({
