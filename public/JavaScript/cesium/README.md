@@ -9,6 +9,8 @@
 │  ├─gcoord                         坐标系转换
 │  ├─layui                          ui
 │  ├─layer                          提示
+│  ├─mock                           数据模拟
+│  ├─cesium-navigation              罗盘
 │  └─uuid-js                        生成唯一id
 ├─Map                               地图
 │  ├─Baidu                          百度  
@@ -16,7 +18,6 @@
 ├─Materials                         材质
 ├─EntityUtils                       Entity 工具
 │  └─PolylineVolume.js              多段线柱体 
-├─iconfont                          矢量图
 ├─Config.js                         配置项
 ├─Entity.js                         实体创建
 ├─Primitives.js                     图元

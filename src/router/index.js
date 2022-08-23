@@ -387,6 +387,12 @@ export const constantRoutes = [
         component: () => import('@/views/Tools/measure'),
         meta: { title: '测量', icon: 'el-icon-mouse', highlight: true }
       },
+      {
+        path: 'compass',
+        name: 'Compass',
+        component: () => import('@/views/Tools/compass'),
+        meta: { title: '罗盘', icon: 'el-icon-discover', highlight: true }
+      },
     ]
   },
 
