@@ -18,6 +18,7 @@
     "axios": "0.18.1",
     "bignumber.js": "^9.0.2",
     "cesium": "^1.94.3",
+    "cesium-navigation-es6": "^3.0.8",
     "core-js": "^3.22.8",
     "element-ui": "2.13.2",
     "gcoord": "^0.3.2",
