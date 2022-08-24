@@ -11,7 +11,7 @@ export default {
   data() {
     return {};
   },
-  mounted() {},
+  mounted() { },
   methods: {},
 };
 </script>
@@ -22,6 +22,7 @@ export default {
   height: 100%;
   padding: 16px;
   background-color: #eee;
+
   .view {
     width: 410px;
   }
