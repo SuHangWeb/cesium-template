@@ -1,1 +1,25 @@
-define(["./CylinderGeometry-542da09e","./defaultValue-81eec7ed","./GeometryOffsetAttribute-8c5e10db","./RuntimeError-8952249c","./Transforms-969e35b7","./Matrix2-7fbd2afb","./ComponentDatatype-be80d12c","./WebGLConstants-508b9636","./_commonjsHelpers-3aae1032-26891ab7","./combine-3c023bda","./CylinderGeometryLibrary-3ef269dc","./GeometryAttribute-6e58c1bc","./GeometryAttributes-32b29525","./IndexDatatype-a852edb7","./VertexFormat-a0b706b0"],(function(e,t,r,n,a,b,o,d,i,c,m,y,u,f,s){"use strict";return function(r,n){return t.defined(n)&&(r=e.CylinderGeometry.unpack(r,n)),e.CylinderGeometry.createGeometry(r)}}));
+/**
+ * @license
+ * Cesium - https://github.com/CesiumGS/cesium
+ * Version 1.96
+ *
+ * Copyright 2011-2022 Cesium Contributors
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * Columbus View (Pat. Pend.)
+ *
+ * Portions licensed separately.
+ * See https://github.com/CesiumGS/cesium/blob/main/LICENSE.md for full licensing details.
+ */
+define(["./CylinderGeometry-38de8def","./defaultValue-4607806f","./Transforms-c450597e","./Matrix2-21f90abf","./RuntimeError-cef79f54","./ComponentDatatype-4028c72d","./WebGLConstants-f100e3dd","./_commonjsHelpers-a32ac251","./combine-fc59ba59","./CylinderGeometryLibrary-af834e78","./GeometryAttribute-3c090c07","./GeometryAttributes-acac33d2","./GeometryOffsetAttribute-3e5f3e97","./IndexDatatype-20e78e57","./VertexFormat-75e8069c"],(function(e,t,r,n,a,o,f,c,i,d,m,y,u,s,G){"use strict";return function(r,n){return t.defined(n)&&(r=e.CylinderGeometry.unpack(r,n)),e.CylinderGeometry.createGeometry(r)}}));

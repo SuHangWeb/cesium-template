@@ -7,15 +7,14 @@
 <script>
 import Entity from "@/common/cesium/Entity.js";
 import Echarts3D from "@/common/cesium/Echarts.js";
-import echartsData from "./module/data";
 import code from "./module/highlight";
 export default {
   name: "echartsWaterPolo",
   data() {
     return {
       viewer: null,
+      _Entity: null,
       _Echarts3D: null,
-      echartsData: echartsData,
     };
   },
   created() {
@@ -32,16 +31,23 @@ export default {
         imageryProvider: new Cesium.ArcGisMapServerImageryProvider({
           url: "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer",
         }),
-        terrainProvider: new Cesium.CesiumTerrainProvider({
-          //加载火星在线地形
-          url: "http://data.marsgis.cn/terrain",
-        }),
-        shouldAnimate: true,
+        // terrainProvider: new Cesium.CesiumTerrainProvider({
+        //   //加载火星在线地形
+        //   url: "http://data.marsgis.cn/terrain",
+        // }),
         infoBox: false,
-        selectionIndicator: false,
+        shouldAnimate: true,
+        vrButton: true,
+        geocoder: false,
+        homeButton: false,
+        sceneModePicker: false,
+        baseLayerPicker: true,
+        navigationHelpButton: false,
+        animation: false,
+        timeline: false,
+        fullscreenButton: false,
       });
-      //设置贴地效果
-      this.viewer.scene.globe.depthTestAgainstTerrain = false;
+      this._Entity = new Entity(Cesium, this.viewer);
       this._Echarts3D = new Echarts3D(Cesium, this.viewer);
       this.start();
     },
@@ -50,26 +56,37 @@ export default {
      */
     start() {
       const Cesium = this.cesium;
+      const EntityModel = this._Entity.createModel({
+        position: Cesium.Cartesian3.fromDegrees(
+          123.64968897708842, 41.905545890053986,
+          0
+        ),
+        uri: process.env.VUE_APP_PUBLIC_URL + "/glb/gongchang.glb",
+        heightReference: Cesium.HeightReference.RELATIVE_TO_GROUND,
+      })
       this._Echarts3D.createWaterPolo({
         nodeId: "echarts",
-        data: echartsData,
+        size: 40,
+        data: [
+          {
+            name: "惠工广场",
+            position: [123.64753799005176, 41.90693164850206, 0],
+            data: 50,
+            // color: "red"
+          },
+          {
+            name: "沈阳北站",
+            position: [123.64968245766008, 41.90631359871417, 0],
+            data: 10,
+          },
+          {
+            name: "市府广场",
+            position: [123.64917223733927, 41.90348119308158, 0],
+            data: 80,
+          },
+        ],
       });
-
-      //相机(定位到了 沈河区惠工广场)
-      this.viewer.camera.flyTo({
-        //setView是直接跳到 flyTo// 是镜头飞行到  网速不好或者电脑配置不高 还是不要fly了吧
-        destination: Cesium.Cartesian3.fromDegrees(
-          123.43382736814452,
-          41.811201240193164,
-          5000
-        ), //经纬度坐标转换为 笛卡尔坐标(世界坐标)
-        orientation: {
-          heading: Cesium.Math.toRadians(0.0), // east, default value is 0.0 (north) //东西南北朝向
-          pitch: Cesium.Math.toRadians(-90), // default value (looking down)  //俯视仰视视觉
-          roll: 0.0, // default value
-        },
-        duration: 3, //3秒到达战场
-      });
+      this.viewer.flyTo(EntityModel);
     },
   },
 };
@@ -79,6 +96,7 @@ export default {
 .container {
   width: 100%;
   height: 100%;
+
   #cesiumContainer {
     width: 100%;
     height: 100%;

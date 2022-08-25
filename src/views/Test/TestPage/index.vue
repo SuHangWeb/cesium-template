@@ -1,15 +1,19 @@
 <template>
-  <div class="container">
+  <div class="container" id="echarts">
     <div id="cesiumContainer"></div>
   </div>
 </template>
  
 <script>
+import Entity from "@/common/cesium/Entity.js";
+import Echarts3D from "@/common/cesium/Echarts.js";
 export default {
   name: "TextPage",
   data() {
     return {
       viewer: null,
+      _Entity: null,
+      _Echarts3D: null,
     };
   },
   mounted() {
@@ -20,6 +24,13 @@ export default {
       const Cesium = this.cesium;
       Cesium.Ion.defaultAccessToken = process.env.VUE_APP_TOKEN;
       this.viewer = new Cesium.Viewer("cesiumContainer", {
+        imageryProvider: new Cesium.ArcGisMapServerImageryProvider({
+          url: "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer",
+        }),
+        // terrainProvider: new Cesium.CesiumTerrainProvider({
+        //   //加载火星在线地形
+        //   url: "http://data.marsgis.cn/terrain",
+        // }),
         infoBox: false,
         shouldAnimate: true,
         vrButton: true,
@@ -32,42 +43,44 @@ export default {
         timeline: false,
         fullscreenButton: false,
       });
-      //设置贴地效果
-      // this.viewer.scene.globe.depthTestAgainstTerrain = false;
-
+      this._Entity = new Entity(Cesium, this.viewer);
+      this._Echarts3D = new Echarts3D(Cesium, this.viewer);
       this.start();
     },
     start() {
       const Cesium = this.cesium;
-      const viewer = this.viewer;
-      // 特效 默认为开启
-      Cesium.TILE_EFFECT_STATE = true;
-      // 自定义着色器  默认有片元着色器
-      Cesium.TILE_FS_BODY = ` float stc_pl = fract(czm_frameNumber / 120.0) * 3.14159265 * 2.0;
-                float stc_sd = v_stcVertex.z / 320.0 + sin(stc_pl) * 0.1;
-                gl_FragColor *= vec4(stc_sd, stc_sd, stc_sd, 1.0);
-                float stc_a13 = fract(czm_frameNumber / 360.0);
-                float stc_h = clamp(v_stcVertex.z / 450.0, 0.0, 1.0);
-                stc_a13 = abs(stc_a13 - 0.5) * 2.0;
-                float stc_diff = step(0.005, abs(stc_h - stc_a13));
-                gl_FragColor.rgb += gl_FragColor.rgb * (1.0 - stc_diff);`;
 
-
-                
-      let tilesets = viewer.scene.primitives.add(new Cesium.Cesium3DTileset({
-        // url: 'https://lab.earthsdk.com/model/702aa950d03c11e99f7ddd77cbe22fea/tileset.json' //切片url
-        url: "http://192.168.0.45/shanghai/tileset.json" //本地化 数据加载  需要自定部署本地数据
-      }))
-      tilesets.readyPromise.then(function (tileset) {
-        tileset.style = new Cesium.Cesium3DTileStyle({
-          color: {
-            conditions: [
-              ["true", "color('cyan')"]
-            ]
-          }
-        });
-        viewer.flyTo(tileset)
+      const EntityModel = this._Entity.createModel({
+        position: Cesium.Cartesian3.fromDegrees(
+          123.64968897708842, 41.905545890053986,
+          0
+        ),
+        uri: process.env.VUE_APP_PUBLIC_URL + "/glb/gongchang.glb",
+        heightReference: Cesium.HeightReference.RELATIVE_TO_GROUND,
       })
+      this._Echarts3D.createWaterPolo({
+        nodeId: "echarts",
+        size: 40,
+        data: [
+          {
+            name: "惠工广场",
+            position: [123.64753799005176, 41.90693164850206, 0],
+            data: 50,
+            // color: "red"
+          },
+          {
+            name: "沈阳北站",
+            position: [123.64968245766008, 41.90631359871417, 0],
+            data: 10,
+          },
+          {
+            name: "市府广场",
+            position: [123.64917223733927, 41.90348119308158, 0],
+            data: 80,
+          },
+        ],
+      });
+      this.viewer.flyTo(EntityModel);
     },
   },
 };

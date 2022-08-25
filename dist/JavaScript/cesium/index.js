@@ -31,6 +31,7 @@ const path = "../landstar/js/LS-cesium-common";
 ImportJs(`${path}/Tripartite/uuid-js/uuid.min.js`);//uuid
 ImportJs(`${path}/Tripartite/bignumber/bignumber.js`);//bignumber
 ImportJs(`${path}/Tripartite/layer/layer.js`);//layer
+ImportJs(`${path}/Tripartite/mock/mock-min.js`);//layer
 
 //layui start
 //文档：http://www.uimaker.com/layui/doc/index.html
@@ -41,6 +42,8 @@ ImportJs(`${path}/Tripartite/layui/layui.js`);
 
 ImportJs(`${path}/Tripartite/gcoord/dist/gcoord.js`);
 ImportJs(`${path}/Tripartite/geojson/geojson.min.js`);
+// createStyle(`${path}/Tripartite/cesium-navigation/cesium-navigation.css`);
+// ImportJs(`${path}/Tripartite/cesium-navigation/CesiumNavigation.umd.js`);
 /**
  * 三方js库 End
  */
@@ -49,7 +52,7 @@ ImportJs(`${path}/Tripartite/geojson/geojson.min.js`);
  * 依赖 Start
  */
 ImportJs(`${path}/Map/Baidu/module/BaiDuImageryProvider.js`);//百度地图依赖
-createStyle(`${path}/iconfont/iconfont.css`)//矢量图标
+// createStyle(`${path}/iconfont/iconfont.css`)//矢量图标
 ImportJs(`${path}/EntityUtils/PolylineVolume.js`);//多线段柱体形态
 /**
  * 依赖 End

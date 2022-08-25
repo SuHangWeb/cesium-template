@@ -80,6 +80,9 @@ class Echarts3D {
                 const _createCylinder = _Entity.createCylinder({
                     id: jItem?.id ? jItem.id : uuid4(),
                     name: jItem.label,
+                    common: {
+                        typeName: "bar",
+                    },
                     position: Cesium.Cartesian3.fromDegrees(
                         item.position[0],
                         item.position[1],
@@ -198,7 +201,7 @@ class Echarts3D {
                 const maxInfoIndex = getBarInfo(id)
                 //通过索引找到原始数据 并处理 根据color参数传递值
                 const dataObj = {
-                    name: params.data[maxInfoIndex].name,
+                    name: params.data[maxInfoIndex].name || "",
                     data: params.data[maxInfoIndex].data.map((item, index) => {
                         return {
                             ...item,
@@ -224,18 +227,17 @@ class Echarts3D {
                 //根据坐标获取实体信息
                 const pickInfo = this.viewer.scene.pick(event.endPosition);
                 const cursorDom = document.getElementById(nodeId)
-                if (!pickInfo) {
+                if (pickInfo && pickInfo.id?._typeName && pickInfo.id._typeName == 'bar') {
+                    cursorDom.style.cursor = 'pointer'
+                    _Utils.debounce(createInfoWindow(pickInfo.id.id, event.endPosition))
+                } else {
                     //移动非实体位置 删除窗口
                     if (_Utils.operationDom('has', 'echarts3D-Bar-Info-Window')) {
                         _Utils.operationDom('remove', 'echarts3D-Bar-Info-Window')
                     }
                     cursorDom.style.cursor = 'default'
                     hoverOperation(false)
-                    return
-                } else {
-                    cursorDom.style.cursor = 'pointer'
                 }
-                _Utils.debounce(createInfoWindow(pickInfo.id.id, event.endPosition))
             }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
             // 对鼠标移动事件的监听 End
         }
@@ -247,6 +249,7 @@ class Echarts3D {
      * @param {*} params 
      */
     createWaterPolo(params) {
+
         if (params.data.length == 0) return
 
         const _Utils = new Utils();
