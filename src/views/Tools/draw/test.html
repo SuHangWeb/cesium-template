@@ -1,0 +1,104 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <script src="Build/CesiumUnminified/Cesium.js"></script>
+    <link rel="stylesheet" href="Build/Cesium/Widgets/widgets.css">
+    <script src="initMap.js"></script>
+    <script>
+        //在initMap.js进行初始化
+        var viewer = null;
+
+        function load() {
+            console.log("地图初始化");
+            initMap();
+        }
+        //采集面
+        function polygonGather(){
+            var gatherPoints=[];
+            var points = [];
+            var gatherPolygon = null;
+            var polygonGatherHandler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
+            //鼠标变成加号
+            document.getElementById("map").style.cursor = "crosshair";
+            // 对鼠标按下事件的监听
+            polygonGatherHandler.setInputAction((event) => {
+                //获取加载地形后对应的经纬度和高程：地标坐标
+                var ray=viewer.camera.getPickRay(event.position);
+                var cartesian  = viewer.scene.globe.pick(ray, viewer.scene);
+                console.log(cartesian);
+                if(!Cesium.defined(cartesian)) {
+                    return;
+                }
+                var point = viewer.entities.add({
+                    name: 'gon_point',
+                    position: cartesian,
+                    point: {
+                        color: Cesium.Color.WHITE,
+                        pixelSize: 5,
+                        heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
+                        outlineColor: Cesium.Color.BLACK,
+                        outlineWidth: 1
+                    }
+                });
+                gatherPoints.push(point);
+                points.push(cartesian);
+                if (points.length >= 3) {
+                    if (gatherPolygon == null) {
+                        gatherPolygon = viewer.entities.add({
+                            name: 'polygon',
+                            polygon: {
+                                hierarchy: new Cesium.CallbackProperty(function (time,result){
+                                    var hierarchyTemp=new Cesium.PolygonHierarchy ( points , null )
+                                    return hierarchyTemp;
+                                }, false),
+                                material: Cesium.Color.GREENYELLOW.withAlpha(0.5)
+                            }
+                        });
+                    }else {
+                        gatherPolygon.polygon.hierarchy = new Cesium.CallbackProperty(function (time,result){
+                            var hierarchyTemp=new Cesium.PolygonHierarchy ( points , null )
+                            return hierarchyTemp;
+                        }, false);
+                    }
+                }
+            }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+
+            polygonGatherHandler.setInputAction(function (rightClick) {
+                console.log("采集的面坐标(笛卡尔)：",gatherPolygon.polygon.hierarchy.getValue().positions);
+                var dke=gatherPolygon.polygon.hierarchy.getValue().positions;
+                var objArr=[];
+                for(var i=0;i<dke.length;i++){
+                    var ellipsoid=viewer.scene.globe.ellipsoid;
+                    var cartesian3=new Cesium.Cartesian3(dke[i].x,dke[i].y,dke[i].z);
+                    var cartographic=ellipsoid.cartesianToCartographic(cartesian3);
+                    //console.log("cartographic",cartographic);
+                    var obj={};
+                    obj.lat=Cesium.Math.toDegrees(cartographic.latitude);
+                    obj.lng=Cesium.Math.toDegrees(cartographic.longitude);
+                    obj.alt=cartographic.height;
+                    objArr.push(obj);
+                }
+                console.log("采集的面坐标(经纬度)",objArr);
+                for(var i=0;i<gatherPoints.length;i++){
+                    viewer.entities.remove(gatherPoints[i]);
+                }
+                gatherPoints=[];
+                //points = [];//注：points不可置空，如果置空，会导致地图上的点也不存在。
+                //鼠标变成加号
+                document.getElementById("map").style.cursor = "default";
+                //移除地图点击事件
+                polygonGatherHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_CLICK)//移除事件
+            }, Cesium.ScreenSpaceEventType.RIGHT_CLICK);
+
+        }
+    </script>
+</head>
+<body onload="load()">
+<input type="button" onclick='polygonGather();' value="面采集"
+       style='position:absolute;left:50px;top:50px;background: blue;color:white;z-index: 9999;font-size: 24px'/>
+
+
+<div id="map" style='z-index:100;position: absolute;top: 0; bottom: 0;right: 0;left: 0;'></div>
+</body>
+</html>
+

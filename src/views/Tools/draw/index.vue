@@ -48,13 +48,16 @@ export default {
      */
     clears() {
       const Cesium = this.cesium;
-      //移除地图鼠标点击事件
-      this.handler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOWN)
-      //移除地图鼠标移动事件
-      this.handler.removeInputAction(Cesium.ScreenSpaceEventType.MOUSE_MOVE)
-      //移除地图鼠标抬起事件
-      this.handler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_UP)
-      this.handler = null
+      if (this.handler) {
+        //移除地图鼠标点击事件
+        this.handler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOWN)
+        //移除地图鼠标移动事件
+        this.handler.removeInputAction(Cesium.ScreenSpaceEventType.MOUSE_MOVE)
+        //移除地图鼠标抬起事件
+        this.handler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_UP)
+        this.handler.destroy();
+        this.handler = null
+      }
       this.viewer.entities.removeAll();
     },
     /**
@@ -64,12 +67,15 @@ export default {
     draws(name) {
       const Cesium = this.cesium;
       const viewer = this.viewer;
+
       this.handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
+
       //雨
       if (name == "Rain") {
         this._Rain.createRain()
         return
       }
+
       //点
       if (name == "Point") {
         //鼠标点击事件
@@ -82,11 +88,80 @@ export default {
           }
           const _Point = this._Draw.createPoint({
             position: cartesian,
+            color: Cesium.Color.SKYBLUE,
+            pixelSize: 10,
+            outlineColor: Cesium.Color.YELLOW,
+            outlineWidth: 3,
+            disableDepthTestDistance: Number.POSITIVE_INFINITY,
           })
           console.log(`绘制点：=>`, _Point)
         }, Cesium.ScreenSpaceEventType.LEFT_DOWN);
+        //鼠标右键点击
+        this.handler.setInputAction((event) => {
+          this.handler.destroy();
+          this.handler = null
+        }, Cesium.ScreenSpaceEventType.RIGHT_CLICK);
         return
       }
+
+      //线
+      if (name == "Polyline") {
+        let lineEntity = null; //线实体
+        let positions = []; //位置
+        /**
+       * 选择了椭球或地图，返回世界上椭球或地图表面上的点坐标。如果未选择椭球或地图，则返回undefined
+       * @return  Cartesian3
+       */
+        const pickEllipsoid = (eventPosition) => {
+          return this.viewer.scene.camera.pickEllipsoid(
+            eventPosition,
+            this.viewer.scene.globe.ellipsoid
+          );
+        };
+
+        //鼠标左键点击
+        this.handler.setInputAction((event) => {
+          const cartesian = pickEllipsoid(event.position);
+          if (positions.length == 0) {
+            //复制此实例
+            positions.push(cartesian.clone());
+          }
+          positions.push(cartesian);
+        }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+
+        //鼠标移动
+        this.handler.setInputAction((event) => {
+          const cartesian = pickEllipsoid(event.endPosition);
+          if (positions.length >= 2) {
+            if (!Cesium.defined(lineEntity)) {
+              //值由回调函数延迟计算
+              const _positions = new Cesium.CallbackProperty(() => {
+                return positions;
+              }, false);
+
+              lineEntity = this._Draw.createPolyline({
+                positions: _positions,
+                material: Cesium.Color.RED,
+                width: 5,
+              });
+            } else {
+              if (cartesian != undefined) {
+                positions.pop();
+                cartesian.y += 1 + Math.random();
+                positions.push(cartesian);
+              }
+            }
+          }
+        }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
+        //鼠标右键点击
+        this.handler.setInputAction((event) => {
+          this.handler.destroy();
+          this.handler = null
+        }, Cesium.ScreenSpaceEventType.RIGHT_CLICK);
+        return
+      }
+
+      
     }
   },
 };

@@ -7,12 +7,24 @@ class Draw extends Entity {
     //     this.Cesium = Cesium
     //     this.viewer = viewer
     // }
+
     /**
      * 绘制点
+     * @param {*} params 
+     * @returns 
      */
     createPoint(params) {
         const _Entity = new Entity(this.Cesium, this.viewer)
         return _Entity.createPoint(params)
+    }
+    /**
+     * 绘制线
+     * @param {*} params 
+     * @returns 
+     */
+    createPolyline(params) {
+        const _Entity = new Entity(this.Cesium, this.viewer)
+        return _Entity.createPolyline(params)
     }
 }
 export default Draw
