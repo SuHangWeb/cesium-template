@@ -35,7 +35,7 @@ class Rain {
             '}\n';
     }
 
-    createRain() {
+    create() {
         const Cesium = this.Cesium
         //  collection = viewer.scene.postProcessStages;
         this.rainStage = this.viewer.scene.postProcessStages.add(new Cesium.PostProcessStage({

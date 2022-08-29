@@ -36,6 +36,8 @@ https://segmentfault.com/a/1190000040320599?sort=newest 流线
 
 * https://blog.csdn.net/weixin_40902527/article/details/110224380  建筑光效
 
+* https://blog.csdn.net/Tmraz/article/details/114025038 效果
+
 ## github
 * https://github.com/YanzheZhang/Cesium.HPUZYZ.Demo 案例集
 * https://github.com/zouyaoji/vue-cesium-demo
