@@ -87,6 +87,7 @@ export const constantRoutes = [
     }]
   },
 
+
   {
     path: '/getCoordinates',
     component: Layout,
@@ -382,16 +383,22 @@ export const constantRoutes = [
     meta: { title: '工具', icon: 'el-icon-thumb', highlight: true },
     children: [
       {
-        path: 'measure',
-        name: 'Measure',
-        component: () => import('@/views/Tools/measure'),
-        meta: { title: '测量', icon: 'el-icon-mouse', highlight: true }
-      },
-      {
         path: 'compass',
         name: 'Compass',
         component: () => import('@/views/Tools/compass'),
         meta: { title: '罗盘', icon: 'el-icon-discover', highlight: true }
+      },
+      {
+        path: 'draw',
+        name: 'Draw',
+        component: () => import('@/views/Tools/draw'),
+        meta: { title: '绘制', icon: 'el-icon-edit', highlight: true }
+      },
+      {
+        path: 'measure',
+        name: 'Measure',
+        component: () => import('@/views/Tools/measure'),
+        meta: { title: '测量', icon: 'el-icon-mouse', highlight: true }
       },
     ]
   },
