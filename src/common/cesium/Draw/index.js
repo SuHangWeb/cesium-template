@@ -75,6 +75,9 @@ class Draw extends Entity {
         //鼠标左键点击
         handler.setInputAction((event) => {
             const cartesian = pickEllipsoid(event.position);
+            if (!Cesium.defined(cartesian)) {
+                return;
+            }
             if (positions.length == 0) {
                 //复制此实例
                 positions.push(cartesian.clone());
@@ -145,24 +148,32 @@ class Draw extends Entity {
         let tempEntities = [];
         let position = [];
         let tempPoints = [];
+        let lineEntity = null; //线实体
+        let linePositions = [];
 
-        //鼠标移动事件
-        handler.setInputAction((movement) => {
-            callback({
-                entity: undefined,
-                entityMsg: "绘制面",
-                handlerMsg: "移动",
-                msg: "成功",
-                code: 202
-            })
-        }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
+        /**
+        * 选择了椭球或地图，返回世界上椭球或地图表面上的点坐标。如果未选择椭球或地图，则返回undefined
+        * @return  Cartesian3
+        */
+        const pickEllipsoid = (eventPosition) => {
+            return this.viewer.scene.camera.pickEllipsoid(
+                eventPosition,
+                this.viewer.scene.globe.ellipsoid
+            );
+        };
+
+
         //左键点击操作
         handler.setInputAction((event) => {
             //调用获取位置信息的接口
             let ray = this.viewer.camera.getPickRay(event.position);
             position = this.viewer.scene.globe.pick(ray, this.viewer.scene);
+            if (!Cesium.defined(position)) {
+                return;
+            }
             tempPoints.push(position);
             let tempLength = tempPoints.length;
+
             //调用绘制点的接口
             let point = _Entity.createPoint({
                 position: position,
@@ -175,31 +186,96 @@ class Draw extends Entity {
             })
             tempEntities.push(point);
             if (tempLength > 1) {
-                function drawPolyline(positions) {
-                    if (positions.length < 1) return;
-                    //值由回调函数延迟计算
-                    const _positions = new Cesium.CallbackProperty(() => {
-                        return positions;
-                    }, false);
-                    
-                    return _Entity.createPolyline({
-                        positions: _positions,
-                        // width: 5.0,
-                        // material: new Cesium.PolylineGlowMaterialProperty({
-                        //     color: Cesium.Color.GOLD,
-                        // }),
-                        // depthFailMaterial: new Cesium.PolylineGlowMaterialProperty({
-                        //     color: Cesium.Color.GOLD,
-                        // }),
-                        // clampToGround: true,
-                    })
-                }
-                let pointline = drawPolyline([tempPoints[tempPoints.length - 2], tempPoints[tempPoints.length - 1]]);
-                tempEntities.push(pointline);
+                // function drawPolyline(positions) {
+                //     if (positions.length < 1) return;
+                //     //值由回调函数延迟计算
+                //     const _positions = new Cesium.CallbackProperty(() => {
+                //         return positions;
+                //     }, false);
+
+                //     return _Entity.createPolyline({
+                //         positions: _positions,
+                //         // width: 5.0,
+                //         // material: new Cesium.PolylineGlowMaterialProperty({
+                //         //     color: Cesium.Color.GOLD,
+                //         // }),
+                //         // depthFailMaterial: new Cesium.PolylineGlowMaterialProperty({
+                //         //     color: Cesium.Color.GOLD,
+                //         // }),
+                //         // clampToGround: true,
+                //     })
+                // }
+                // let pointline = drawPolyline([tempPoints[tempPoints.length - 2], tempPoints[tempPoints.length - 1]]);
+                // tempEntities.push(pointline);
             } else {
                 // tooltip.innerHTML = "请绘制下一个点，右键结束";
             }
         }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+        //鼠标移动事件
+        handler.setInputAction((event) => {
+            const cartesian = pickEllipsoid(event.endPosition);
+
+            if (!Cesium.defined(lineEntity)) {
+                //值由回调函数延迟计算
+                const _positions = new Cesium.CallbackProperty(() => {
+                    return tempPoints;
+                }, false);
+
+                lineEntity = _Entity.createPolyline({
+                    positions: _positions,
+                    material: Cesium.Color.RED,
+                    width: 2,
+                })
+
+            } else {
+                if (cartesian != undefined) {
+                    tempPoints.pop();
+                    cartesian.y += 1 + Math.random();
+                    tempPoints.push(cartesian);
+                }
+            }
+
+            let tempLength = tempPoints.length;
+            if (tempLength >= 3) {
+                const _Polygon = _Entity.createPolygon({
+                    hierarchy: new Cesium.CallbackProperty((time, result) => {
+                        return new Cesium.PolygonHierarchy(tempPoints, null)
+                    }, false),
+                    material: Cesium.Color.fromCssColorString("#FFD700").withAlpha(.2)
+                })
+                tempEntities.push(_Polygon);
+            }
+            callback({
+                entity: undefined,
+                entityMsg: "绘制面",
+                handlerMsg: "移动",
+                msg: "成功",
+                code: 202
+            })
+        }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
+        //鼠标右键点击
+        handler.setInputAction((event) => {
+
+            const _positions = new Cesium.CallbackProperty(() => {
+                return [tempPoints[tempPoints.length - 1], tempPoints[0]];
+            }, false);
+
+            lineEntity = _Entity.createPolyline({
+                positions: _positions,
+                material: Cesium.Color.RED,
+                width: 2,
+            })
+            tempEntities.push(lineEntity);
+
+            handler = null
+            callback({
+                entity: tempEntities,
+                entityMsg: "绘制面",
+                handlerMsg: "右键",
+                msg: "成功",
+                code: 200
+            })
+        }, Cesium.ScreenSpaceEventType.RIGHT_CLICK);
     }
 }
 export default Draw
