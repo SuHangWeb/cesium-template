@@ -37,6 +37,9 @@ https://segmentfault.com/a/1190000040320599?sort=newest 流线
 * https://blog.csdn.net/weixin_40902527/article/details/110224380  建筑光效
 
 * https://blog.csdn.net/Tmraz/article/details/114025038 效果
+* https://blog.csdn.net/qq_36213352/article/details/122909184 绘制点线面
+* http://t.zoukankan.com/CreateFree-p-11488492.html 绘制点线面
+* https://blog.csdn.net/qq_25064691/article/details/114494842 绘制点线面
 
 ## github
 * https://github.com/YanzheZhang/Cesium.HPUZYZ.Demo 案例集

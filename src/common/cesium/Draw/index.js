@@ -132,5 +132,74 @@ class Draw extends Entity {
             })
         }, Cesium.ScreenSpaceEventType.RIGHT_CLICK);
     }
+
+    /**
+     * 绘制面
+     * @param {*} params 样式参数
+     * @param {*} handler 事件
+     * @param {*} callback 回调函数
+     */
+    createPolygon(params, handler, callback) {
+        const Cesium = this.Cesium
+        const _Entity = new Entity(this.Cesium, this.viewer)
+        let tempEntities = [];
+        let position = [];
+        let tempPoints = [];
+
+        //鼠标移动事件
+        handler.setInputAction((movement) => {
+            callback({
+                entity: undefined,
+                entityMsg: "绘制面",
+                handlerMsg: "移动",
+                msg: "成功",
+                code: 202
+            })
+        }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
+        //左键点击操作
+        handler.setInputAction((event) => {
+            //调用获取位置信息的接口
+            let ray = this.viewer.camera.getPickRay(event.position);
+            position = this.viewer.scene.globe.pick(ray, this.viewer.scene);
+            tempPoints.push(position);
+            let tempLength = tempPoints.length;
+            //调用绘制点的接口
+            let point = _Entity.createPoint({
+                position: position,
+                color: Cesium.Color.SKYBLUE,
+                pixelSize: 10,
+                outlineColor: Cesium.Color.YELLOW,
+                outlineWidth: 3,
+                disableDepthTestDistance: Number.POSITIVE_INFINITY,
+                heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
+            })
+            tempEntities.push(point);
+            if (tempLength > 1) {
+
+                function drawPolyline(positions) {
+                    if (positions.length < 1) return;
+                    //值由回调函数延迟计算
+                    const _positions = new Cesium.CallbackProperty(() => {
+                        return positions;
+                    }, false);
+                    return _Entity.createPolyline({
+                        positions: _positions,
+                        // width: 5.0,
+                        // material: new Cesium.PolylineGlowMaterialProperty({
+                        //     color: Cesium.Color.GOLD,
+                        // }),
+                        // depthFailMaterial: new Cesium.PolylineGlowMaterialProperty({
+                        //     color: Cesium.Color.GOLD,
+                        // }),
+                        // clampToGround: true,
+                    })
+                }
+                let pointline = drawPolyline([tempPoints[tempPoints.length - 2], tempPoints[tempPoints.length - 1]]);
+                tempEntities.push(pointline);
+            } else {
+                // tooltip.innerHTML = "请绘制下一个点，右键结束";
+            }
+        }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+    }
 }
 export default Draw

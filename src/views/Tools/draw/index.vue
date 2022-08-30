@@ -106,10 +106,52 @@ export default {
       }
 
       //面
-      if (name == "polygonGather") {
+      if (name == "polygon") {
+        this._Draw.createPolygon({
+        }, this.handler, (e) => {
+          console.log(e)
+        })
+        
+        // //鼠标移动事件
+        // handler.setInputAction(function (movement) {
+        // }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
+        // //左键点击操作
+        // handler.setInputAction(function (click) {
+        //   //调用获取位置信息的接口
+        //   let ray = viewer.camera.getPickRay(click.position);
+        //   position = viewer.scene.globe.pick(ray, viewer.scene);
+        //   tempPoints.push(position);
+        //   let tempLength = tempPoints.length;
+        //   //调用绘制点的接口
+        //   let point = that.drawPoint(position);
+        //   tempEntities.push(point);
+        //   if (tempLength > 1) {
+        //     let pointline = that.drawPolyline([tempPoints[tempPoints.length - 2], tempPoints[tempPoints.length - 1]]);
+        //     tempEntities.push(pointline);
+        //   } else {
+        //     // tooltip.innerHTML = "请绘制下一个点，右键结束";
+        //   }
+        // }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+        // //右键点击操作
+        // handler.setInputAction(function (click) {
+        //   let cartesian = viewer.camera.pickEllipsoid(click.position, viewer.scene.globe.ellipsoid);
 
+        //   if (cartesian) {
+        //     let tempLength = tempPoints.length;
+        //     if (tempLength < 3) {
+        //       alert('请选择3个以上的点再执行闭合操作命令');
+        //     } else {
+        //       //闭合最后一条线
+        //       let pointline = that.drawPolyline([tempPoints[tempPoints.length - 1], tempPoints[0]]);
+        //       tempEntities.push(pointline);
+        //       that.drawPolygon(tempPoints);
+        //       tempEntities.push(tempPoints);
+        //       handler.destroy();//关闭事件句柄
+        //       handler = null;
+        //     }
+        //   }
+        // }, Cesium.ScreenSpaceEventType.RIGHT_CLICK);
       }
-
     }
   },
 };

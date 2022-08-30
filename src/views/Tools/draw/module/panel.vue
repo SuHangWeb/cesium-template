@@ -7,7 +7,7 @@
         <div class="panel-content">
             <el-button type="primary" size="mini" @click="clickCreate('Point')">绘制点</el-button>
             <el-button type="primary" size="mini" @click="clickCreate('Polyline')">绘制线</el-button>
-            <el-button type="primary" size="mini" @click="clickCreate('polygonGather')">绘制面</el-button>
+            <el-button type="primary" size="mini" @click="clickCreate('polygon')">绘制面</el-button>
         </div>
     </el-card>
 </template>
