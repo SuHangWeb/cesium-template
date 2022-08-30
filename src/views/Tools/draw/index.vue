@@ -33,6 +33,8 @@ export default {
         infoBox: false,
         selectionIndicator: false,
       });
+      // 开启深度检测
+      // this.viewer.scene.globe.depthTestAgainstTerrain = true;
       //去掉双击事件
       this.viewer.cesiumWidget.screenSpaceEventHandler.removeInputAction(
         Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK
@@ -110,7 +112,7 @@ export default {
         this._Draw.createPolygon({
         }, this.handler, (e) => {
           if (e.code == 200) {
-            console.log(e)
+            // console.log(e)
             this.handler.destroy();
             this.handler = null
           }
