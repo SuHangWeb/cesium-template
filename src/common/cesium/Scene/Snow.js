@@ -49,7 +49,7 @@ class Snow {
         }))
         return this.snowStage
     }
-    removeSnow() {
+    remove() {
         if (this.snowStage != undefined) {
             this.viewer.scene.postProcessStages.remove(this.snowStage)
             this.snowStage = undefined

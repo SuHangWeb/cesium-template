@@ -51,7 +51,7 @@ class Rain {
         this.viewer.scene.fog.minimumBrightness = 0.8;
         return this.rainStage
     }
-    removeRain() {
+    remove() {
         if (this.rainStage != undefined) {
             this.viewer.scene.postProcessStages.remove(this.rainStage)
             this.rainStage = undefined

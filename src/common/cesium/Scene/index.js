@@ -89,6 +89,28 @@ class Scene {
         const silhouette = collection.add(Cesium.PostProcessStageLibrary.createBrightnessStage());
         silhouette.enabled = true;
         silhouette.uniforms.brightness = 0.1; //（调节亮度0 - 3最佳）
+
+        // 方法2
+        // var fs =
+        //     'uniform sampler2D colorTexture;\n' +
+        //     'varying vec2 v_textureCoordinates;\n' +
+        //     'uniform float scale;\n' +
+        //     'uniform vec3 offset;\n' +
+        //     'void main() {\n' +
+        //     '    vec4 color = texture2D(colorTexture, v_textureCoordinates);\n' + //获取片段颜色
+        //     '    gl_FragColor = vec4(color.rgb * scale + offset, 10.0);\n' +
+        //     '}\n'; //放大片段颜色系数
+
+        // viewer.scene.postProcessStages.add(new Cesium.PostProcessStage({
+        //     fragmentShader: fs,
+        //     uniforms: {
+        //         scale: 1.1,
+        //         offset: function () {
+        //             // return new Cesium.Cartesian3(0.1, 0.2, 0.3);
+        //             return new Cesium.Cartesian3(0.01, 0.02, 0.03);
+        //         }
+        //     }
+        // }));
     }
 
     /**
@@ -188,6 +210,31 @@ class Scene {
             context: this.viewer.scene.context
         });
         this.viewer.scene.shadowMap.enabled = true;
+    }
+
+    /**
+     * 轮廓（描边）
+     */
+    Stroke() {
+        const Cesium = this.Cesium
+        let collection = this.viewer.scene.postProcessStages;
+        let silhouette = collection.add(Cesium.PostProcessStageLibrary.createSilhouetteStage());
+        silhouette.enabled = true;
+        silhouette.uniforms.color = Cesium.Color.YELLOW;
+    }
+
+    /**
+     * 泛光 bloom
+     */
+    Bloom() {
+        let bloom = this.viewer.scene.postProcessStages.bloom;
+        bloom.enabled = true;
+        bloom.uniforms.glowOnly = false;
+        bloom.uniforms.contrast = 128;
+        bloom.uniforms.brightness = -0.3;
+        bloom.uniforms.delta = 1;
+        bloom.uniforms.sigma = 2;
+        bloom.uniforms.stepSize = 1;
     }
 
 }

@@ -7,11 +7,7 @@
  
 <script>
 import panelView from "./module/panel.vue"
-import Rain from "@/common/cesium/Draw/Rain"
-import Snow from "@/common/cesium/Draw/Snow"
-import Fog from "@/common/cesium/Draw/Fog"
 import Draw from "@/common/cesium/Draw"
-import Scene from "@/common/cesium/Scene"
 export default {
   components: {
     panelView
@@ -20,11 +16,7 @@ export default {
     return {
       viewer: null,
       handler: null,
-      _Rain: null,
-      _Snow: null,
-      _Fog: null,
       _Draw: null,
-      _Scene: null
     };
   },
   mounted() {
@@ -46,11 +38,7 @@ export default {
         Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK
       );
 
-      this._Rain = new Rain(Cesium, this.viewer)
-      this._Snow = new Snow(Cesium, this.viewer)
-      this._Fog = new Fog(Cesium, this.viewer)
       this._Draw = new Draw(Cesium, this.viewer)
-      this._Scene = new Scene(Cesium, this.viewer)
     },
     /**
      * 清楚
@@ -80,78 +68,6 @@ export default {
       const viewer = this.viewer;
 
       this.handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
-
-      //雨
-      if (name == "Rain") {
-        this._Rain.create()
-        return
-      }
-      //雪
-      if (name == "Snow") {
-        this._Snow.create()
-        return
-      }
-      //雾
-      if (name == "Fog") {
-        this._Fog.create()
-        return
-      }
-      //雾（私有）
-      if (name == "private-Fog") {
-        this._Scene.fog()
-        return
-      }
-      //太阳（私有）
-      if (name == "private-Sun") {
-        this._Scene.sun()
-        return
-      }
-      //月亮（私有）
-      if (name == "private-Moon") {
-        this._Scene.moon()
-        return
-      }
-      //黑白
-      if (name == "colourless") {
-        this._Scene.colourless()
-        return
-      }
-      //高斯模糊
-      if (name == "gaussianBlur") {
-        this._Scene.gaussianBlur()
-        return
-      }
-      //亮度
-      if (name == "brightness") {
-        this._Scene.brightness()
-        return
-      }
-      //景深
-      if (name == "depthOfField") {
-        this._Scene.depthOfField()
-        return
-      }
-      //耀斑
-      if (name == "solarFlare") {
-        this._Scene.solarFlare()
-        return
-      }
-      //夜视
-      if (name == "nightVision") {
-        this._Scene.nightVision()
-        return
-      }
-      //环境遮蔽
-      if (name == "ambientOcclusion") {
-        this._Scene.ambientOcclusion()
-        return
-      }
-      //阴影
-      if (name == "shadow") {
-        this._Scene.shadow()
-        return
-      }
-
 
       //点
       if (name == "Point") {

@@ -33,6 +33,10 @@
     JudgePointInPolygon | 判断点是否在平面内部
     JudgePointInPolyline | 盘算点是否在线段上
     GetPanelEquation | 根据3个点,计算空间平面的方程
+    modelBlock | cesium模型变黑的解决
+    updateViewModel | Imagey的光照调整
+    blurredPicture | 解决Cesium显示画面模糊的问题
+    antialiasing | 去锯齿
  */
 class Utils {
     constructor(Cesium, viewer) {
@@ -703,7 +707,82 @@ class Utils {
         return { A: A, B: B, C: C, D: D };
     }
 
+    /**
+    * cesium模型变黑的解决
+    * https://github.com/CesiumGS/cesium-ion-rest-api-examples/issues/73
+    * lightColor : new Cesium.Cartesian3(100.0,100.0, 100.0)，表示，rgb的倍数，这样就是白光增强到100倍。对Pbrt材质有效，倾斜摄影不生效。
+    */
+    modelBlock(tileset) {
+        const Cesium = this.Cesium
+        tileset.lightColor = new Cesium.Cartesian3(1000, 1000, 1000)
+    }
 
+    /**
+     * Imagey的光照调整
+     * 官网示例：https://sandcastle.cesium.com/?src=Imagery%20Adjustment.html&label=All
+     * 不适用于3dtiles
+     * @param {*} imageryLayers 
+     */
+    updateViewModel(imageryLayers) {
+        if (imageryLayers.length > 0) {
+            var layer = imageryLayers.get(0);
+            viewModel.brightness = layer.brightness;
+            viewModel.contrast = layer.contrast;
+            viewModel.hue = layer.hue;
+            viewModel.saturation = layer.saturation;
+            viewModel.gamma = layer.gamma;
+        }
+    }
+
+    /**
+     * 解决Cesium显示画面模糊的问题
+     * https://zhuanlan.zhihu.com/p/41794242
+     */
+    blurredPicture() {
+        const Cesium = this.Cesium
+        this.viewer._cesiumWidget._supportsImageRenderingPixelated = Cesium.FeatureDetection.supportsImageRenderingPixelated();
+        this.viewer._cesiumWidget._forceResize = true;
+        if (Cesium.FeatureDetection.supportsImageRenderingPixelated()) {
+            var vtxf_dpr = window.devicePixelRatio;
+            // 适度降低分辨率
+            while (vtxf_dpr >= 2.0) {
+                vtxf_dpr /= 2.0;
+            }
+            //alert(dpr);
+            this.viewer.resolutionScale = vtxf_dpr;
+        }
+    }
+
+    /**
+     * 去锯齿
+     * https://blog.csdn.net/weixin_46592036/article/details/106206502
+     * 
+     * cesium中有个属性viewer.resolutionScale,默认值是1.0。
+        JavaScript中有个属性window.devicePixelRatio，属性返回的是当前显示设备的物理像素分辨率与CSS像素分辨率的比率，即一个CSS像素和一个物理像素的大小比值
+        cesium中viewer.resolutionScale默认值是1.0，也就是说无论在哪个屏幕上，cesium都把当前显示器的物理像素分辨率与CSS像素分辨率的比率(window.devicePixelRatio)当成是1.0来渲染，而实际上的比率可能是1.0或者1.25或者2.0(比如mac电脑Retina屏)，所以造成锯齿和模糊。
+     */
+    antialiasing() {
+        const Cesium = this.Cesium
+        // let labelInfo = null
+        //是否开启抗锯齿
+        if (Cesium.FeatureDetection.supportsImageRenderingPixelated()) {//判断是否支持图像渲染像素化处理
+            this.viewer.resolutionScale = window.devicePixelRatio;
+        }
+        this.viewer.scene.fxaa = true;
+        this.viewer.scene.postProcessStages.fxaa.enabled = true;
+        // labelInfo = this.viewer.entities.add(new Cesium.Entity());
+        // labelInfo.position = position;
+        // labelInfo.label = {
+        //     show: true,
+        //     showBackground: true,
+        //     backgroundColor: Cesium.Color.fromCssColorString('#000'),
+        //     scale: 0.5, //这里非常巧妙的先将字体大小放大一倍在缩小一倍
+        //     font: 'normal 32px MicroSoft YaHei',
+        //     text: `blabla~~`,
+        //     pixelOffset: new Cesium.Cartesian2(-120, -100),
+        //     horizontalOrigin: Cesium.HorizontalOrigin.LEFT
+        // }
+    }
 }
 
 export default Utils

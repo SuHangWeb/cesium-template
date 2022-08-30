@@ -34,7 +34,7 @@ class Fog {
         // this.FogStage.enabled=true;
         return this.fogStage
     }
-    removeSnow() {
+    remove() {
         if (this.fogStage != undefined) {
             this.viewer.scene.postProcessStages.remove(this.fogStage)
             this.fogStage = undefined

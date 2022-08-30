@@ -145,6 +145,17 @@ export const constantRoutes = [
   },
 
   {
+    path: '/scene',
+    component: Layout,
+    children: [{
+      path: 'scene',
+      name: 'Scene',
+      component: () => import('@/views/Scene'),
+      meta: { title: '场景', icon: 'el-icon-bangzhu', highlight: true }
+    }]
+  },
+
+  {
     path: '/entity',
     component: Layout,
     redirect: '/entity/drawPoint',
