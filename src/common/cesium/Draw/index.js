@@ -175,13 +175,13 @@ class Draw extends Entity {
             })
             tempEntities.push(point);
             if (tempLength > 1) {
-
                 function drawPolyline(positions) {
                     if (positions.length < 1) return;
                     //值由回调函数延迟计算
                     const _positions = new Cesium.CallbackProperty(() => {
                         return positions;
                     }, false);
+                    
                     return _Entity.createPolyline({
                         positions: _positions,
                         // width: 5.0,
