@@ -5,9 +5,8 @@
             <el-button style="float: right; padding: 3px 0" type="text" @click="clears">清楚</el-button>
         </div>
         <div class="panel-content">
-            <el-button type="primary" size="mini" @click="clickCreate('Point')">绘制点</el-button>
-            <el-button type="primary" size="mini" @click="clickCreate('Polyline')">绘制线</el-button>
-            <el-button type="primary" size="mini" @click="clickCreate('polygon')">绘制面</el-button>
+            <el-button type="primary" v-for="(item, index) in clickCreateFor" :key="index" size="mini"
+                @click="clickCreate(item.value)">{{  item.label  }}</el-button>
         </div>
     </el-card>
 </template>
@@ -26,8 +25,28 @@ export default {
         return {
             clickCreateFor: [
                 {
-                    label: "",
-                    value: ""
+                    label: "点",
+                    value: "Point"
+                },
+                {
+                    label: "线",
+                    value: "Polyline"
+                },
+                {
+                    label: "面",
+                    value: "polygon"
+                },
+                {
+                    label: "矩形",
+                    value: "rectangle"
+                },
+                {
+                    label: "圆",
+                    value: "ellipse"
+                },
+                {
+                    label: "箭头",
+                    value: "arrow"
                 }
             ]
         };

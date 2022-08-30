@@ -60,6 +60,9 @@ export default {
       this.viewer.entities.removeAll();
 
       this.viewer.scene.postProcessStages.removeAll()
+
+      this.viewer.scene.screenSpaceCameraController.enableRotate = true;
+      this.viewer.scene.screenSpaceCameraController.enableZoom = true;
     },
     /**
      * 绘制
@@ -118,6 +121,43 @@ export default {
           }
         })
       }
+
+      //矩形
+      if (name == "rectangle") {
+        this._Draw.createRectangle({
+        }, this.handler, (e) => {
+          if (e.code == 200) {
+            console.log(e)
+            this.handler.destroy();
+            this.handler = null
+          }
+        })
+      }
+
+      //圆
+      if (name == "ellipse") {
+        this._Draw.createEllipse({
+        }, this.handler, (e) => {
+          if (e.code == 200) {
+            console.log(e)
+            this.handler.destroy();
+            this.handler = null
+          }
+        })
+      }
+
+      //箭头
+      if (name == "arrow") {
+        this._Draw.createArrow({
+        }, this.handler, (e) => {
+          if (e.code == 200) {
+            console.log(e)
+            this.handler.destroy();
+            this.handler = null
+          }
+        })
+      }
+
     }
   },
 };
