@@ -66,92 +66,43 @@ export default {
     draws(name) {
       const Cesium = this.cesium;
       const viewer = this.viewer;
-
       this.handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
 
       //点
       if (name == "Point") {
-        //鼠标点击事件
-        this.handler.setInputAction((event) => {
-          //获取加载地形后对应的经纬度和高程：地标坐标
-          var ray = viewer.camera.getPickRay(event.position);
-          var cartesian = viewer.scene.globe.pick(ray, viewer.scene);
-          if (!Cesium.defined(cartesian)) {
-            return;
+        this._Draw.createPoint({
+          color: Cesium.Color.SKYBLUE,
+          pixelSize: 10,
+          outlineColor: Cesium.Color.YELLOW,
+          outlineWidth: 3,
+          disableDepthTestDistance: Number.POSITIVE_INFINITY,
+        }, this.handler, (e) => {
+          console.log(e)
+          if (e.code == 200) {
+            //绘制成功 e.entity = 返回实体
           }
-          const _Point = this._Draw.createPoint({
-            position: cartesian,
-            color: Cesium.Color.SKYBLUE,
-            pixelSize: 10,
-            outlineColor: Cesium.Color.YELLOW,
-            outlineWidth: 3,
-            disableDepthTestDistance: Number.POSITIVE_INFINITY,
-          })
-          console.log(`绘制点：=>`, _Point)
-        }, Cesium.ScreenSpaceEventType.LEFT_DOWN);
-        //鼠标右键点击
-        this.handler.setInputAction((event) => {
-          this.handler.destroy();
-          this.handler = null
-        }, Cesium.ScreenSpaceEventType.RIGHT_CLICK);
-        return
+          if (e.code == 201) {
+            this.handler.destroy();
+            this.handler = null
+          }
+        })
       }
 
       //线
       if (name == "Polyline") {
-        let lineEntity = null; //线实体
-        let positions = []; //位置
-        /**
-       * 选择了椭球或地图，返回世界上椭球或地图表面上的点坐标。如果未选择椭球或地图，则返回undefined
-       * @return  Cartesian3
-       */
-        const pickEllipsoid = (eventPosition) => {
-          return this.viewer.scene.camera.pickEllipsoid(
-            eventPosition,
-            this.viewer.scene.globe.ellipsoid
-          );
-        };
-
-        //鼠标左键点击
-        this.handler.setInputAction((event) => {
-          const cartesian = pickEllipsoid(event.position);
-          if (positions.length == 0) {
-            //复制此实例
-            positions.push(cartesian.clone());
+        this._Draw.createPolyline({
+          material: Cesium.Color.RED,
+          width: 5,
+        }, this.handler, (e) => {
+          console.log(e)
+          if (e.code == 200) {
+            //绘制成功 e.entity = 返回实体
           }
-          positions.push(cartesian);
-        }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
-
-        //鼠标移动
-        this.handler.setInputAction((event) => {
-          const cartesian = pickEllipsoid(event.endPosition);
-          if (positions.length >= 2) {
-            if (!Cesium.defined(lineEntity)) {
-              //值由回调函数延迟计算
-              const _positions = new Cesium.CallbackProperty(() => {
-                return positions;
-              }, false);
-
-              lineEntity = this._Draw.createPolyline({
-                positions: _positions,
-                material: Cesium.Color.RED,
-                width: 5,
-              });
-            } else {
-              if (cartesian != undefined) {
-                positions.pop();
-                cartesian.y += 1 + Math.random();
-                positions.push(cartesian);
-              }
-            }
+          if (e.code == 201) {
+            this.handler.destroy();
+            this.handler = null
           }
-        }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
-        //鼠标右键点击
-        this.handler.setInputAction((event) => {
-          this.handler.destroy();
-          this.handler = null
-        }, Cesium.ScreenSpaceEventType.RIGHT_CLICK);
-        return
+        })
       }
 
       //面
