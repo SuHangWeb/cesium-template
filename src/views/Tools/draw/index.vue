@@ -146,9 +146,9 @@ export default {
         })
       }
 
-      //箭头
-      if (name == "arrow") {
-        this._Draw.createArrow({
+      //直线
+      if (name == "straightArrow") {
+        this._Draw.createStraightArrow({
         }, this.handler, (e) => {
           if (e.code == 200) {
             console.log(e)

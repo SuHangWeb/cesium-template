@@ -44,10 +44,10 @@ export default {
                     label: "圆",
                     value: "ellipse"
                 },
-                // {
-                //     label: "箭头",
-                //     value: "arrow"
-                // }
+                {
+                    label: "直线箭头",
+                    value: "straightArrow"
+                }
             ]
         };
     },

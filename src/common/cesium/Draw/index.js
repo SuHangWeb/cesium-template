@@ -1,4 +1,5 @@
 import Entity from "./../Entity"
+import DrawstraightArrow from "./straightArrow"
 
 /**
  * 绘制
@@ -504,15 +505,21 @@ class Draw extends Entity {
     }
 
     /**
-    * 绘制箭头
+    * 绘制直线箭头
     * @param {*} params 样式参数
     * @param {*} handler 事件
     * @param {*} callback 回调函数
     */
-    createArrow(params, handler, callback) {
-        const Cesium = this.Cesium
-        const _Entity = new Entity(this.Cesium, this.viewer)
-
+    createStraightArrow(params, handler, callback) {
+        const _DrawstraightArrow = new DrawstraightArrow(this.Cesium, this.viewer)
+        _DrawstraightArrow.startCreate()
+        // callback({
+        //     entity: _DrawstraightArrow.startCreate(),
+        //     entityMsg: "绘制直线箭头",
+        //     handlerMsg: "右键",
+        //     msg: "成功",
+        //     code: 200,
+        // })
     }
 }
 export default Draw
