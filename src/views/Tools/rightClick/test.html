@@ -1,0 +1,224 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <script src="Build/Cesium/Cesium.js"></script>
+    <link rel="stylesheet" href="Build/Cesium/Widgets/widgets.css">
+	<script src="initMap.js"></script>
+
+	<style>
+        ul,li{
+            padding: 0;
+            margin: 0;
+        }
+        .contextmenu-ul{
+            background: rgba(43,44,47,.6);
+            border: 1px solid #2b2c2f;
+            min-width: 110px;
+            list-style: none; 
+            font-size: 14px;
+        }
+        .contextmenu-ul a{
+            border-bottom: 1px solid rgba(128, 128, 128, 0.5);
+            padding: 6px 10px;
+            transition: background-color .25s;
+            display: block;
+            clear: both;
+            font-weight: 400;
+            line-height: 1.6;
+            white-space: nowrap;
+            color: #edffff;
+            text-decoration: none;
+        }
+        .contextmenu-ul li:last-child a{
+            border-bottom:none;
+        }
+        .contextmenu-ul a:hover{
+            background-color: #444d59;
+            color: #fff;
+            text-decoration: none;
+        }
+    </style>
+
+    <script>
+		var viewer=null;
+		var eText = [
+        {
+            text: "显示此处经纬度",
+            type: 'longlat'
+        },
+        {
+            text: "开启深度监测",
+            type: 'opendepth',
+        },
+        {
+            text: "关闭深度监测",
+            type: 'closedepth',
+        },
+        {
+            text: "初始视角",
+            type: "firstperspective",
+        },
+		{
+            text: "关闭",
+            type: "close",
+        }];
+		var cesiumContainer = null;
+
+		function load() {
+			cesiumContainer = document.getElementById("map");
+			console.log("cesiumContainer:",cesiumContainer)
+		    //初始化地图
+			initMap();
+			//定位
+			var obj = {lng:118.0850887298584, lat: 24.439001083374023,eyeHeight:5000,pitch:-30,heading:0.0,time:1};
+			viewerFlyToLonLat(obj);
+
+			doProhibit();
+			loadRightClick();
+		}
+		// 禁用浏览器右键菜单
+        function doProhibit(){
+            if(window.Event) 
+                document.captureEvents(Event.MOUSEUP);
+            
+            function nocontextmenu() {
+                event.cancelBubble = true
+                event.returnvalue = false;
+                return false;
+            }
+            
+            function norightclick(e) {
+                if (window.Event){
+                    if (e.which == 2 || e.which == 3)
+                    return false;
+                }else if (event.button == 2 || event.button == 3) {
+                    event.cancelBubble = true
+                    event.returnvalue = false;
+                    return false;
+                }
+            }
+            document.oncontextmenu = nocontextmenu;  // for IE5+ 
+            document.onmousedown = norightclick;  //
+        }
+		//附加右击事件
+		function loadRightClick(){
+			var ellipsoid = viewer.scene.globe.ellipsoid;
+            var Handler = new Cesium.ScreenSpaceEventHandler(viewer.scene.canvas);
+            Handler.setInputAction(function(e) {
+                var cartesian = viewer.camera.pickEllipsoid(e.position,ellipsoid);
+                if(cartesian){
+                    // 苗卡尔椭球体的三维坐标 转 地图坐标（弧度）
+                    var cartographic = viewer.scene.globe.ellipsoid.cartesianToCartographic(cartesian);
+                    // 地图坐标（弧度） 转 十进制度数 toFixed保留小数点后几位
+                    var log_String = Cesium.Math.toDegrees(cartographic.longitude).toFixed(8);//经度
+                    var lat_String = Cesium.Math.toDegrees(cartographic.latitude).toFixed(8);//纬度
+                    var alt_String = (viewer.camera.positionCartographic.height/1000).toFixed(2);//视角高
+                    var elec_String = viewer.scene.globe.getHeight(cartographic).toFixed(4);//海拔
+                    latObj = {log:log_String,lat:lat_String,alt:alt_String,elec:elec_String}
+                }
+                // 判断点击位置是否有实体
+				loadUl(e.position);
+				/**
+                var pickedObject = viewer.scene.pick(e.position);
+            
+                if(pickedObject == undefined){
+                    loadUl(e.position) 
+                }else{
+                    if(pickedObject.tileset != undefined && pickedObject.tileset.type == "3dtiles"){
+                        loadUl(e.position,pickedObject.tileset.contextmenuItems,"3dtiles") 
+                    }else{
+                        entitiesId = pickedObject.id._id;
+                        // 判断实体
+                        var entity = viewer.entities.getById(entitiesId);
+                        if(entity != undefined){
+                            var type = ""
+                            if(entity.billboard != undefined){
+                                type = "billboard"
+                            }
+                            if(entity.polygon != undefined){
+                                type = "polygon"
+                            }
+                            if(entity.polyline != undefined){
+                                type = "polyline"
+                            }
+                            loadUl(e.position,entity._contextmenuItems,type) 
+                        }
+                    }
+                }
+				*/
+            }, Cesium.ScreenSpaceEventType.RIGHT_CLICK);
+        }
+
+		/**
+         * 右键点击html
+         * @params {object} pos 屏幕坐标对象｛x:122,y:444｝
+         * @params {object} textArr 渲染文本数组对象
+         * @params {string} type 实体类型 undefined：空白区域
+         */
+        function loadUl(pos,textArr,type){
+            var con, lis = '';
+            if(textArr != undefined && type != undefined){
+                for(var i=0; i<textArr.length; i++){
+                    lis += `<li class="li-item" data-index="20">
+                            <a href="javascript:rightliClick( '${textArr[i].type}' )" >${textArr[i].text}</a>
+                        </li>`  
+                }
+            }else{
+                var terrainStatus = viewer.scene.globe.depthTestAgainstTerrain;
+                for(var i=0; i<eText.length; i++){
+                    if(terrainStatus){
+                        if(eText[i].type == 'opendepth'){continue}
+                    }else{
+                        if(eText[i].type == 'closedepth'){continue}
+                    }
+                    lis += `<li class="li-item" data-index="20">
+                            <a href="javascript:rightliClick( '${ eText[i].type }' )">${eText[i].text}</a>
+                        </li>`  
+                }
+            }
+            con = `<ul class="contextmenu-ul">${lis}</ul>`
+            var divs = document.querySelectorAll(".contextmenu");
+            if(divs.length != 0){
+                cesiumContainer.removeChild(divs[0])
+            }
+            div = document.createElement('div')
+            div.className = "contextmenu"
+            div.style.top = pos.y + 'px'
+            div.style.left = pos.x + 'px'
+            div.style.position = 'fixed'
+            div.innerHTML = con;
+            cesiumContainer.append(div)
+        }
+
+		function rightliClick(type){
+            var divs = document.querySelectorAll(".contextmenu")
+            cesiumContainer.removeChild(divs[0]);
+            switch(type){
+                case 'longlat':
+                    alert('经纬度：'+latObj.log+","+latObj.lat)
+                    console.log("latObj:",latObj)
+                    break;
+                case 'opendepth':
+                    viewer.scene.globe.depthTestAgainstTerrain = true;
+                    break;
+                case 'closedepth':
+                    viewer.scene.globe.depthTestAgainstTerrain = false;
+                    break;
+                case 'firstperspective': 
+                    //定位
+					var obj = {lng:118.0850887298584, lat: 24.439001083374023,eyeHeight:5000,pitch:-30,heading:0.0,time:1};
+					viewerFlyToLonLat(obj);
+                    break;
+				case 'close': 
+                    break;
+            }
+        }
+
+
+    </script>
+</head>
+<body onload="load()">
+	<div id="map" style='z-index:100;position: absolute;top: 0; bottom: 0;right: 0;left: 0;'></div>
+</body>
+</html>
+

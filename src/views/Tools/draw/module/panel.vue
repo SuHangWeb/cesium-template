@@ -2,7 +2,7 @@
     <el-card class="panel-card">
         <div slot="header" class="clearfix">
             <span>操作面板</span>
-            <el-button style="float: right; padding: 3px 0" type="text" @click="clears">清楚</el-button>
+            <el-button style="float: right; padding: 3px 0" type="text" @click="clears">清除</el-button>
         </div>
         <div class="panel-content">
             <el-button type="primary" v-for="(item, index) in clickCreateFor" :key="index" size="mini"
@@ -44,10 +44,10 @@ export default {
                     label: "圆",
                     value: "ellipse"
                 },
-                {
-                    label: "箭头",
-                    value: "arrow"
-                }
+                // {
+                //     label: "箭头",
+                //     value: "arrow"
+                // }
             ]
         };
     },

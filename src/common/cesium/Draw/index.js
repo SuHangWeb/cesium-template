@@ -513,33 +513,6 @@ class Draw extends Entity {
         const Cesium = this.Cesium
         const _Entity = new Entity(this.Cesium, this.viewer)
 
-        let gatherPosition = []; //采集的点信息
-        let floatingPoint = null; //移动点
-        let layerId = "straightArrowLayer";
-
-        //左键点击
-        handler.setInputAction((event) => {
-            const position = event.position;
-            if (!Cesium.defined(position)) {
-                return;
-            }
-            const ray = this.viewer.camera.getPickRay(position);
-            if (!Cesium.defined(ray)) {
-                return;
-            }
-            const cartesian = this.viewer.scene.globe.pick(ray, this.viewer.scene);
-            if (!Cesium.defined(cartesian)) {
-                return;
-            }
-
-            if (gatherPosition.length == 0) {
-                gatherPosition.push(cartesian);
-                floatingPoint = createPoint(cartesian, -1);
-                showRegion2Map();
-            }
-
-
-        }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
     }
 }
 export default Draw

@@ -411,6 +411,12 @@ export const constantRoutes = [
         component: () => import('@/views/Tools/measure'),
         meta: { title: '测量', icon: 'el-icon-mouse', highlight: true }
       },
+      {
+        path: 'rightClick',
+        name: 'RightClick',
+        component: () => import('@/views/Tools/rightClick'),
+        meta: { title: '右键', icon: 'el-icon-mouse', highlight: true }
+      },
     ]
   },
 
