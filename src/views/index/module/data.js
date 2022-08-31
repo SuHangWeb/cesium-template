@@ -80,14 +80,14 @@ export const doc = [
 
     {
         title: "coding-工作平台",
-        link: "https://landstar.coding.net/user",
-        innerChain: true,
+        link: "https://landstar.shenyang.com:442/!/#10onemap3d",
+        externalLinks: true,
         private: true
     },
     {
         title: "下载",
         link: "https://zhuanlan.zhihu.com/p/523570955",
-        innerChain: true,
+        externalLinks: true,
         private: true
     }
 ]
@@ -184,7 +184,7 @@ export const tripartite = [
 /**
  * 工具类
  */
- export const tools = [
+export const tools = [
     {
         title: "地理geoJson下载",
         describe: "地理geoJson数据下载",
