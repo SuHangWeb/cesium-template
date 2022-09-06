@@ -26,7 +26,7 @@ export default {
             clickCreateFor: [
                 {
                     label: "距离测量",
-                    value: "MeasureDistance"
+                    value: "distance"
                 }
             ]
         };
