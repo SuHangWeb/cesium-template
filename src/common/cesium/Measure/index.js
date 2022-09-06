@@ -55,18 +55,24 @@ class Measure {
         });
         this.vertexEntities.push(vertexEntity);
     }
+    /**
+     * 换算空间距离
+     * @param {*} positions 
+     */
+    spaceDistance(positions) {
+        const _len = positions.length
+        return this._Turf.distance(positions[_len - 2], positions[_len - 1])
+    }
     //创建线节点
     createVertex(positions) {
-        console.log(positions)
         const Cesium = this.Cesium
-        console.log(this._Turf.distance(positions[0],positions[1]))
         let vertexEntity = this.viewer.entities.add({
             position: positions[positions.length - 1],
             id: "MeasureDistanceVertex" + positions[positions.length - 1],
             type: "MeasureDistanceVertex",
             label: {
-                // text: spaceDistance(this.positions) + "米",
-                text: "米",
+                text: this.spaceDistance(this.positions) + "米",
+                // text: "米",
                 scale: 0.5,
                 font: 'normal 24px MicroSoft YaHei',
                 distanceDisplayCondition: new Cesium.DistanceDisplayCondition(0, 5000),
