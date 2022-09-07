@@ -27,6 +27,14 @@ export default {
                 {
                     label: "距离测量",
                     value: "distance"
+                },
+                // {
+                //     label: "测量高度",
+                //     value: "height"
+                // },
+                {
+                    label: "面积测量",
+                    value: "area"
                 }
             ]
         };

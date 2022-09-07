@@ -41,5 +41,13 @@ class MeasureCommon {
         const _Utils = new Utils(this.Cesium, this.viewer)
         return _Utils.getDistance(from, to).toFixed(2)
     }
+    /**
+     * 多边形面积
+     * @param {*} arr 
+     */
+    get_countArea(arr) {
+        const _Utils = new Utils(this.Cesium, this.viewer)
+        return _Utils.countArea(arr).toFixed(2)
+    }
 }
 export default MeasureCommon

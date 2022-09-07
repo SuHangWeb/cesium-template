@@ -67,7 +67,13 @@ export default {
      */
     measure(type) {
       if(type == "distance"){
-        this._Measure.createDistance()
+        this._Measure.distance()
+      }
+      if(type == "height"){
+        this._Measure.height()
+      }
+      if(type == "area"){
+        this._Measure.area()
       }
      }
   },

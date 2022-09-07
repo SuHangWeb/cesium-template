@@ -110,7 +110,6 @@ class Distance extends MeasureCommon {
     measureEnd() {
         this.deactivate();
         this.MeasureEndEvent.raiseEvent(this.measureDistance); //触发结束事件 传入结果
-        console.log(this.viewer)
     }
 
     //清空绘制

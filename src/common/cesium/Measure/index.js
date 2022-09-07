@@ -1,4 +1,6 @@
 import Distance from "./distance"
+import Height from "./height"
+import Area from "./area"
 /**
  * 测量
  */
@@ -22,11 +24,26 @@ class Measure {
         this.config = __assign({}, config);
     }
     /**
-     * 初始化
+     * 距离
      */
-    createDistance() {
+    distance() {
         const _Distance = new Distance(this.Cesium, this.viewer, this.config)
         _Distance.activate()
+    }
+    /**
+     * 高度
+     */
+    height() {
+        const _Height = new Height(this.Cesium, this.viewer, this.config)
+        _Height.activate()
+    }
+
+    /**
+     * 面积
+     */
+    area() {
+        const _Area = new Area(this.Cesium, this.viewer, this.config)
+        _Area.activate()
     }
 }
 export default Measure
