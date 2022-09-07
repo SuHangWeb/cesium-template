@@ -1,8 +1,7 @@
-import Distance from "./distance"
-/**
- * 测量
- */
 
+/**
+ * 通用
+ */
 var __assign = (this && this.__assign) || function () {
     __assign = Object.assign || function (t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -15,18 +14,11 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-class Measure {
+class MeasureCommon {
     constructor(Cesium, viewer, config) {
         this.Cesium = Cesium
         this.viewer = viewer
         this.config = __assign({}, config);
     }
-    /**
-     * 初始化
-     */
-    createDistance() {
-        const _Distance = new Distance(this.Cesium, this.viewer, this.config)
-        _Distance.activate()
-    }
 }
-export default Measure
+export default MeasureCommon

@@ -7,7 +7,8 @@
  
 <script>
 import panelView from "./module/panel.vue";
-import Distance from "@/common/cesium/Measure/distance"
+// import Distance from "@/common/cesium/Measure/distance"
+import Measure from "@/common/cesium/Measure"
 export default {
   components: {
     panelView
@@ -41,7 +42,7 @@ export default {
       );
 
 
-      this._Distance = new Distance(Cesium,this.viewer)
+      this._Measure = new Measure(Cesium,this.viewer)
 
       //相机
       this.viewer.camera.flyTo({
@@ -66,7 +67,7 @@ export default {
      */
     measure(type) {
       if(type == "distance"){
-        this._Distance.activate()
+        this._Measure.createDistance()
       }
      }
   },
