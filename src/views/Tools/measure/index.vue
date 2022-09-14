@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div id="cesiumContainer"></div>
-    <panel-view @measure="measure" />
+    <panel-view @measure="measure" @clears="clears" />
   </div>
 </template>
  
@@ -17,7 +17,7 @@ export default {
     return {
       viewer: null,
       handler: null,
-      _Distance :null
+      _Distance: null
     };
   },
   mounted() {
@@ -28,6 +28,13 @@ export default {
       const Cesium = this.cesium;
       Cesium.Ion.defaultAccessToken = process.env.VUE_APP_TOKEN;
       this.viewer = new Cesium.Viewer("cesiumContainer", {
+        imageryProvider: new Cesium.ArcGisMapServerImageryProvider({
+          url: "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer",
+        }),
+        terrainProvider: new Cesium.CesiumTerrainProvider({
+          //加载火星在线地形
+          url: "http://data.marsgis.cn/terrain",
+        }),
         animation: false,
         timeline: false,
         shouldAnimate: true,
@@ -42,7 +49,7 @@ export default {
       );
 
 
-      this._Measure = new Measure(Cesium,this.viewer)
+      this._Measure = new Measure(Cesium, this.viewer)
 
       //相机
       this.viewer.camera.flyTo({
@@ -66,16 +73,22 @@ export default {
      * @param {*} type 
      */
     measure(type) {
-      if(type == "distance"){
+      if (type == "distance") {
         this._Measure.distance()
       }
-      if(type == "height"){
+      if (type == "height") {
         this._Measure.height()
       }
-      if(type == "area"){
+      if (type == "area") {
         this._Measure.area()
       }
-     }
+    },
+    /**
+     * 清除
+     */
+    clears() {
+      this.viewer.entities.removeAll();
+    }
   },
 };
 </script>

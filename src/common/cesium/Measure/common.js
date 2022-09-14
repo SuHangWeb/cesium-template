@@ -49,5 +49,7 @@ class MeasureCommon {
         const _Utils = new Utils(this.Cesium, this.viewer)
         return _Utils.countArea(arr).toFixed(2)
     }
+
+    get_height(){}
 }
 export default MeasureCommon
