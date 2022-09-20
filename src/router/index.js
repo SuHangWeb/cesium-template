@@ -241,6 +241,26 @@ export const constantRoutes = [
             name: 'AircraftTailFlame',
             meta: { title: '飞机尾焰', icon: 'el-icon-s-promotion', highlight: true }
           },
+          {
+            path: 'rainbow',
+            component: () => import('@/views/Primitives/ParticleSystem/Rainbow'),
+            name: 'Rainbow',
+            meta: { title: '彩虹', icon: 'el-icon-dish-1', highlight: true }
+          },
+        ]
+      },
+      {
+        path: 'models',
+        name: 'Models',
+        component: () => import('@/views/Primitives/Models/Mapping'),
+        meta: { title: '模型', icon: 'el-icon-menu', highlight: true },
+        children: [
+          {
+            path: 'mapping',
+            component: () => import('@/views/Primitives/Models/Mapping'),
+            name: 'Mapping',
+            meta: { title: '贴图', icon: 'el-icon-picture-outline-round', highlight: true }
+          },
         ]
       },
     ]
