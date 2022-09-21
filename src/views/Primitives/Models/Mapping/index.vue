@@ -8,10 +8,12 @@
  
 <script>
 import gltf from "./module/gltf.js"
+import Utils from "@/common/cesium/Utils.js"
 export default {
   data() {
     return {
       viewer: null,
+      _Utils: null
     };
   },
   mounted() {
@@ -35,6 +37,7 @@ export default {
       });
       //设置贴地效果
       this.viewer.scene.globe.depthTestAgainstTerrain = false;
+      this._Utils = new Utils(Cesium, this.viewer)
       this.start();
     },
     /**
@@ -75,40 +78,7 @@ export default {
      * 导出图片
      */
     exportImg() {
-      /**
-       * @description: 场景导出
-       * @param {*} _viewer
-       * @return {*}
-       */
-      function saveToImage(_viewer) {
-        // 不写会导出为黑图
-        _viewer.render();
-
-        let canvas = _viewer.scene.canvas;
-        let image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
-
-        let link = document.createElement("a");
-        let blob = dataURLtoBlob(image);
-        let objurl = URL.createObjectURL(blob);
-        link.download = "scene.png";
-        link.href = objurl;
-        link.click();
-      }
-      saveToImage(this.viewer)
-
-      function dataURLtoBlob(dataurl) {
-        let arr = dataurl.split(','),
-          mime = arr[0].match(/:(.*?);/)[1],
-          bstr = atob(arr[1]),
-          n = bstr.length,
-          u8arr = new Uint8Array(n);
-        while (n--) {
-          u8arr[n] = bstr.charCodeAt(n);
-        }
-        return new Blob([u8arr], {
-          type: mime
-        });
-      }
+      this._Utils.sceneSaveToImage()
     }
   },
 };

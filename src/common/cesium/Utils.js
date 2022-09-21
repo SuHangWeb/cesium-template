@@ -37,6 +37,7 @@
     updateViewModel | Imagey的光照调整
     blurredPicture | 解决Cesium显示画面模糊的问题
     antialiasing | 去锯齿
+    sceneSaveToImage | 场景保存导出图片
  */
 class Utils {
     constructor(Cesium, viewer) {
@@ -782,6 +783,37 @@ class Utils {
         //     pixelOffset: new Cesium.Cartesian2(-120, -100),
         //     horizontalOrigin: Cesium.HorizontalOrigin.LEFT
         // }
+    }
+    /**
+     * 场景保存导出图片
+     * @param {*} fileName 
+     */
+    sceneSaveToImage(fileName = 'scene') {
+        const dataURLtoBlob = (dataurl) => {
+            let arr = dataurl.split(','),
+                mime = arr[0].match(/:(.*?);/)[1],
+                bstr = atob(arr[1]),
+                n = bstr.length,
+                u8arr = new Uint8Array(n);
+            while (n--) {
+                u8arr[n] = bstr.charCodeAt(n);
+            }
+            return new Blob([u8arr], {
+                type: mime
+            });
+        }
+
+        // 不写会导出为黑图
+        this.viewer.render();
+
+        let canvas = this.viewer.scene.canvas;
+        let image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+        let link = document.createElement("a");
+        let blob = dataURLtoBlob(image);
+        let objurl = URL.createObjectURL(blob);
+        link.download = fileName + ".png";
+        link.href = objurl;
+        link.click();
     }
 }
 
