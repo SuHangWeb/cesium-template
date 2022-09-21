@@ -23,10 +23,10 @@ export default {
         imageryProvider: new Cesium.ArcGisMapServerImageryProvider({
           url: "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer",
         }),
-        terrainProvider: new Cesium.CesiumTerrainProvider({
-          //加载火星在线地形
-          url: "http://data.marsgis.cn/terrain",
-        }),
+        // terrainProvider: new Cesium.CesiumTerrainProvider({
+        //   //加载火星在线地形
+        //   url: "http://data.marsgis.cn/terrain",
+        // }),
         shouldAnimate: true,
         infoBox: false,
         selectionIndicator: false,
@@ -55,26 +55,19 @@ export default {
 
       var imagePath = process.env.VUE_APP_PUBLIC_URL + 'image/test.jpg';
 
-    //   Promise.resolve(promise).then(function(updatedPositions) {
-   
-    //  });
-      Cesium.when(model.readyPromise).then(function () {
+      Promise.resolve(model.readyPromise).then((updatedPositions) => {
         var texture = model._rendererResources.textures[0];
-
         Cesium.Resource.fetchImage({
           url: imagePath
         }).then(function (image) {
           texture.copyFrom(image);
           texture.generateMipmap(); // Also replaces textures in mipmap
-        }).otherwise(function (error) {
-          console.log("Error finding livery!  Error = " + error);
-        });
+        })
 
         this.viewer.camera.flyTo({
           destination: Cesium.Cartesian3.fromDegrees(position[0], position[1], 300)
         });
-
-      })
+      });
     },
   },
 };
