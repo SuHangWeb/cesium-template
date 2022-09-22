@@ -247,6 +247,12 @@ export const constantRoutes = [
             name: 'Rainbow',
             meta: { title: '彩虹', icon: 'el-icon-dish-1', highlight: true }
           },
+          {
+            path: 'zoom',
+            component: () => import('@/views/Primitives/ParticleSystem/Zoom'),
+            name: 'Zoom',
+            meta: { title: '距离变化', icon: 'el-icon-crop', highlight: true }
+          },
         ]
       },
       {

@@ -88,3 +88,20 @@ https://github.com/luoyp123/Cesium-Plugin/blob/master/src/CoordinateTransform.js
 
 
 https://www.wenjiangs.com/doc/pkwjrz0r
+
+
+glTF相关工具推荐
+glTF在线验证： http://github.khronos.org/glTF-Validator/
+浏览-Sketchfab： https://sketchfab.com/（需要注册账号，并且要上传模型才能浏览）
+浏览-PlayCanvas查看器： https://playcanvas.com/viewer
+浏览-ThreeJS查看器：https://gltf-viewer.donmccurdy.com/
+浏览-BabylonJS查看器： https://sandbox.babylonjs.com/
+gltf转glb： https://sbtron.github.io/makeglb/
+obj2gltf： https://github.com/CesiumGS/obj2gltf
+FBX2glTF： https://github.com/facebookincubator/FBX2glTF
+COLLADA2GLTF： https://github.com/KhronosGroup/COLLADA2GLTF
+
+
+glb下载：
+http://glbxz.com/
+http://www.shvr.work/
