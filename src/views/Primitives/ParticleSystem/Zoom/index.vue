@@ -54,6 +54,19 @@ export default {
         heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
       });
       this.viewer.flyTo(createModel);
+
+      //定义
+      var viewModel = {         //对象
+        emissionRate: 3.0, //发射频率
+        gravity: 0.0, //地球引力
+        minimumParticleLife: 1,  // 生命周期在5秒和10秒之间
+        maximumParticleLife: 5,
+        minimumSpeed: 20,   //运行速度Speed发射器控制了粒子的位置和方向，速度通过speed参数或者minimumSpeed和maximumSpeed    让粒子每秒运行20~50米:
+        maximumSpeed: 50,
+        startScale: 1.0,      //例子发射开始范围
+        endScale: 10,        //粒子发射结束范围
+        particleSize: 25.0      //颗粒大小
+      };
     },
   },
 };
