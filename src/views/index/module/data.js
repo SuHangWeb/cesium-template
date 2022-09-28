@@ -89,7 +89,17 @@ export const doc = [
         link: "https://zhuanlan.zhihu.com/p/523570955",
         externalLinks: true,
         private: true
-    }
+    },
+    {
+        title: "参考前后台",
+        link: "https://gitee.com/hawk86104/vue3-ts-cesium-map-show-backend?_from=gitee_search",
+        externalLinks: true
+    },
+    {
+        title: "智慧城市",
+        link: "https://gitee.com/lxydft/cesium-city3d?_from=gitee_search",
+        externalLinks: true
+    },
 ]
 /**
  * 参考效果
