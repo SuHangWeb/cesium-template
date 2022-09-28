@@ -184,6 +184,45 @@ export default {
         this.viewer.trackedEntity = rect;
         return
       }
+      //鹰眼地图
+      if (name == "EagleEyeMap") {
+        const _container = document.getElementsByClassName("container")
+        let _div = window.document.createElement("div");
+        _div.id = 'eye'
+        _div.style = `position: absolute;
+                      width: 20%;
+                      height: 20%;
+                      bottom: 0;
+                      left: 0;
+                      z-index: 999;
+                      background: red;
+                      border: solid blue 1px;`
+        _div.innerHTML = `<img id='eyeImage' style="width: 100%;height: 100%;" src="" alt="">`
+        _container[0].appendChild(_div)
+
+        let showEye = () => {
+          document.getElementById('eyeImage').src = this.viewer.scene.canvas.toDataURL("image/png");
+          this.viewer.scene.postRender.removeEventListener(showEye);
+        };
+
+        this.viewer.camera.changed.addEventListener(() => {
+          this.viewer.scene.postRender.addEventListener(showEye);
+        });
+        window.onload = () => {
+          this.viewer.scene.postRender.addEventListener(showEye);
+        }
+
+        return
+      }
+      //网格
+      if (name == "grid") {
+        var imageryLayers = this.viewer.imageryLayers;
+        var layer = imageryLayers.addImageryProvider(new Cesium.GridImageryProvider());
+        layer.alpha = Cesium.defaultValue(alpha, 0.5);
+        layer.show = Cesium.defaultValue(show, true);
+        layer.name = "Grid";
+        return
+      }
     }
   },
 };
@@ -193,6 +232,7 @@ export default {
 .container {
   width: 100%;
   height: 100%;
+  position: relative;
 
   #cesiumContainer {
     width: 100%;

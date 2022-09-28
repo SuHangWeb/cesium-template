@@ -6,7 +6,7 @@
         </div>
         <div class="panel-content">
             <el-button type="primary" v-for="(item, index) in clickCreateFor" :key="index" size="mini"
-                @click="clickCreate(item.value)">{{  item.label  }}</el-button>
+                @click="clickCreate(item.value)">{{ item.label }}</el-button>
         </div>
     </el-card>
 </template>
@@ -79,6 +79,12 @@ export default {
                 }, {
                     label: "视频",
                     value: "video"
+                }, {
+                    label: "鹰眼地图",
+                    value: "EagleEyeMap"
+                }, {
+                    label: "网格",
+                    value: "grid"
                 }
 
             ]
