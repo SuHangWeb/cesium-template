@@ -5,15 +5,12 @@
 </template>
  
 <script>
+import Entity from "@/common/cesium/Entity.js";
 export default {
   data() {
     return {
       viewer: null,
-      scene: null,
-      cbd1: 'http://www.supermapol.com/realspace/services/3D-WebGLCBD/rest/realspace/datas/Tree@%E6%96%B0CBD/config',//CBD 树SCP
-      cbd2: 'http://www.supermapol.com/realspace/services/3D-WebGLCBD/rest/realspace/datas/Ground_1@%E6%96%B0CBD/config',//CBD 地面1 SCP
-      cbd3: 'http://www.supermapol.com/realspace/services/3D-WebGLCBD/rest/realspace/datas/Ground_2@%E6%96%B0CBD/config',//CBD 地面2 SCP
-      cbd4: 'http://www.supermapol.com/realspace/services/3D-WebGLCBD/rest/realspace/datas/Building@%E6%96%B0CBD/config',//CBD 建筑物 SCP
+      _Entity: null
     };
   },
   mounted() {
@@ -24,16 +21,6 @@ export default {
       const Cesium = this.cesium;
       Cesium.Ion.defaultAccessToken = process.env.VUE_APP_TOKEN;
       this.viewer = new Cesium.Viewer("cesiumContainer", {
-        // 加载单张影像 第一层最小最透明的
-        imageryProvider: new Cesium.SingleTileImageryProvider({
-          // url: process.env.VUE_APP_API_ASSETS + 'Cesium-1.82-hawk/background.png',
-          url: 'https://mapv-data.oss-cn-hangzhou.aliyuncs.com/Cesium-1.82-hawk/background.png',
-        }),
-        contextOptions: {
-          webgl: {
-            alpha: false,
-          },
-        },
         // 默认设置
         baseLayerPicker: false, // 基础影响图层选择器
         navigationHelpButton: false, // 导航帮助按钮
@@ -54,6 +41,24 @@ export default {
       });
       // 设置开启深度检测
       this.viewer.scene.globe.depthTestAgainstTerrain = true
+      this._Entity = new Entity(Cesium, this.viewer);
+
+      var position = Cesium.Cartesian3.fromDegrees(119.9015668093, 31.4943207228, 0);
+      var buildinghpr = new Cesium.HeadingPitchRoll(0, 0, 0);
+      var orientation = Cesium.Transforms.headingPitchRollQuaternion(position, buildinghpr);
+
+      // 创建模型 start
+      const createModel = this._Entity.createModel({
+        position,
+        uri:
+          process.env.VUE_APP_PUBLIC_URL +
+          "/gltf/无人机.gltf",
+        maximumScale: 100,
+        minimumPixelSize: 30,
+        orientation: orientation,
+        heightReference: Cesium.HeightReference.CLAMP_TO_GROUND,
+      });
+      this.viewer.flyTo(createModel);
     },
 
   },

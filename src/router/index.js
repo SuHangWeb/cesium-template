@@ -141,6 +141,12 @@ export const constantRoutes = [
         component: () => import('@/views/City/wisdom'),
         meta: { title: '智慧城市', icon: 'el-icon-office-building', highlight: true },
       },
+      {
+        path: 'UAV',
+        name: 'UAV',
+        component: () => import('@/views/City/UAV'),
+        meta: { title: '无人机', icon: 'el-icon-s-promotion', highlight: true },
+      },
     ]
   },
 
