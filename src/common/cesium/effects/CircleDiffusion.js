@@ -6,9 +6,11 @@
  * @Description: 圆扩散
  */
 class CircleDiffusion {
-  viewer
-  lastStageList
-  constructor(viewer) {
+  // Cesium
+  // viewer
+  // lastStageList
+  constructor(Cesium, viewer) {
+    this.Cesium = Cesium
     this.viewer = viewer
     this.lastStageList = []
   }
@@ -41,6 +43,7 @@ class CircleDiffusion {
     maxRadius,
     duration
   ) {
+    const Cesium = this.Cesium
     const cartographicCenter = new Cesium.Cartographic(
       Cesium.Math.toRadians(position[0]),
       Cesium.Math.toRadians(position[1]),
@@ -68,6 +71,7 @@ class CircleDiffusion {
     scanColor,
     duration
   ) {
+    const Cesium = this.Cesium
     const _Cartesian3Center =
       Cesium.Cartographic.toCartesian(cartographicCenter)
     const _Cartesian4Center = new Cesium.Cartesian4(

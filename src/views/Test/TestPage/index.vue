@@ -5,15 +5,15 @@
 </template>
  
 <script>
-import Entity from "@/common/cesium/Entity.js";
-import Echarts3D from "@/common/cesium/Echarts.js";
+import CircleScan from "@/common/cesium/effects/CircleScan.js";
+import CircleDiffusion from "@/common/cesium/effects/CircleDiffusion.js";
 export default {
   name: "TextPage",
   data() {
     return {
       viewer: null,
-      _Entity: null,
-      _Echarts3D: null,
+      _CircleScan: null,
+      _CircleDiffusion: null
     };
   },
   mounted() {
@@ -43,44 +43,30 @@ export default {
         timeline: false,
         fullscreenButton: false,
       });
-      this._Entity = new Entity(Cesium, this.viewer);
-      this._Echarts3D = new Echarts3D(Cesium, this.viewer);
+      this._CircleScan = new CircleScan(Cesium, this.viewer)
+      this._CircleDiffusion = new CircleDiffusion(Cesium, this.viewer)
+      //设置贴地效果
+      this.viewer.scene.globe.depthTestAgainstTerrain = true;
       this.start();
     },
     start() {
       const Cesium = this.cesium;
+      this._CircleScan.add([123.46787863792646,41.83241486807863, 0], 'rgba(0, 255, 0, 1)', 500, 3000)
+      this._CircleDiffusion.add([123.45362700404472,41.81860631952072, 0], 'rgba(0, 255, 0, 1)', 500, 3000)
 
-      const EntityModel = this._Entity.createModel({
-        position: Cesium.Cartesian3.fromDegrees(
-          123.64968897708842, 41.905545890053986,
-          0
-        ),
-        uri: process.env.VUE_APP_PUBLIC_URL + "/glb/gongchang.glb",
-        heightReference: Cesium.HeightReference.RELATIVE_TO_GROUND,
-      })
-      this._Echarts3D.createWaterPolo({
-        nodeId: "echarts",
-        size: 40,
-        data: [
-          {
-            name: "惠工广场",
-            position: [123.64753799005176, 41.90693164850206, 0],
-            data: 50,
-            // color: "red"
-          },
-          {
-            name: "沈阳北站",
-            position: [123.64968245766008, 41.90631359871417, 0],
-            data: 10,
-          },
-          {
-            name: "市府广场",
-            position: [123.64917223733927, 41.90348119308158, 0],
-            data: 80,
-          },
-        ],
+      //相机
+      this.viewer.camera.flyTo({
+        //setView是直接跳到 flyTo// 是镜头飞行到  网速不好或者电脑配置不高 还是不要fly了吧
+        destination: Cesium.Cartesian3.fromDegrees(
+          123.46787863792646,41.83241486807863, 10000
+        ), //经纬度坐标转换为 笛卡尔坐标(世界坐标)
+        orientation: {
+          heading: Cesium.Math.toRadians(0.0), // east, default value is 0.0 (north) //东西南北朝向
+          pitch: Cesium.Math.toRadians(-90), // default value (looking down)  //俯视仰视视觉
+          roll: 0.0, // default value
+        },
+        duration: 3, //3秒到达战场
       });
-      this.viewer.flyTo(EntityModel);
     },
   },
 };

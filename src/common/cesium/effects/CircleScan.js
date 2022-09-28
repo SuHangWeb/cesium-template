@@ -6,9 +6,11 @@
  * @Description: 雷达圆扫
  */
 class CircleScan {
-  viewer
-  lastStageList
-  constructor(viewe) {
+  // Cesium
+  // viewer
+  // lastStageList
+  constructor(Cesium, viewer) {
+    this.Cesium = Cesium
     this.viewer = viewer
     this.lastStageList = []
   }
@@ -41,6 +43,7 @@ class CircleScan {
     maxRadius,
     duration
   ) {
+    const Cesium = this.Cesium
     const cartographicCenter = new Cesium.Cartographic(
       Cesium.Math.toRadians(position[0]),
       Cesium.Math.toRadians(position[1]),
@@ -68,6 +71,7 @@ class CircleScan {
     scanColor,
     duration
   ) {
+    const Cesium = this.Cesium
     const _Cartesian3Center =
       Cesium.Cartographic.toCartesian(cartographicCenter)
     const _Cartesian4Center = new Cesium.Cartesian4(
@@ -119,14 +123,14 @@ class CircleScan {
     const ScanPostStage = new Cesium.PostProcessStage({
       fragmentShader: this._getRadarScanShader(),
       uniforms: {
-        u_scanCenterEC: function() {
+        u_scanCenterEC: function () {
           return Cesium.Matrix4.multiplyByVector(
             _this.viewer.camera._viewMatrix,
             _Cartesian4Center,
             _scratchCartesian4Center
           )
         },
-        u_scanPlaneNormalEC: function() {
+        u_scanPlaneNormalEC: function () {
           const temp = Cesium.Matrix4.multiplyByVector(
             _this.viewer.camera._viewMatrix,
             _Cartesian4Center,
@@ -148,7 +152,7 @@ class CircleScan {
           return _scratchCartesian3Normal
         },
         u_radius: radius,
-        u_scanLineNormalEC: function() {
+        u_scanLineNormalEC: function () {
           const temp = Cesium.Matrix4.multiplyByVector(
             _this.viewer.camera._viewMatrix,
             _Cartesian4Center,

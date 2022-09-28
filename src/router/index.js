@@ -449,6 +449,12 @@ export const constantRoutes = [
         component: () => import('@/views/Tools/rightClick'),
         meta: { title: '右键', icon: 'el-icon-mouse', highlight: true }
       },
+      {
+        path: 'effect',
+        name: 'Effect',
+        component: () => import('@/views/Tools/effect'),
+        meta: { title: '效果', icon: 'el-icon-magic-stick', highlight: true }
+      },
     ]
   },
 
