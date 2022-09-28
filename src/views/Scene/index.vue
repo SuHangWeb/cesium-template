@@ -2,6 +2,10 @@
   <div class="container">
     <div id="cesiumContainer"></div>
     <panel-view @draws="draws" @clears="clears" />
+    <video id="trailer" style="display: none;" muted autoplay loop crossorigin controls>
+      <source src="/file/videos/tt.mp4" type="video/mp4">
+      Your browser does not support the <code>video</code> element.
+    </video>
   </div>
 </template>
  
@@ -12,6 +16,7 @@ import Snow from "@/common/cesium/Scene/Snow"
 import Fog from "@/common/cesium/Scene/Fog"
 import Skyline from "@/common/cesium/Scene/Skyline"
 import Scene from "@/common/cesium/Scene"
+import Entity from "@/common/cesium/Entity"
 export default {
   components: {
     panelView
@@ -24,7 +29,8 @@ export default {
       _Snow: null,
       _Fog: null,
       _Skyline: null,
-      _Scene: null
+      _Scene: null,
+      _Entity: null
     };
   },
   mounted() {
@@ -51,6 +57,7 @@ export default {
       this._Fog = new Fog(Cesium, this.viewer)
       this._Skyline = new Skyline(Cesium, this.viewer)
       this._Scene = new Scene(Cesium, this.viewer)
+      this._Entity = new Entity(Cesium, this.viewer)
     },
     /**
      * 清楚
@@ -166,7 +173,17 @@ export default {
         this._Scene.Bloom()
         return
       }
-
+      //视频
+      if (name == "video") {
+        var videoElement = document.getElementById('trailer');
+        videoElement.play();
+        const rect = this._Entity.createRectangle({
+          coordinates: Cesium.Rectangle.fromDegrees(-180.0, -90.0, 180.0, 90.0),
+          material: videoElement
+        })
+        this.viewer.trackedEntity = rect;
+        return
+      }
     }
   },
 };

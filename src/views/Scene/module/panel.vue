@@ -76,6 +76,9 @@ export default {
                 }, {
                     label: "泛光",
                     value: "Bloom"
+                }, {
+                    label: "视频",
+                    value: "video"
                 }
 
             ]
