@@ -64,7 +64,7 @@ class HexagonSpreadMaterialProperty {
         MaterialFun.prototype.equals = function (other) {
             return this === other || (other instanceof MaterialFun && Cesium.Property.equals(this._color, other._color))
         };
-        Cesium.Material.HexagonSpreadMaterialImage = '/cesium/effects/Materials/hexagon.png'
+        Cesium.Material.HexagonSpreadMaterialImage = process.env.VUE_APP_PUBLIC_URL + '/cesium/effects/Materials/hexagon.png'
         Cesium.Material.HexagonSpreadSource = `
         czm_material czm_getMaterial(czm_materialInput materialInput)
         {
