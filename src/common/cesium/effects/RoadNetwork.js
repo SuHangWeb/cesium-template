@@ -59,5 +59,26 @@ class RoadNetwork {
             }))
         })
     }
+
+    /**
+     * 道路穿梭线
+     * @param {*} url 
+     * @param {*} Picurl 
+     * @param {*} width 宽度
+     * @param {*} time 延迟时间
+     */
+    RoadPic(url, Picurl, width, time) {
+        const Cesium = this.Cesium
+        let promise = Cesium.GeoJsonDataSource.load(url)
+        promise.then((dataSource) => {
+            this.viewer.dataSources.add(dataSource)
+            this.RoadPicEntities = dataSource.entities.values
+            for (let i = 0; i < this.RoadPicEntities.length; i++) {
+                const entity = this.RoadPicEntities[i]
+                entity.polyline.width = width
+                entity.polyline.material = new Cesium.Spriteline1MaterialProperty(time, Picurl)
+            }
+        })
+    }
 }
 export default RoadNetwork
