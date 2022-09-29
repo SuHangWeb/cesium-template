@@ -12,7 +12,7 @@ import HexagonSpread from "@/common/cesium/effects/HexagonSpread.js";
 import Scanline from "@/common/cesium/effects/Scanline.js";
 import SpreadWall from "@/common/cesium/effects/SpreadWall.js";
 import EllipsoidFade from "@/common/cesium/effects/EllipsoidFade.js";
-
+import RoadNetwork from "@/common/cesium/effects/RoadNetwork.js";
 export default {
   data() {
     return {
@@ -23,7 +23,8 @@ export default {
       _HexagonSpread: null,
       _Scanline: null,
       _SpreadWall: null,
-      _EllipsoidFade: null
+      _EllipsoidFade: null,
+      _RoadNetwork: null
     };
   },
   mounted() {
@@ -60,8 +61,8 @@ export default {
       this._Scanline = new Scanline(Cesium, this.viewer)
       this._SpreadWall = new SpreadWall(Cesium, this.viewer)
       this._EllipsoidFade = new EllipsoidFade(Cesium, this.viewer)
+      this._RoadNetwork = new RoadNetwork(Cesium, this.viewer)
 
-      
 
       //设置贴地效果
       this.viewer.scene.globe.depthTestAgainstTerrain = true;
@@ -73,10 +74,23 @@ export default {
       this._CircleDiffusion.add([123.45362700404472, 41.81860631952072, 0], '#1890ff', 800, 3000)
       this._CircleWave.add([123.4227202687658, 41.817036701780346, 0], 'rgba(0, 255, 0, 1)', 500, 3000)
       this._HexagonSpread.add([123.41743639592823, 41.83039278462179, 0], '#c41d7f', 800, 3000)
-
       // this._Scanline.add([123.40586284673046,41.82030438186604, 0], '#c41d7f', 800, 3000)
       // this._SpreadWall.add([123.40586284673046, 41.82030438186604, 0], '#c41d7f', 800, 3000, 1000)
       // this._EllipsoidFade.add([123.40586284673046, 41.82030438186604, 0], '#c41d7f', 800, 3000)
+
+      // this._RoadNetwork.flyLines([
+      //   123.4143,
+      //   41.8161,
+      //   123.4681,
+      //   41.8013],
+      //   "#A932B4",
+      //   2,
+      //   3000,
+      //   6,
+      //   0.1,
+      //   0.1,
+      //   300)
+
 
       //相机
       this.viewer.camera.flyTo({
