@@ -1,16 +1,12 @@
 /*
- * @Author: xcl
- * @Date: 2022-09-22 10:26:48
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-09-22 11:04:23
- * @Description: 雷达平扫
+ * 雷达平扫
  */
 import Effect from './Effect'
 class RaderScan extends Effect {
   step
   scanColor
-  constructor(viewer, id) {
-    super(viewer, id)
+  constructor(Cesium, viewer, id) {
+    super(Cesium, viewer, id)
     this.step = -0.2
     this.scanColor = 'rgba(19, 206, 102, 0.8)'
   }
@@ -21,6 +17,7 @@ class RaderScan extends Effect {
     this.scanColor = val
   }
   add(position, scanColor, maxRadius, step, isedit = false) {
+    const Cesium = this.Cesium
     super.add(position, scanColor, maxRadius, step, isedit)
     this.step = step
     this.scanColor = scanColor
@@ -46,10 +43,10 @@ class RaderScan extends Effect {
         position[2]
       ),
       ellipse: {
-        semiMinorAxis: new Cesium.CallbackProperty(function(n) {
+        semiMinorAxis: new Cesium.CallbackProperty(function (n) {
           return _this.maxRadius
         }, false),
-        semiMajorAxis: new Cesium.CallbackProperty(function(n) {
+        semiMajorAxis: new Cesium.CallbackProperty(function (n) {
           return _this.maxRadius
         }, false),
         rotation: new Cesium.CallbackProperty(() => {

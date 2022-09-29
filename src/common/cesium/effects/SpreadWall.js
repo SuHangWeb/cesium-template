@@ -1,10 +1,7 @@
 /*
- * @Author: xcl
- * @Date: 2022-09-22 10:26:48
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-09-22 11:07:38
- * @Description: 推动墙扩散
+ * 推动墙扩散
  */
+import WallGradientsMaterialProperty from "./Materials/WallGradientsMaterialProperty"
 class SpreadWall {
   viewer
   id
@@ -16,7 +13,8 @@ class SpreadWall {
   wallHeight
   position
   edgeCount
-  constructor(viewer, id) {
+  constructor(Cesium, viewer, id) {
+    this.Cesium = Cesium
     this.viewer = viewer
     this.id = id
     this.duration = 1000
@@ -25,11 +23,13 @@ class SpreadWall {
     this.leftDownFlag = false
     this.position = null
     this.edgeCount = 0
+    this._WallGradientsMaterialProperty = new WallGradientsMaterialProperty(Cesium, viewer)
   }
   del() {
     this.viewer.entities.removeById(this.id)
   }
   change_position(p) {
+    const Cesium = this.Cesium
     const cartesian3 = Cesium.Cartographic.fromDegrees(
       parseFloat(p[0]),
       parseFloat(p[1]),
@@ -41,6 +41,7 @@ class SpreadWall {
     this.position = cartesian3
   }
   change_color(val) {
+    const Cesium = this.Cesium
     const curEntity = this.viewer.entities.getById(this.id)
     curEntity._wall._material.color = new Cesium.Color.fromCssColorString(
       val
@@ -61,6 +62,7 @@ class SpreadWall {
     edgeCount = 0,
     isedit = false
   ) {
+    const Cesium = this.Cesium
     position = Cesium.Cartographic.fromDegrees(
       position[0],
       position[1],
@@ -83,10 +85,18 @@ class SpreadWall {
     if (isedit) {
       this.mouseEvent()
     }
+
+
+    this._WallGradientsMaterialProperty.create({
+      cesiumName: "WallGradientsMaterialProperty",
+      color: new Cesium.Color.fromCssColorString(color),
+    })
+
+
     this.viewer.entities.add({
       id: _this.id,
       wall: {
-        positions: new Cesium.CallbackProperty(function(e) {
+        positions: new Cesium.CallbackProperty(function (e) {
           const reData = _this.getPositions(
             currentRadius,
             _this.maxRadius,
@@ -100,22 +110,21 @@ class SpreadWall {
 
           return rPositions[currentRadius]
         }, false),
-        minimumHeights: 
-        new Cesium.CallbackProperty(function(n) {
-          let re = _this.getminimumHeights(rPositions[_this.maxRadius])
-          return re
-        }, false),
-        maximumHeights: new Cesium.CallbackProperty(function(n) {
+        minimumHeights:
+          new Cesium.CallbackProperty(function (n) {
+            let re = _this.getminimumHeights(rPositions[_this.maxRadius])
+            return re
+          }, false),
+        maximumHeights: new Cesium.CallbackProperty(function (n) {
           let re = _this.getmaximumHeights(rPositions[_this.maxRadius])
           return re
         }, false),
-        material: new Cesium.WallGradientsMaterialProperty(
-          new Cesium.Color.fromCssColorString(color)
-        ),
+        material: new Cesium.WallGradientsMaterialProperty(),
       },
     })
   }
   mouseEvent() {
+    const Cesium = this.Cesium
     const _this = this
     function leftDownAction(e) {
       _this.pointDraged = _this.viewer.scene.pick(e.position) // 选取当前的entity
@@ -179,6 +188,7 @@ class SpreadWall {
     return rPositions
   }
   getcenterDegrees(position) {
+    const Cesium = this.Cesium
     const centerDegrees = [
       Cesium.Math.toDegrees(position.longitude),
       Cesium.Math.toDegrees(position.latitude),
@@ -204,7 +214,7 @@ class SpreadWall {
   ) {
     if (
       ((currentRadius += (1000 / duration) * 20),
-      currentRadius > radius && (currentRadius = 1)
+        currentRadius > radius && (currentRadius = 1)
       )// rPositions[currentRadius]
     ) {
       return { rPositions: rPositions, currentRadius: currentRadius }
@@ -221,9 +231,10 @@ class SpreadWall {
     return { rPositions: rPositions, currentRadius: currentRadius }
   }
   pointsToPositions(t, e) {
+    const Cesium = this.Cesium
     const n = []
     return (
-      t.map(function(t) {
+      t.map(function (t) {
         n.push(Cesium.Cartesian3.fromDegrees(t[0], t[1], e))
       }),
       n
@@ -252,7 +263,7 @@ class SpreadWall {
           ((n = 6356725 + (21412 * (90 - e)) / 90) *
             Math.cos((e * Math.PI) / 180)) +
           (t * Math.PI) / 180)) /
-        Math.PI,
+      Math.PI,
       (180 * (i / n + (e * Math.PI) / 180)) / Math.PI,
     ]
   }

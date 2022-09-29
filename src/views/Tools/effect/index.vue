@@ -9,6 +9,10 @@ import CircleScan from "@/common/cesium/effects/CircleScan.js";
 import CircleDiffusion from "@/common/cesium/effects/CircleDiffusion.js";
 import CircleWave from "@/common/cesium/effects/CircleWave.js";
 import HexagonSpread from "@/common/cesium/effects/HexagonSpread.js";
+import Scanline from "@/common/cesium/effects/Scanline.js";
+import SpreadWall from "@/common/cesium/effects/SpreadWall.js";
+import EllipsoidFade from "@/common/cesium/effects/EllipsoidFade.js";
+
 export default {
   data() {
     return {
@@ -16,7 +20,10 @@ export default {
       _CircleScan: null,
       _CircleDiffusion: null,
       _CircleWave: null,
-      _HexagonSpread: null
+      _HexagonSpread: null,
+      _Scanline: null,
+      _SpreadWall: null,
+      _EllipsoidFade: null
     };
   },
   mounted() {
@@ -50,6 +57,12 @@ export default {
       this._CircleDiffusion = new CircleDiffusion(Cesium, this.viewer)
       this._CircleWave = new CircleWave(Cesium, this.viewer)
       this._HexagonSpread = new HexagonSpread(Cesium, this.viewer)
+      this._Scanline = new Scanline(Cesium, this.viewer)
+      this._SpreadWall = new SpreadWall(Cesium, this.viewer)
+      this._EllipsoidFade = new EllipsoidFade(Cesium, this.viewer)
+
+      
+
       //设置贴地效果
       this.viewer.scene.globe.depthTestAgainstTerrain = true;
       this.start();
@@ -59,8 +72,11 @@ export default {
       this._CircleScan.add([123.46787863792646, 41.83241486807863, 0], '#f5222d', 500, 3000)
       this._CircleDiffusion.add([123.45362700404472, 41.81860631952072, 0], '#1890ff', 800, 3000)
       this._CircleWave.add([123.4227202687658, 41.817036701780346, 0], 'rgba(0, 255, 0, 1)', 500, 3000)
-      this._HexagonSpread.add([123.41743639592823,41.83039278462179, 0], '#c41d7f', 800, 3000)
+      this._HexagonSpread.add([123.41743639592823, 41.83039278462179, 0], '#c41d7f', 800, 3000)
 
+      // this._Scanline.add([123.40586284673046,41.82030438186604, 0], '#c41d7f', 800, 3000)
+      // this._SpreadWall.add([123.40586284673046, 41.82030438186604, 0], '#c41d7f', 800, 3000, 1000)
+      // this._EllipsoidFade.add([123.40586284673046, 41.82030438186604, 0], '#c41d7f', 800, 3000)
 
       //相机
       this.viewer.camera.flyTo({

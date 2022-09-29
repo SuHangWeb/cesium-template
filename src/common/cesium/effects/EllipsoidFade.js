@@ -1,20 +1,29 @@
 /*
- * @Author: xcl
- * @Date: 2022-09-22 10:26:48
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-09-22 10:28:39
- * @Description: 扩散点 圆
+ * 扩散点 圆
  */
 import Effect from './Effect'
+
+import EllipsoidFadeMaterialProperty from "./Materials/EllipsoidFadeMaterialProperty"
 class EllipsoidFade extends Effect {
-  constructor(viewer, id) {
-    super(viewer, id)
+  constructor(Cesium, viewer, id) {
+    super(Cesium, viewer, id)
+    this._EllipsoidFadeMaterialProperty = new EllipsoidFadeMaterialProperty(Cesium, viewer)
   }
   add(position, color, maxRadius, duration, isedit = false) {
+    const Cesium = this.Cesium
     // efmInit()
     super.add(position, color, maxRadius, duration, isedit)
     const _this = this
     let currentRadius = 1
+
+
+    
+    this._EllipsoidFadeMaterialProperty.create({
+      cesiumName: "EllipsoidFadeMaterialProperty",
+      duration: _this.duration,
+      color: new Cesium.Color.fromCssColorString(color),
+    })
+
     const entity = this.viewer.entities.add({
       id: _this.id,
       position: Cesium.Cartesian3.fromDegrees(
@@ -27,20 +36,17 @@ class EllipsoidFade extends Effect {
         // extrudedHeightReference: Cesium.HeightReference.RELATIVE_TO_GROUND,
         // height: position[2],
         // extrudedHeight: position[2], // 如果这里设置高度 那么就会直接穿透 不洒在建筑物上
-        semiMajorAxis: new Cesium.CallbackProperty(function(n) {
+        semiMajorAxis: new Cesium.CallbackProperty(function (n) {
           currentRadius += (1000 / _this.duration) * 50
           if (currentRadius > _this.maxRadius) {
             currentRadius = 1
           }
           return currentRadius
         }, false),
-        semiMinorAxis: new Cesium.CallbackProperty(function(n) {
+        semiMinorAxis: new Cesium.CallbackProperty(function (n) {
           return currentRadius
         }, false),
-        material: new Cesium.EllipsoidFadeMaterialProperty(
-          new Cesium.Color.fromCssColorString(color),
-          _this.duration
-        ),
+        material: new Cesium.EllipsoidFadeMaterialProperty(),
       },
     })
     return entity.id
