@@ -1,9 +1,5 @@
 /*
- * @Author: xcl
- * @Date: 2022-09-22 10:26:48
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-09-22 11:43:12
- * @Description: 圆扩散
+ * 圆扩散
  */
 class CircleDiffusion {
   // Cesium

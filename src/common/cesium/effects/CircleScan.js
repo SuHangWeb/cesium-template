@@ -1,9 +1,5 @@
 /*
- * @Author: xcl
- * @Date: 2022-09-22 10:26:48
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2022-09-22 11:42:19
- * @Description: 雷达圆扫
+ * 雷达圆扫
  */
 class CircleScan {
   // Cesium

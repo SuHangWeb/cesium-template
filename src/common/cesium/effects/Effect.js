@@ -1,9 +1,5 @@
 /*
- * @Author: xcl
- * @Date: 2022-09-22 10:26:48
- * @LastEditors: 
- * @LastEditTime: 2022-09-22 10:27:53
- * @Description: 点效果集合 父类
+ * 点效果集合 父类
  */
 class Effect {
   viewer
@@ -13,7 +9,8 @@ class Effect {
   pointDraged
   leftDownFlag
   update_position
-  constructor(viewer, id) {
+  constructor(Cesium, viewer, id) {
+    this.Cesium = Cesium
     this.viewer = viewer
     this.id = id
     this.duration = 1000
@@ -25,12 +22,14 @@ class Effect {
     this.duration = d
   }
   change_color(val) {
+    const Cesium = this.Cesium
     const curEntity = this.viewer.entities.getById(this.id)
     curEntity._ellipse._material.color = new Cesium.Color.fromCssColorString(
       val
     )
   }
   change_position(p) {
+    const Cesium = this.Cesium
     const cartesian3 = Cesium.Cartesian3.fromDegrees(
       parseFloat(p[0]),
       parseFloat(p[1]),
@@ -49,6 +48,7 @@ class Effect {
     duration,
     isEdit = false
   ) {
+    const Cesium = this.Cesium
     const _this = this
     this.duration = duration
     this.maxRadius = maxRadius
