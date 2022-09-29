@@ -3,12 +3,14 @@
  */
 import * as turf from '@turf/turf'
 import PolylineTrailMaterialProperty from "./Materials/PolylineTrailMaterialProperty"
+import Spriteline1MaterialProperty from "./Materials/Spriteline1MaterialProperty"
 class RoadNetwork {
     constructor(Cesium, viewer) {
         this.Cesium = Cesium
         this.viewer = viewer
         this.FlyLinesEntities = []
         this._PolylineTrailMaterialProperty = new PolylineTrailMaterialProperty(Cesium, viewer)
+        this._Spriteline1MaterialProperty = new Spriteline1MaterialProperty(Cesium, viewer)
     }
     /**
      * 飞线
@@ -69,6 +71,13 @@ class RoadNetwork {
      */
     RoadPic(url, Picurl, width, time) {
         const Cesium = this.Cesium
+
+        this._Spriteline1MaterialProperty.create({
+            cesiumName: "Spriteline1MaterialProperty",
+            duration: time,
+            image: Picurl
+        })
+
         let promise = Cesium.GeoJsonDataSource.load(url)
         promise.then((dataSource) => {
             this.viewer.dataSources.add(dataSource)
@@ -76,7 +85,7 @@ class RoadNetwork {
             for (let i = 0; i < this.RoadPicEntities.length; i++) {
                 const entity = this.RoadPicEntities[i]
                 entity.polyline.width = width
-                entity.polyline.material = new Cesium.Spriteline1MaterialProperty(time, Picurl)
+                entity.polyline.material = new Cesium.Spriteline1MaterialProperty()
             }
         })
     }

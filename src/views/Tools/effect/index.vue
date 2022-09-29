@@ -91,6 +91,26 @@ export default {
       //   0.1,
       //   300)
 
+      // this._RoadNetwork.RoadPic(
+      //   process.env.VUE_APP_PUBLIC_URL + '/cesium/effects/Data/nanshan-road1.geojson',
+      //   process.env.VUE_APP_PUBLIC_URL + '/cesium/effects/Materials/spriteline1.png',
+      //   1.7,
+      //   3600
+      // )
+      // this._RoadNetwork.RoadPic(
+      //   process.env.VUE_APP_PUBLIC_URL + '/cesium/effects/Data/nanshan-road2.geojson',
+      //   process.env.VUE_APP_PUBLIC_URL + '/cesium/effects/Materials/spriteline2.png',
+      //   2,
+      //   3000
+      // )
+      // this._RoadNetwork.RoadPic(
+      //   process.env.VUE_APP_PUBLIC_URL + '/cesium/effects/Data/nanshan-road3.geojson',
+      //   process.env.VUE_APP_PUBLIC_URL + '/cesium/effects/Materials/spriteline3.png',
+      //   1.6,
+      //   600
+      // )
+
+
 
       //相机
       this.viewer.camera.flyTo({
