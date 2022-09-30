@@ -119,18 +119,18 @@ export default {
       // this._SpreadWall.add([123.40586284673046, 41.82030438186604, 0], '#c41d7f', 800, 3000, 1000)
       // this._EllipsoidFade.add([123.40586284673046, 41.82030438186604, 0], '#c41d7f', 800, 3000)
 
-      // this._RoadNetwork.flyLines([
-      //   123.4143,
-      //   41.8161,
-      //   123.4681,
-      //   41.8013],
-      //   "#A932B4",
-      //   2,
-      //   3000,
-      //   6,
-      //   0.1,
-      //   0.1,
-      //   300)
+      this._RoadNetwork.flyLines([
+        113.8918,
+        22.4818,
+        113.96858,
+        22.5692],
+        "#A932B4",
+        2,
+        3000,
+        6,
+        0.1,
+        0.1,
+        300)
 
       this._RoadNetwork.RoadPic(
         process.env.VUE_APP_PUBLIC_URL + '/cesium/effects/Data/nanshan-road1.geojson',
