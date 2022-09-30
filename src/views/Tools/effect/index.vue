@@ -101,6 +101,18 @@ export default {
           "updatetime": 1646979297
         }
       )
+      const WhiteMold = this._Layer.createWhiteMold("https://mapv-data.oss-cn-hangzhou.aliyuncs.com/titleset/sz_ns2/tileset.json")
+      this._Layer.Cesium3DTileStyle(WhiteMold, 'rgba(255, 255, 255, 1)')
+      this._Layer.update3dtilesMaxtrix(WhiteMold, {
+        "offset_x": 0,// 偏移量lon经度
+        "offset_y": 0,// 偏移量lat纬度
+        "offset_z": 0,// 偏移量height高度(米)
+      })
+      this._Layer.makeEffect(WhiteMold, {
+        "effectswitch": 1,// 是否启用打光效果 0 / 1
+        "height": 260,// 光环的移动范围(高度)单位米
+        "effect_color": "#df16f1",// 打光效果颜色
+      })
 
 
       // this._Scanline.add([123.40586284673046,41.82030438186604, 0], '#c41d7f', 800, 3000)
@@ -120,40 +132,40 @@ export default {
       //   0.1,
       //   300)
 
-      // this._RoadNetwork.RoadPic(
-      //   process.env.VUE_APP_PUBLIC_URL + '/cesium/effects/Data/nanshan-road1.geojson',
-      //   process.env.VUE_APP_PUBLIC_URL + '/cesium/effects/Materials/spriteline1.png',
-      //   1.7,
-      //   3600
-      // )
-      // this._RoadNetwork.RoadPic(
-      //   process.env.VUE_APP_PUBLIC_URL + '/cesium/effects/Data/nanshan-road2.geojson',
-      //   process.env.VUE_APP_PUBLIC_URL + '/cesium/effects/Materials/spriteline2.png',
-      //   2,
-      //   3000
-      // )
-      // this._RoadNetwork.RoadPic(
-      //   process.env.VUE_APP_PUBLIC_URL + '/cesium/effects/Data/nanshan-road3.geojson',
-      //   process.env.VUE_APP_PUBLIC_URL + '/cesium/effects/Materials/spriteline3.png',
-      //   1.6,
-      //   600
-      // )
+      this._RoadNetwork.RoadPic(
+        process.env.VUE_APP_PUBLIC_URL + '/cesium/effects/Data/nanshan-road1.geojson',
+        process.env.VUE_APP_PUBLIC_URL + '/cesium/effects/Materials/spriteline1.png',
+        1.7,
+        3600
+      )
+      this._RoadNetwork.RoadPic(
+        process.env.VUE_APP_PUBLIC_URL + '/cesium/effects/Data/nanshan-road2.geojson',
+        process.env.VUE_APP_PUBLIC_URL + '/cesium/effects/Materials/spriteline2.png',
+        2,
+        3000
+      )
+      this._RoadNetwork.RoadPic(
+        process.env.VUE_APP_PUBLIC_URL + '/cesium/effects/Data/nanshan-road3.geojson',
+        process.env.VUE_APP_PUBLIC_URL + '/cesium/effects/Materials/spriteline3.png',
+        1.6,
+        600
+      )
 
 
-
+      this.viewer.flyTo(WhiteMold);
       //相机
-      this.viewer.camera.flyTo({
-        //setView是直接跳到 flyTo// 是镜头飞行到  网速不好或者电脑配置不高 还是不要fly了吧
-        destination: Cesium.Cartesian3.fromDegrees(
-          123.46787863792646, 41.83241486807863, 10000
-        ), //经纬度坐标转换为 笛卡尔坐标(世界坐标)
-        orientation: {
-          heading: Cesium.Math.toRadians(0.0), // east, default value is 0.0 (north) //东西南北朝向
-          pitch: Cesium.Math.toRadians(-90), // default value (looking down)  //俯视仰视视觉
-          roll: 0.0, // default value
-        },
-        duration: 3, //3秒到达战场
-      });
+      // this.viewer.camera.flyTo({
+      //   //setView是直接跳到 flyTo// 是镜头飞行到  网速不好或者电脑配置不高 还是不要fly了吧
+      //   destination: Cesium.Cartesian3.fromDegrees(
+      //     123.46787863792646, 41.83241486807863, 10000
+      //   ), //经纬度坐标转换为 笛卡尔坐标(世界坐标)
+      //   orientation: {
+      //     heading: Cesium.Math.toRadians(0.0), // east, default value is 0.0 (north) //东西南北朝向
+      //     pitch: Cesium.Math.toRadians(-90), // default value (looking down)  //俯视仰视视觉
+      //     roll: 0.0, // default value
+      //   },
+      //   duration: 3, //3秒到达战场
+      // });
     },
   },
 };
