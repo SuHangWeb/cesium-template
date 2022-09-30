@@ -76,24 +76,29 @@ export default {
       this._CircleDiffusion.add([123.45362700404472, 41.81860631952072, 0], '#1890ff', 800, 3000)
       this._CircleWave.add([123.4227202687658, 41.817036701780346, 0], 'rgba(0, 255, 0, 1)', 500, 3000)
       this._HexagonSpread.add([123.41743639592823, 41.83039278462179, 0], '#c41d7f', 800, 3000)
-
       this._Layer.setLayer(
         {
-          "id": 3,
+          "id": 14,
           "isShow": true,
-          "name": "高德地图02",
+          "name": "高德地图01",
           "type": "UrlTemplateImageryProvider",
           "classConfig": {
-            "url": "https://webst02.is.autonavi.com/appmaptile?style=6&x={x}&y={y}&z={z}"
+            "url": "http://webst03.is.autonavi.com/appmaptile?x={x}&y={y}&z={z}&style=7"
           },
-          "interfaceConfig": {},
-          "offset": "0,0",
-          "invertswitch": 0,
-          "filterRGB": "#ffffff",
+          "interfaceConfig": {
+            "saturation": 0,// 饱和度
+            "brightness": 0.6,// 亮度
+            "contrast": 1.8,// 对比度
+            "hue": 1,// 色调
+            "gamma": 0.3// 伽马校正
+          },
+          "offset": "0,0",// 偏移量
+          "invertswitch": 1,// 是否反色 1 \ 0
+          "filterRGB": "#4e70a6",// 滤镜颜色
           "showswitch": 1,
           "weigh": 0,
-          "createtime": 1624346908,
-          "updatetime": 1647395260
+          "createtime": 1624326728,
+          "updatetime": 1646979297
         }
       )
 
