@@ -142,6 +142,12 @@ export const constantRoutes = [
         meta: { title: '智慧城市', icon: 'el-icon-office-building', highlight: true },
       },
       {
+        path: 'section',
+        name: 'section',
+        component: () => import('@/views/City/section'),
+        meta: { title: '分析剖切', icon: 'el-icon-office-building', highlight: true },
+      },
+      {
         path: 'UAV',
         name: 'UAV',
         component: () => import('@/views/City/UAV'),
