@@ -26,7 +26,7 @@ export default {
       _SpreadWall: null,
       _EllipsoidFade: null,
       _RoadNetwork: null,
-      _Layer: null
+      _Layer: null,
     };
   },
   mounted() {
@@ -66,16 +66,20 @@ export default {
       this._RoadNetwork = new RoadNetwork(Cesium, this.viewer)
       this._Layer = new Layer(Cesium, this.viewer)
 
+
       //设置贴地效果
       this.viewer.scene.globe.depthTestAgainstTerrain = true;
+
       this.start();
     },
     start() {
-      const Cesium = this.cesium;
-      this._CircleScan.add([123.46787863792646, 41.83241486807863, 0], '#f5222d', 500, 3000)
-      this._CircleDiffusion.add([123.45362700404472, 41.81860631952072, 0], '#1890ff', 800, 3000)
-      this._CircleWave.add([123.4227202687658, 41.817036701780346, 0], 'rgba(0, 255, 0, 1)', 500, 3000)
-      this._HexagonSpread.add([123.41743639592823, 41.83039278462179, 0], '#c41d7f', 800, 3000)
+      this._CircleScan.add([113.928703308, 22.505599976, 0], 'rgba(187, 0, 255, 1)', 1000, 3000)
+      this._CircleDiffusion.add([113.94443512, 22.523283005, 0], 'rgba(247, 235, 8, 1)', 1400, 9500)
+      this._CircleWave.add([113.939323425, 22.511972427, 0], 'rgba(31, 168, 227, 0.59)', 400, 4500)
+      this._HexagonSpread.add([113.91519165, 22.513103485, 0], 'rgba(255, 0, 183, 1)', 800, 3000)
+      this._Scanline.add([113.922744751, 22.536218643, 0], 'rgba(206, 19, 116, 0.91)', 1200, 6500)
+      // this._SpreadWall.add([123.40586284673046, 41.82030438186604, 0], '#c41d7f', 800, 3000, 1000)
+      // this._EllipsoidFade.add([123.40586284673046, 41.82030438186604, 0], '#c41d7f', 800, 3000)
       this._Layer.setLayer(
         {
           "id": 14,
@@ -113,11 +117,6 @@ export default {
         "height": 260,// 光环的移动范围(高度)单位米
         "effect_color": "#df16f1",// 打光效果颜色
       })
-
-
-      // this._Scanline.add([123.40586284673046,41.82030438186604, 0], '#c41d7f', 800, 3000)
-      // this._SpreadWall.add([123.40586284673046, 41.82030438186604, 0], '#c41d7f', 800, 3000, 1000)
-      // this._EllipsoidFade.add([123.40586284673046, 41.82030438186604, 0], '#c41d7f', 800, 3000)
 
       this._RoadNetwork.flyLines([
         113.8918,
