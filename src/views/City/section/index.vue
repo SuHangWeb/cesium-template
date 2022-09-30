@@ -11,6 +11,7 @@ export default {
     return {
       viewer: null,
       _Layer: null,
+      distance: 3,
     };
   },
   mounted() {
@@ -74,7 +75,7 @@ export default {
       this.start();
     },
     start() {
-      const Cesium = this.Cesium
+      const Cesium = this.cesium;
       const clippingPlanes = new Cesium.ClippingPlaneCollection({
         planes: [
           new Cesium.ClippingPlane(
@@ -86,6 +87,7 @@ export default {
         edgeWidth: 1,
       });
 
+
       let tileset = new Cesium.Cesium3DTileset({
         url: "//lab.earthsdk.com/model/d16c1ce0ac2d11e99dbd8fd044883638/tileset.json",
         modelMatrix: Cesium.Matrix4.fromArray([
@@ -94,6 +96,7 @@ export default {
         show: true,
         clippingPlanes,
       });
+
 
       // 剖切面
       this.viewer.entities.add({
