@@ -100,6 +100,11 @@ export const doc = [
         link: "https://gitee.com/lxydft/cesium-city3d?_from=gitee_search",
         externalLinks: true
     },
+    {
+        title: "智慧城市-test平台 账号：test 123456",
+        link: "http://175.155.179.248:90/cesiumTest/#/home/home",
+        externalLinks: true
+    },
 ]
 /**
  * 参考效果

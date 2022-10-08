@@ -1,6 +1,8 @@
 <template>
-  <div class="container" id="echarts">
+  <div class="container">
     <div id="cesiumContainer"></div>
+    <el-slider class="slider" :min="-9.4" :max="3" :step="0.1" height="300px" vertical v-model="distance"
+      :marks="marks"></el-slider>
   </div>
 </template>
  
@@ -12,6 +14,12 @@ export default {
       viewer: null,
       _Layer: null,
       distance: 3,
+      marks: {
+        3: "完整",
+        0.4: "顶层",
+        "-3.4": "二层",
+        "-7.2": "一层",
+      },
     };
   },
   mounted() {
@@ -139,6 +147,18 @@ export default {
   #cesiumContainer {
     width: 100%;
     height: 100%;
+  }
+
+  .slider {
+    position: fixed;
+    width: 30px;
+    right: 50px;
+    bottom: 50px;
+
+    .el-slider__marks div {
+      color: white;
+      margin-left: 15px;
+    }
   }
 }
 </style>
