@@ -100,11 +100,7 @@ export const doc = [
         link: "https://gitee.com/lxydft/cesium-city3d?_from=gitee_search",
         externalLinks: true
     },
-    {
-        title: "智慧城市-test平台 账号：test 123456",
-        link: "http://175.155.179.248:90/cesiumTest/#/home/home",
-        externalLinks: true
-    },
+
 ]
 /**
  * 参考效果
@@ -164,7 +160,12 @@ export const effect = [
         title: "Cesium map实例",
         link: "http://api.rivermap.cn/cesium/rivermap/map.html",
         externalLinks: true
-    }
+    },
+    {
+        title: "智慧城市-test平台 账号：test 123456",
+        link: "http://175.155.179.248:90/cesiumTest/#/home/home",
+        externalLinks: true
+    },
 ]
 /**
  * 三方依赖
