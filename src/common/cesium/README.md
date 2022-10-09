@@ -4,12 +4,16 @@
 
 ```
 ┌─Tripartite                三方依赖库
+├─Layer                     图层
+├─effects                   效果
 ├─Map                       地图
 │  ├─Baidu                  百度  
 │  └─Gaode                  高德 
 ├─EntityUtils               Entity 工具
 │  └─PolylineVolume.js      多段线柱体 
 ├─Materials                 材质
+├─Measure                   测量  
+├─Scene                     场景 
 ├─Config.js                 配置项
 ├─Entity.js                 实体创建
 ├─Primitives.js             图元
