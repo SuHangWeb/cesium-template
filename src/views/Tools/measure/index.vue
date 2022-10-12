@@ -31,10 +31,10 @@ export default {
         imageryProvider: new Cesium.ArcGisMapServerImageryProvider({
           url: "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer",
         }),
-        terrainProvider: new Cesium.CesiumTerrainProvider({
-          //加载火星在线地形
-          url: "http://data.marsgis.cn/terrain",
-        }),
+        // terrainProvider: new Cesium.CesiumTerrainProvider({
+        //   //加载火星在线地形
+        //   url: "http://data.marsgis.cn/terrain",
+        // }),
         animation: false,
         timeline: false,
         shouldAnimate: true,
