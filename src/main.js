@@ -29,6 +29,10 @@ var widgets = require('cesium/Widgets/widgets.css');
 Vue.prototype.cesium = cesium
 Vue.prototype.widgets = widgets
 
+// import '@supermap/iclient3d-vue-for-webgl/lib/theme/index.css'
+// import webgl3d from "@supermap/iclient3d-vue-for-webgl"
+// app.use(webgl3d)  
+
 import VueClipboard from "vue-clipboard2";
 VueClipboard.config.autoSetContainer = true
 Vue.use(VueClipboard);

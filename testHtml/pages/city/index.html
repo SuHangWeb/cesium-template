@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title> 智慧城市 </title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <script src="../../src/Build/Cesium/Cesium.js"></script>
+  <link href="../../src/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+  <!-- <script src="../../src/Build/Cesium/SuperMap3D.js"></script> -->
+  <style>
+    html,
+    body,
+    #cesiumContainer {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+
+  </style>
+</head>
+
+<body>
+  <div id="cesiumContainer"></div>
+  <script>
+    var viewer = new Cesium.Viewer('cesiumContainer', {
+      imageryProvider: new Cesium.ArcGisMapServerImageryProvider({
+        url: "https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer",
+      }),
+      terrainProvider: new Cesium.CesiumTerrainProvider({
+        //加载火星在线地形
+        url: "http://data.marsgis.cn/terrain",
+      }),
+      shouldAnimate: true,
+      geocoder: false,
+      homeButton: false,
+      sceneModePicker: false,
+      baseLayerPicker: false,
+      //baseLayerPicker:false,
+      //animation:false,
+      //creditContainer:"credit"
+      timeline: true,
+      vrButton: false
+    });
+    viewer.scene.globe.depthTestAgainstTerrain = true;
+
+    // 添加3D Tiles
+    var tileset = viewer.scene.primitives.add(
+      new Cesium.Cesium3DTileset({
+        url: 'http://192.168.0.222:8082/city/66/tileset.json',
+        // maximumScreenSpaceError: 2, //最大的屏幕空间误差
+        // maximumNumberOfLoadedTiles: 1000, //最大加载瓦片个数
+      })
+    );
+
+    this.viewer.flyTo(tileset);
+
+
+    // //相机
+    // this.viewer.camera.flyTo({
+    //   //setView是直接跳到 flyTo// 是镜头飞行到  网速不好或者电脑配置不高 还是不要fly了吧
+    //   destination: Cesium.Cartesian3.fromDegrees(
+    //     123.43382736814452,
+    //     41.811201240193164,
+    //     3000
+    //   ), //经纬度坐标转换为 笛卡尔坐标(世界坐标)
+    //   orientation: {
+    //     heading: Cesium.Math.toRadians(0.0), // east, default value is 0.0 (north) //东西南北朝向
+    //     pitch: Cesium.Math.toRadians(-90), // default value (looking down)  //俯视仰视视觉
+    //     roll: 0.0, // default value
+    //   },
+    //   duration: 3, //3秒到达战场
+    // });
+
+
+    // window.onload = function () {
+    //   var viewer = new Cesium.Viewer("cesiumContainer");
+    //   var scene = viewer.scene;
+    //   var promise = viewer.scene.open("http://www.supermapol.com/realspace/services/3D-CBD/rest/realspace");
+    //   Cesium.when.all(promise, function (layers) {
+
+    //   });
+    // }
+
+  </script>
+</body>
+
+</html>
