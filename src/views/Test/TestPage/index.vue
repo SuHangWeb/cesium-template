@@ -5,16 +5,16 @@
 </template>
  
 <script>
+import Entity from "@/common/cesium/Entity.js";
+import Transform from "@/common/cesium/Transform.js";
 export default {
   name: "TextPage",
   data() {
     return {
       viewer: null,
-      cbd1: 'http://www.supermapol.com/realspace/services/3D-WebGLCBD/rest/realspace/datas/Tree@%E6%96%B0CBD/config',//CBD 树SCP
-      cbd2: 'http://www.supermapol.com/realspace/services/3D-WebGLCBD/rest/realspace/datas/Ground_1@%E6%96%B0CBD/config',//CBD 地面1 SCP
-      cbd3: 'http://www.supermapol.com/realspace/services/3D-WebGLCBD/rest/realspace/datas/Ground_2@%E6%96%B0CBD/config',//CBD 地面2 SCP
-      cbd4: 'http://www.supermapol.com/realspace/services/3D-WebGLCBD/rest/realspace/datas/Building@%E6%96%B0CBD/config',//CBD 建筑物 SCP
-      sceneUrl: "http://www.supermapol.com/realspace/services/3D-CQmodel_wireframe_2000/rest/realspace"
+      _Entity: null,
+      _Transform: null,
+      handler: null,
     };
   },
   mounted() {
@@ -46,6 +46,11 @@ export default {
       });
       //设置贴地效果
       this.viewer.scene.globe.depthTestAgainstTerrain = true;
+      this._Entity = new Entity(Cesium, this.viewer);
+      this._Transform = new Transform(Cesium, this.viewer);
+      this.handler = new Cesium.ScreenSpaceEventHandler(
+        this.viewer.scene.canvas
+      );
       this.loadScene();
     },
     /**
@@ -53,24 +58,53 @@ export default {
      */
     loadScene() {
       const Cesium = this.cesium;
-      //建筑
-      // this.viewer.imageryLayers.addImageryProvider(this.cbd1);
-      // const groundPromise = this.viewer.scene.addS3MTilesLayerByScp(this.cbd1, {
-      //   name: 'ground'
-      // })
-      // const buildPromise = this.viewer.scene.addS3MTilesLayerByScp(this.cbd2, {
-      //   name: 'build'
-      // })
-      // const lakePromise = this.viewer.scene.addS3MTilesLayerByScp(this.cbd3, {
-      //   name: 'lake'
-      // })
-      // const treePromise = this.viewer.scene.addS3MTilesLayerByScp(this.cbd4, {
-      //   name: 'tree'
-      // })
+      
+      const tileset = this.addTileset('http://192.168.0.222:8082/city/66/tileset.json')
+      this.viewer.flyTo(tileset);
 
-      // Cesium.when.all([groundPromise, buildPromise, lakePromise, treePromise], (layers) => {
-
-      // })
+    
+      this.handler.setInputAction((event) => {
+        // 添加点
+        this._Entity.createPoint({
+          position: this.viewer.scene.camera.pickEllipsoid(event.position),
+          color: Cesium.Color.RED,
+          pixelSize: 30,
+        });
+        // 获取点击位置
+        const getPosition = this._Transform.getPosition(event);
+        const Alert = `${JSON.stringify(getPosition)}\n经度：${getPosition.longitude
+          }、纬度：${getPosition.latitude}、相机高度：${getPosition.cameraHeight
+          }`;
+        console.log(Alert);
+        this.$copyText(`${getPosition.longitude},${getPosition.latitude}`).then(
+          (e) => {
+            this.$notify({
+              title: "成功",
+              message: "位置信息已拷贝到粘贴板",
+              type: "success",
+            });
+          },
+          (e) => {
+            this.$notify.error({
+              title: "错误",
+              message: "位置信息拷贝失败",
+            });
+          }
+        );
+      }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+    },
+    /**
+     * 加载Tileset数据
+     * @param {*} url  数据地址
+     * @returns 
+     */
+    addTileset(url) {
+      const Cesium = this.cesium;
+      return this.viewer.scene.primitives.add(
+        new Cesium.Cesium3DTileset({
+          url
+        })
+      );
     },
   },
 };

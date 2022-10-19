@@ -218,5 +218,11 @@ export const tools = [
         describe: "可视化面板",
         link: "https://www.cnblogs.com/fangdongdemao/p/13949773.html",
         externalLinks: true
+    },
+    {
+        title: "heatmap",
+        describe: "heatmap.js 是一个轻量级、易于使用的 JavaScript 库，可帮助您可视化您的 3D 数据！",
+        link: "https://www.patrick-wied.at/static/heatmapjs/",
+        externalLinks: true
     }
 ]
