@@ -212,5 +212,11 @@ export const tools = [
         describe: "地理空间分析库，处理各种地图算法",
         link: "https://turfjs.fenxianglu.cn/category/",
         externalLinks: true
+    },
+    {
+        title: "dat.gui",
+        describe: "可视化面板",
+        link: "https://www.cnblogs.com/fangdongdemao/p/13949773.html",
+        externalLinks: true
     }
 ]

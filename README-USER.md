@@ -105,3 +105,40 @@ COLLADA2GLTF： https://github.com/KhronosGroup/COLLADA2GLTF
 glb下载：
 http://glbxz.com/
 http://www.shvr.work/
+
+
+https://www.cnblogs.com/2008nmj/p/15628551.html 功能插件
+cesium功能插件
+esium-measure
+三维量测工具:https://github.com/zhangti0708/cesium-measure
+cesium-graphicBuffer
+动态缓冲区效果 https://github.com/zhangti0708/cesium-graphicBuffer
+cesium-viewshed
+三维分析可视域:https://github.com/zhangti0708/cesium-viewshed
+cesium-videoshed
+三维分析视频投射: https://github.com/zhangti0708/cesium-videoshed
+cesium-transform
+3DTileset矩阵调整开源工具:https://github.com/zhangti0708/cesium-transform
+cesium-tilesetEffect
+3DTileset模型Shader特效插件:https://github.com/zhangti0708/cesium-tilesetEffect
+cesium-materialLine
+三维实体材质线插件: https://github.com/zhangti0708/cesium-materialLine
+cesium-city3d
+基于超图的示例:https://github.com/zhangti0708/cesium-city3d
+new-CesiumGraph
+三维雷达探测器修改:https://github.com/zhangti0708/new-CesiumGraph
+后续持续增加其他效果和分析插件
+参考：https://github.com/zhangti0708/cesium-examples
+
+参考2：http://d3.ztwow.top/web3d/cesium/
+
+插件封装：https://www.cnblogs.com/HelsingWang/p/14261695.html
+
+https://zhuanlan.zhihu.com/p/368922434 热力图
+https://zhuanlan.zhihu.com/p/370528187
+
+
+
+https://blog.csdn.net/qq_35984445/article/details/125743739  Cesium 场景设置~黑白、夜视和描边
+
+https://blog.csdn.net/QQ98281642/article/details/121491658 绕中心点旋转
