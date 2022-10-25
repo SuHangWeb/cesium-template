@@ -166,6 +166,11 @@ export const effect = [
         link: "http://175.155.179.248:90/cesiumTest/#/home/home",
         externalLinks: true
     },
+    {
+        title: "右弦GISer",
+        link: "https://blog.csdn.net/weixin_45782925?type=blog",
+        externalLinks: true
+    },
 ]
 /**
  * 三方依赖
