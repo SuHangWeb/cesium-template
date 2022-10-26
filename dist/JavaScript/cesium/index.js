@@ -44,6 +44,10 @@ ImportJs(`${path}/Tripartite/gcoord/dist/gcoord.js`);
 ImportJs(`${path}/Tripartite/geojson/geojson.min.js`);
 // createStyle(`${path}/Tripartite/cesium-navigation/cesium-navigation.css`);
 // ImportJs(`${path}/Tripartite/cesium-navigation/CesiumNavigation.umd.js`);
+
+// ImportJs(`${path}/Tripartite/turf/turf.min.js`);
+
+ImportJs(`${path}/Tripartite/dat.gui/dat.gui.min.js`);
 /**
  * 三方js库 End
  */
@@ -70,6 +74,22 @@ ImportJs(`${path}/Materials/color.js`);//颜色材质
 ImportJs(`${path}/Canvas.js`);//原生canvas操作
 ImportJs(`${path}/Map/Gaode/index.js`);//高德api
 ImportJs(`${path}/Map/index.js`);//地图
+ImportJs(`${path}/Scene/index.js`);//场景集合
+ImportJs(`${path}/Scene/Fog.js`);// 雾
+ImportJs(`${path}/Scene/Rain.js`);//雨
+ImportJs(`${path}/Scene/Skyline.js`);//天际线
+ImportJs(`${path}/Scene/Snow.js`);//雪
+ImportJs(`${path}/Scene/Rainbow.js`);//彩虹
+ImportJs(`${path}/rightClickMenu.js`);//右键菜单
+ImportJs(`${path}/Draw/straightArrow.js`);//直线箭头
+ImportJs(`${path}/Draw/index.js`);//绘制
+ImportJs(`${path}/Measure/common.js`);//测量继承
+setTimeout(() => {
+    ImportJs(`${path}/Measure/area.js`);//测量面积
+    ImportJs(`${path}/Measure/distance.js`);//测量距离
+    ImportJs(`${path}/Measure/index.js`);//测量
+}, 500)
+
 /**
  * Echarts图表封装以及3d模拟 
  * 依赖：
@@ -78,3 +98,29 @@ ImportJs(`${path}/Map/index.js`);//地图
  * ./Tripartite/uuid-js/uuid.min.js 三方库 uuid
  */
 ImportJs(`${path}/Echarts.js`);
+
+
+/**
+ * 智慧城市
+ */
+ImportJs(`${path}/effects/Effect.js`);
+
+setTimeout(() => {
+    ImportJs(`${path}/effects/Materials/CircleWaveMaterialProperty.js`);
+    ImportJs(`${path}/effects/Materials/EllipsoidFadeMaterialProperty.js`);
+    ImportJs(`${path}/effects/Materials/HexagonSpreadMaterialProperty.js`);
+    ImportJs(`${path}/effects/Materials/PolylineTrailMaterialProperty.js`);
+    ImportJs(`${path}/effects/Materials/ScanlineMaterialProperty.js`);
+    ImportJs(`${path}/effects/Materials/Spriteline1MaterialProperty.js`);
+    ImportJs(`${path}/effects/Materials/WallGradientsMaterialProperty.js`);
+
+    ImportJs(`${path}/effects/CircleScan.js`);
+    ImportJs(`${path}/effects/CircleDiffusion.js`);
+    ImportJs(`${path}/effects/CircleWave.js`);
+    ImportJs(`${path}/effects/HexagonSpread.js`);
+    ImportJs(`${path}/effects/Scanline.js`);
+    ImportJs(`${path}/effects/SpreadWall.js`);
+    ImportJs(`${path}/effects/EllipsoidFade.js`);
+    ImportJs(`${path}/effects/RoadNetwork.js`);
+    ImportJs(`${path}/Layer/index.js`);
+}, 500)

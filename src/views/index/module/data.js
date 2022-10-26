@@ -171,6 +171,12 @@ export const effect = [
         link: "https://blog.csdn.net/weixin_45782925?type=blog",
         externalLinks: true
     },
+    {
+        title: "右弦GISer-集合",
+        link: "https://blog.csdn.net/weixin_45782925/article/details/123269490?spm=1001.2014.3001.5502",
+        externalLinks: true
+    },
+    
 ]
 /**
  * 三方依赖
