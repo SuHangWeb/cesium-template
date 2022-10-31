@@ -176,6 +176,12 @@ export const effect = [
         link: "https://blog.csdn.net/weixin_45782925/article/details/123269490?spm=1001.2014.3001.5502",
         externalLinks: true
     },
+    {
+        title: "四季留歌",
+        link: "https://www.cnblogs.com/onsummer/category/1684193.html",
+        externalLinks: true
+    },
+    
     
 ]
 /**
