@@ -155,7 +155,6 @@ class Distance extends MeasureCommon {
         } else {
             return `${_Number.toFixed(2)}米`
         }
-
     }
     //创建线节点
     createVertex() {

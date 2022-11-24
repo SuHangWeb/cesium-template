@@ -42,7 +42,7 @@ class CircleWave extends Effect {
         position[2]
       ),
       ellipse: {
-        // height: position[2],
+        //height: position[2],
         semiMinorAxis: new Cesium.CallbackProperty(function (n) {
           return _this.maxRadius
         }, false),

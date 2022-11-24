@@ -47,7 +47,10 @@ ImportJs(`${path}/Tripartite/geojson/geojson.min.js`);
 
 // ImportJs(`${path}/Tripartite/turf/turf.min.js`);
 
-ImportJs(`${path}/Tripartite/dat.gui/dat.gui.min.js`);
+// ImportJs(`${path}/Tripartite/dat.gui/dat.gui.min.js`);
+ImportJs(`${path}/Tripartite/heatmap/heatmap.min.js`);
+
+// ImportJs(`${path}/Tripartite/echarts/echarts.min.js`);
 /**
  * 三方js库 End
  */
@@ -58,6 +61,8 @@ ImportJs(`${path}/Tripartite/dat.gui/dat.gui.min.js`);
 ImportJs(`${path}/Map/Baidu/module/BaiDuImageryProvider.js`);//百度地图依赖
 // createStyle(`${path}/iconfont/iconfont.css`)//矢量图标
 ImportJs(`${path}/EntityUtils/PolylineVolume.js`);//多线段柱体形态
+ImportJs(`${path}/Materials/lineFlowMaterialProperty.js`);//抛物线材质着色器
+ImportJs(`${path}/EntityUtils/Parabola.js`);//抛物线
 /**
  * 依赖 End
  */
@@ -90,6 +95,9 @@ setTimeout(() => {
     ImportJs(`${path}/Measure/index.js`);//测量
 }, 500)
 
+ImportJs(`${path}/Camera/AroundPoint.js`);//相机绕点旋转
+ImportJs(`${path}/Camera/AroundView.js`);//相机绕地旋转
+
 /**
  * Echarts图表封装以及3d模拟 
  * 依赖：
@@ -117,6 +125,7 @@ setTimeout(() => {
     ImportJs(`${path}/effects/CircleScan.js`);
     ImportJs(`${path}/effects/CircleDiffusion.js`);
     ImportJs(`${path}/effects/CircleWave.js`);
+    ImportJs(`${path}/effects/WaterRipple.js`);
     ImportJs(`${path}/effects/HexagonSpread.js`);
     ImportJs(`${path}/effects/Scanline.js`);
     ImportJs(`${path}/effects/SpreadWall.js`);

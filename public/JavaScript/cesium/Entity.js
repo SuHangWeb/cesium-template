@@ -123,9 +123,9 @@ class Entity {
                  */
                 heightReference: params.heightReference || Cesium.HeightReference.NONE,
                 //点的颜色
-                color: params.color || new Cesium.Color.WHITE,
+                color: params.color ||  Cesium.Color.WHITE,
                 //轮廓/描边的颜色
-                outlineColor: params.outlineColor || new Cesium.Color.BLACK,
+                outlineColor: params.outlineColor ||  Cesium.Color.BLACK,
                 //轮廓/描边的尺寸 像素/px 为单位
                 outlineWidth: params.outlineWidth || 0,
                 /**

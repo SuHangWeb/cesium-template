@@ -16,9 +16,11 @@ class CircleScan {
     maxRadius,
     duration
   ) {
+
     this.lastStageList.push(
       this.showRadarScan(position, scanColor, maxRadius, duration)
     )
+    return this.lastStageList
   }
   clear() {
     this.lastStageList.forEach((ele) => {

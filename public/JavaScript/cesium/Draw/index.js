@@ -423,10 +423,10 @@ class Draw extends Entity {
                 position: cartesian,
                 semiMinorAxis: 0.1, //椭圆短轴（单位米）
                 semiMajorAxis: 0.1, //椭圆长轴（单位米）
-                material: Cesium.Color.GREENYELLOW.withAlpha(0.5),
-                outline: true,
-                outlineColor: Cesium.Color.WHITE,
-                outlineWidth: 3
+                material: params.material ?: Cesium.Color.GREENYELLOW.withAlpha(0.5),
+                outline: params.outline ?: true,
+                outlineColor: params.outlineColor ?: Cesium.Color.WHITE,
+                outlineWidth: params.outlineWidth ?: 3
             })
 
         }, Cesium.ScreenSpaceEventType.LEFT_DOWN);
