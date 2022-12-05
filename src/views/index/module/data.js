@@ -241,5 +241,11 @@ export const tools = [
         describe: "heatmap.js 是一个轻量级、易于使用的 JavaScript 库，可帮助您可视化您的 3D 数据！",
         link: "https://www.patrick-wied.at/static/heatmapjs/",
         externalLinks: true
+    },
+    {
+        title: "着色器调试",
+        describe: "着色器在线调试器！",
+        link: "http://editor.thebookofshaders.com/",
+        externalLinks: true
     }
 ]
