@@ -32,7 +32,7 @@ class Draw extends Entity {
                 msg: "成功",
                 code: 200
             })
-        }, Cesium.ScreenSpaceEventType.LEFT_DOWN);
+        }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
         //鼠标右键点击
         handler.setInputAction((event) => {
             handler = null
@@ -113,6 +113,7 @@ class Draw extends Entity {
                 }
                 callback({
                     entity: positions,
+                    lineEntity,
                     entityMsg: "绘制线",
                     handlerMsg: "移动",
                     msg: "成功",
@@ -126,6 +127,7 @@ class Draw extends Entity {
             handler = null
             callback({
                 entity: undefined,
+                lineEntity,
                 entityMsg: "绘制线",
                 handlerMsg: "右键",
                 msg: "成功",
@@ -423,10 +425,10 @@ class Draw extends Entity {
                 position: cartesian,
                 semiMinorAxis: 0.1, //椭圆短轴（单位米）
                 semiMajorAxis: 0.1, //椭圆长轴（单位米）
-                material: params.material ?: Cesium.Color.GREENYELLOW.withAlpha(0.5),
-                outline: params.outline ?: true,
-                outlineColor: params.outlineColor ?: Cesium.Color.WHITE,
-                outlineWidth: params.outlineWidth ?: 3
+                material: params.material ? params.material : Cesium.Color.GREENYELLOW.withAlpha(0.5),
+                outline: params.outline ? params.outline : true,
+                outlineColor: params.outlineColor ? params.outlineColor : Cesium.Color.WHITE,
+                outlineWidth: params.outlineWidth ? params.outlineWidth : 3
             })
 
         }, Cesium.ScreenSpaceEventType.LEFT_DOWN);
